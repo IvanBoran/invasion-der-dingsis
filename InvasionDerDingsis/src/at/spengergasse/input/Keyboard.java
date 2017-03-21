@@ -29,7 +29,7 @@ public class Keyboard implements KeyListener{
 //			System.out.println("KEY: "+ k);
 			}
 			catch(IndexOutOfBoundsException e){
-				System.out.println("KEY: --");
+//				System.out.println("KEY: --");
 			}
 	}
 
@@ -39,13 +39,13 @@ public class Keyboard implements KeyListener{
 			keys[k.getKeyCode()]= false;
 			}
 			catch(IndexOutOfBoundsException e){
-				System.out.println("KEY: --");
+//				System.out.println("KEY: --");
 			}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		System.out.println("KEY: Typed");
+//		System.out.println("KEY: Typed");
 
 	}
 

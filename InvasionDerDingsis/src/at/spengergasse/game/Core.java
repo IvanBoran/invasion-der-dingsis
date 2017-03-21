@@ -66,41 +66,27 @@ public class Core implements Runnable{
 		resolutionX = 1920;
 		resolutionY = 1080;
 		
+		frame = new JFrame("Invasion der Dingsis");
+		
+		keyboard = new Keyboard();
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(screenWidth, screenHeight);
+		
 //		gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		
 		data = new int[resolutionX*resolutionY];
 		
 		visual = new Visual(resolutionX, resolutionY, data);
+		
+		visual.addKeyListener(keyboard);
+		frame.add(visual);
 				
-		frameInit(false);
+		frame.setVisible(true);
 		
 		start();
 	}
 	
-	public void frameInit(boolean fullscreen){
-		frame = new JFrame("Invasion der Dingsis");
-		
-		frame.add(visual);
-		
-		keyboard = new Keyboard();
-		
-		visual.addKeyListener(keyboard);
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		if(fullscreen){
-			frame.setUndecorated(true);
-			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		}
-		else{
-			frame.setUndecorated(false);
-			frame.setSize(screenWidth, screenHeight);
-		}
-		
-		frame.setVisible(true);
-		
-		frame.setSize(screenWidth, screenHeight);
-	}
 	
 	public synchronized void start(){
 		running = true;
@@ -120,17 +106,6 @@ public class Core implements Runnable{
 	
 	public void update(){//tick
 		keyboard.update();
-		
-		if(keyboard.f11){
-			if(fullscreen){
-				fullscreen=false;
-				frameInit(fullscreen);
-			}
-			else{
-				fullscreen=true;
-				frameInit(fullscreen);
-			}
-		}
 		
 		for(int i=0;i<data.length;i++){//bsp
 			data[i]=0xff0066;

@@ -18,7 +18,6 @@ public class Visual extends Canvas{
 		image = new BufferedImage(resolutionX, resolutionY, BufferedImage.TYPE_INT_RGB);
 		pixel = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 		
-		
 	}
 	
 	public void render(){

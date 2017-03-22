@@ -2,33 +2,39 @@ package at.spengergasse.game;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import at.spengergasse.entities.Entity;
 import at.spengergasse.input.Keyboard;
 import at.spengergasse.visual.Visual;
 
 public class Core implements Runnable{
 	
+	private Keyboard keyboard;
+	//--
 	private Visual visual;
-	
+	//--
 	private int[] data;
 	private int[] collisionMap;
-	
+	//--
 	private Thread thread;
-	
+	//--
 //	private GraphicsDevice gd;
-	
+	//--
 	private JFrame frame;
 	
 	private int screenWidth,screenHeight;
 	private int resolutionX,resolutionY;
-	
+	//--
 	private boolean running = false;
+	//--
+	private ArrayList<Entity> entities;
+	//--
+	private int tileSize;//größe der "pixel"
 	
-	private Keyboard keyboard;
-	
-	boolean fullscreen;
+//	boolean fullscreen;
 
 	@Override
 	public void run() {
@@ -59,6 +65,7 @@ public class Core implements Runnable{
 	}
 	
 	public Core(){
+		tileSize = 10;
 		//1600x900 anfangs // es ist resizeable und fullscreen
 		screenWidth = 1600;
 		screenHeight = 900;
@@ -74,6 +81,8 @@ public class Core implements Runnable{
 		frame.setSize(screenWidth, screenHeight);
 		
 //		gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		
+		entities = new ArrayList<Entity>();
 		
 		data = new int[resolutionX*resolutionY];
 		
@@ -105,11 +114,20 @@ public class Core implements Runnable{
 	}
 	
 	public void update(){//tick
-		keyboard.update();
+		keyboard.update();//tastatur eingaben werden überprüft //sollte vll wo anders hin verschoben werden weil ticks nur 60 mal die sekunde ablaufen
+		//im moment kommen hier die abfragen bezüglich welche tasten drücke registriert wurden
 		
-		for(int i=0;i<data.length;i++){//bsp
-			data[i]=0xff0066;
+		for(int i=0;i<data.length;i++){//clear
+			data[i]=0;
 		}
+		
+		for(Entity e:entities){//alle entities werden in data eingeschrieben
+			load(e);
+		}
+	}
+	
+	public void load(Entity entity){//lädt das shape der entity ins data array
+		
 	}
 	
 }

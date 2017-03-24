@@ -42,10 +42,16 @@ public class Core implements Runnable{
 		while(running){// sync funktionalität nutzen
 			long now;
 			long next;
-			long delta = 1000000000 / 60;
+			long delta = 1000000000 / 120;
 			
 			while(running){	//testen mit zb thread.sleep
-
+				try {
+					thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				now = System.nanoTime();
 				next = now + delta;
 
@@ -55,8 +61,11 @@ public class Core implements Runnable{
 					visual.render();
 				}
 				
-				//60 mal die sekunde		
+				
+				//60 mal die sekunde
+				
 				update();
+
 				
 				next = now + delta;
 			}
@@ -67,11 +76,11 @@ public class Core implements Runnable{
 	public Core(){
 		tileSize = 10;
 		//1600x900 anfangs // es ist resizeable und fullscreen
-		screenWidth = 1600;
-		screenHeight = 900;
+		screenWidth = 500;
+		screenHeight = 500;
 		//1920x1080
-		resolutionX = 1920;
-		resolutionY = 1080;
+		resolutionX = 500;
+		resolutionY = 500;
 		
 		frame = new JFrame("Invasion der Dingsis");
 		
@@ -83,15 +92,19 @@ public class Core implements Runnable{
 //		gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		
 		entities = new ArrayList<Entity>();
+		entities.add(new Entity(null, 50,50, resolutionX/2, resolutionY/2));//bsp
+		entities.add(new Entity(null, 10,50, resolutionX/3, resolutionY/3));//bsp
 		
 		data = new int[resolutionX*resolutionY];
 		
-		visual = new Visual(resolutionX, resolutionY, data);
+		visual = new Visual(resolutionX, resolutionY,screenWidth,screenHeight, data);
 		
 		visual.addKeyListener(keyboard);
 		frame.add(visual);
-				
+		
 		frame.setVisible(true);
+		
+		frame.pack();
 		
 		start();
 	}
@@ -116,6 +129,9 @@ public class Core implements Runnable{
 	public void update(){//tick
 		keyboard.update();//tastatur eingaben werden überprüft //sollte vll wo anders hin verschoben werden weil ticks nur 60 mal die sekunde ablaufen
 		//im moment kommen hier die abfragen bezüglich welche tasten drücke registriert wurden
+		if(keyboard.up){//TODO
+			entities.get(0).move(1, -1);
+		}
 		
 		for(int i=0;i<data.length;i++){//clear
 			data[i]=0;
@@ -127,7 +143,18 @@ public class Core implements Runnable{
 	}
 	
 	public void load(Entity entity){//lädt das shape der entity ins data array
-		
+		int[] shape = entity.getShape();
+		int width = entity.getWidth();
+		int heigth = entity.getHeight();
+		int x = entity.getX();
+		int y = entity.getY();
+		for(int posY = 0;posY<heigth;posY++){
+			for(int posX=0;posX<width;posX++){
+				if(shape[posX+posY*width]!=0){
+					data[x + y * resolutionX + posX + posY * resolutionX] = shape[posX+posY*width];
+				}
+			}
+		}
 	}
 	
 }

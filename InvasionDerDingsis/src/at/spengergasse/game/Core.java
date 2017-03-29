@@ -2,6 +2,7 @@ package at.spengergasse.game;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -42,7 +43,7 @@ public class Core implements Runnable{
 		while(running){// sync funktionalität nutzen
 			long now;
 			long next;
-			long delta = 1000000000 / 120;
+			long delta = 1000000000 / 60;
 			
 			while(running){	//testen mit zb thread.sleep
 				try {
@@ -73,14 +74,14 @@ public class Core implements Runnable{
 		
 	}
 	
-	public Core(){
+	public Core() throws IOException{//TODO exception handling
 		tileSize = 10;
 		//1600x900 anfangs // es ist resizeable und fullscreen
-		screenWidth = 500;
-		screenHeight = 500;
+		screenWidth = 1000;
+		screenHeight = 1000;
 		//1920x1080
-		resolutionX = 500;
-		resolutionY = 500;
+		resolutionX = 1000;
+		resolutionY = 1000;
 		
 		frame = new JFrame("Invasion der Dingsis");
 		
@@ -92,8 +93,7 @@ public class Core implements Runnable{
 //		gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		
 		entities = new ArrayList<Entity>();
-		entities.add(new Entity(null, 50,50, resolutionX/2, resolutionY/2));//bsp
-		entities.add(new Entity(null, 10,50, resolutionX/3, resolutionY/3));//bsp
+		entities.add(new Entity("shapeTest", 3, 3, 500, 500, 0));
 		
 		data = new int[resolutionX*resolutionY];
 		

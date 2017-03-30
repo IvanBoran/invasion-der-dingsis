@@ -10,24 +10,33 @@ public class Entity {
 	
 	private int[] shape;
 	
-	private int width,heigth;
+	private int width,height;
 	
-	public Entity(String pathShape,int width,int height,int x,int y,int tileSize) throws IOException{
-		
-		shape = new int[width*height];
+	private int simpleWidth,simpleHeight;
+	
+	public Entity(String pathShape,int x,int y,int tileSize) throws IOException{
 		
 		this.x=x;
 		this.y=y;
 		
-		this.width=width;
-		this.heigth=height;
-		
 		BufferedReader reader = new BufferedReader(new FileReader(pathShape));
 		
-		for(int i=0;i<height;i++){
+		simpleWidth =Integer.parseInt(reader.readLine());
+		simpleHeight =Integer.parseInt(reader.readLine());
+		
+		width=simpleWidth*tileSize;
+		height=simpleHeight*tileSize;
+		
+		shape = new int[width*height*tileSize*tileSize];
+		
+		for(int i=0;i<simpleHeight;i++){//TODO nicht optimal ?
 			String[] row = reader.readLine().split(";");
-			for(int e=0;e<width;e++){
-				shape[e + i*width] = Integer.parseUnsignedInt(row[e], 16);
+			for(int k = 0;k<tileSize;k++){
+				for(int e=0;e<simpleWidth;e++){
+					for(int o=0;o<tileSize;o++){
+						shape[e *tileSize + (i*tileSize)*width +o+k*width ] = Integer.parseUnsignedInt(row[e], 16);
+					}
+				}
 			}
 		}
 		
@@ -56,6 +65,6 @@ public class Entity {
 	}
 	
 	public int getHeight(){
-		return heigth;
+		return height;
 	}
 }

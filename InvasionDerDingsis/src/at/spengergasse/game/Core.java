@@ -1,5 +1,6 @@
 package at.spengergasse.game;
 
+import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class Core implements Runnable{
 	//--
 	private Thread thread;
 	//--
-//	private GraphicsDevice gd;
+	private DisplayMode dM;
 	//--
 	private JFrame frame;
 	
@@ -75,13 +76,15 @@ public class Core implements Runnable{
 	}
 	
 	public Core() throws IOException{//TODO exception handling
+		dM = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+		
 		tileSize = 10;
 		//1600x900 anfangs // es ist resizeable und fullscreen
-		screenWidth = 1000;
-		screenHeight = 1000;
+		screenWidth = dM.getWidth();//TODO muss noch fertig gemacht werden -> welche auflösung und welche größe ?
+		screenHeight = dM.getHeight();
 		//1920x1080
-		resolutionX = 1000;
-		resolutionY = 1000;
+		resolutionX = screenWidth;System.out.println(screenWidth+" "+screenHeight+" "+16/9);
+		resolutionY = screenHeight;
 		
 		frame = new JFrame("Invasion der Dingsis");
 		
@@ -90,10 +93,8 @@ public class Core implements Runnable{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(screenWidth, screenHeight);
 		
-//		gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		
 		entities = new ArrayList<Entity>();
-		entities.add(new Entity("shapeTest", 3, 3, 500, 500, 0));
+		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));
 		
 		data = new int[resolutionX*resolutionY];
 		

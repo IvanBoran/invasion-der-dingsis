@@ -44,11 +44,11 @@ public class Core implements Runnable{
 		while(running){// sync funktionalität nutzen
 			long now;
 			long next;
-			long delta = 1000000000 / 60;
+			long delta = 1000000000 / 120;
 			
 			while(running){	//testen mit zb thread.sleep
-				try {
-					thread.sleep(10);
+				try { // gibt ab und so kleine ruckler
+					thread.sleep(0,10);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -80,10 +80,10 @@ public class Core implements Runnable{
 		
 		tileSize = 10;
 		//1600x900 anfangs // es ist resizeable und fullscreen
-		screenWidth = dM.getWidth();//TODO muss noch fertig gemacht werden -> welche auflösung und welche größe ?
-		screenHeight = dM.getHeight();
+		screenWidth = 1600;
+		screenHeight = 900;
 		//1920x1080
-		resolutionX = screenWidth;System.out.println(screenWidth+" "+screenHeight+" "+16/9);
+		resolutionX = screenWidth;
 		resolutionY = screenHeight;
 		
 		frame = new JFrame("Invasion der Dingsis");
@@ -98,10 +98,14 @@ public class Core implements Runnable{
 		
 		data = new int[resolutionX*resolutionY];
 		
+		collisionMap = new int[resolutionX*resolutionY];
+		
 		visual = new Visual(resolutionX, resolutionY,screenWidth,screenHeight, data);
 		
 		visual.addKeyListener(keyboard);
 		frame.add(visual);
+		
+		frame.setResizable(false);
 		
 		frame.setVisible(true);
 		
@@ -130,9 +134,7 @@ public class Core implements Runnable{
 	public void update(){//tick
 		keyboard.update();//tastatur eingaben werden überprüft //sollte vll wo anders hin verschoben werden weil ticks nur 60 mal die sekunde ablaufen
 		//im moment kommen hier die abfragen bezüglich welche tasten drücke registriert wurden
-		if(keyboard.up){//TODO
-			entities.get(0).move(1, -1);
-		}
+		handleMovement();
 		
 		for(int i=0;i<data.length;i++){//clear
 			data[i]=0;
@@ -141,6 +143,24 @@ public class Core implements Runnable{
 		for(Entity e:entities){//alle entities werden in data eingeschrieben
 			load(e);
 		}
+	}
+	
+	private void handleMovement(){
+		int x = 0;
+		int y = 0;
+		if(keyboard.up){
+			y--;
+		}
+		if(keyboard.down){
+			y++;
+		}
+		if(keyboard.right){
+			x++;
+		}
+		if(keyboard.left){
+			x--;
+		}
+		entities.get(0).move(x, y);//index 0 = player
 	}
 	
 	public void load(Entity entity){//lädt das shape der entity ins data array

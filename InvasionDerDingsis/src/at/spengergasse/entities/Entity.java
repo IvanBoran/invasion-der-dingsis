@@ -1,5 +1,8 @@
 package at.spengergasse.entities;
 
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -32,14 +35,15 @@ public class Entity {
 		simpleWidth =Integer.parseInt(reader.readLine());
 		simpleHeight =Integer.parseInt(reader.readLine());
 		
-		width=simpleWidth*tileSize;
-		height=simpleHeight*tileSize;
+		width=simpleWidth*tileSize*2;//*2 wegen rotate
+		height=simpleHeight*tileSize*2;
 		
-		
-		int diagonal = tileSize;//a²*b²=c²
+//		int diagonal = tileSize;//a²*b²=c² // ich glaube diagonal = 2*lenght -1 //length weil es egal ist ob width/height
 		
 		shape = new int[8][width*height];//*tileSize*tileSize
+		
 		reader.mark(simpleHeight*simpleWidth);
+		
 		for(int i=0;i<simpleHeight;i++){//TODO nicht optimal ?
 			String[] row = reader.readLine().split(";");
 			for(int k = 0;k<tileSize;k++){
@@ -50,17 +54,38 @@ public class Entity {
 				}
 			}
 		}
+		
 		reader.reset();
-		for(int i=0;i<simpleHeight;i++){//TODO nicht optimal ?
-			String[] row = reader.readLine().split(";");
-			for(int k = 0;k<tileSize;k++){
-				for(int e=0;e<simpleWidth;e++){
-					for(int o=0;o<tileSize;o++){
-						shape[1][e *tileSize + (i*tileSize)*width +o+k*width ] = Integer.parseUnsignedInt(row[e], 16);
-					}
-				}
-			}
-		}
+
+//		for(int i=0;i<simpleHeight;i++){//TODO nicht optimal ?
+//			String[] row = reader.readLine().split(";");
+//			for(int k = 0;k<tileSize;k++){
+//				for(int e=0;e<simpleWidth;e++){
+//					for(int o=0;o<k;o++){
+//						shape[1][e *tileSize*2 + (i*tileSize*2)*width +o+k*width  + (tileSize-1) - (k/2-1)] = Integer.parseUnsignedInt(row[e], 16);
+//					}
+//				}
+//			}
+//			for(int k = tileSize;k<tileSize*2;k++){
+//				for(int e=0;e<simpleWidth;e++){
+//					for(int o=0;o<tileSize-k;o++){
+//						shape[1][e *tileSize*2 + (i*tileSize*2)*width +o+k*width  +- tileSize] = Integer.parseUnsignedInt(row[e], 16);
+//					}
+//				}
+//			}
+//		}
+		
+		BufferedImage test = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//TODO nur rumtesten
+	
+			test.setRGB(0,0,width,height,shape[0],0,width);
+		
+		AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(45));
+		Graphics2D testg = (Graphics2D) test.getGraphics();
+		testg.setTransform(at);
+//		testg.rotate(Math.toRadians(45));
+		testg.drawImage(test, 0, 0, width, height, null);
+		test.getRGB(0, 0, width, height, shape[1], 0, width);
+		testg.dispose();
 		
 		reader.close();
 	}
@@ -107,4 +132,5 @@ public class Entity {
 		else if(rotation==8)
 			rotation=0;
 	}
+
 }

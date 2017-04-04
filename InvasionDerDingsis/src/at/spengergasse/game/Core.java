@@ -94,7 +94,7 @@ public class Core implements Runnable{
 		frame.setSize(screenWidth, screenHeight);
 		
 		entities = new ArrayList<Entity>();
-		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));
+		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));entities.get(0).rotate(true);//bsp
 		
 		data = new int[resolutionX*resolutionY];
 		

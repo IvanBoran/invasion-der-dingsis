@@ -47,6 +47,7 @@ public class Keyboard implements KeyListener{
 	public void keyTyped(KeyEvent arg0) {
 //		System.out.println("KEY: Typed");
 
+		
 	}
 
 }

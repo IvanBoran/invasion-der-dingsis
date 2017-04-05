@@ -35,8 +35,8 @@ public class Entity {
 		simpleWidth =Integer.parseInt(reader.readLine());
 		simpleHeight =Integer.parseInt(reader.readLine());
 		
-		width=simpleWidth*tileSize*2;//*2 wegen rotate
-		height=simpleHeight*tileSize*2;
+		width=(simpleWidth*tileSize)+tileSize*5+1;//*2 wegen rotate//*2 is wieder raus
+		height=(simpleHeight*tileSize)+tileSize*5+1;
 		
 //		int diagonal = tileSize;//a²*b²=c² // ich glaube diagonal = 2*lenght -1 //length weil es egal ist ob width/height
 		
@@ -49,45 +49,34 @@ public class Entity {
 			for(int k = 0;k<tileSize;k++){
 				for(int e=0;e<simpleWidth;e++){
 					for(int o=0;o<tileSize;o++){
-						shape[0][e *tileSize + (i*tileSize)*width +o+k*width ] = Integer.parseUnsignedInt(row[e], 16);
+						shape[0][e *tileSize + (i*tileSize)*width +o+k*width + (tileSize/2) *5+1] = Integer.parseUnsignedInt(row[e], 16);
 					}
 				}
 			}
 		}
 		
-		reader.reset();
+		int[] pixels = shape[0];
+		for(int l = 1;l<8;l++){
+			
+	     
+			BufferedImage unrotatedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			for(int f = 0; f < height; f++)
+			{
+			for(int g = 0; g < width;g++)
+	       {
+	    	  unrotatedImage.setRGB(f, g, pixels[f + g * width]);
+	       }
+	     }
+			
+			BufferedImage rotatedImage = new BufferedImage(unrotatedImage.getWidth(), unrotatedImage.getHeight(), unrotatedImage.getType());
+			AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(45*l), (unrotatedImage.getWidth() - 1) / 2, (unrotatedImage.getHeight() - 1) / 2);
+			Graphics2D g = (Graphics2D) rotatedImage.getGraphics();
+			g.setTransform(at);
+			g.drawImage(unrotatedImage, 0, 0, null);
+			g.dispose();    
+			rotatedImage.getRGB(0, 0, width, height, shape[l], 0, width);
+		}
 
-//		for(int i=0;i<simpleHeight;i++){//TODO nicht optimal ?
-//			String[] row = reader.readLine().split(";");
-//			for(int k = 0;k<tileSize;k++){
-//				for(int e=0;e<simpleWidth;e++){
-//					for(int o=0;o<k;o++){
-//						shape[1][e *tileSize*2 + (i*tileSize*2)*width +o+k*width  + (tileSize-1) - (k/2-1)] = Integer.parseUnsignedInt(row[e], 16);
-//					}
-//				}
-//			}
-//			for(int k = tileSize;k<tileSize*2;k++){
-//				for(int e=0;e<simpleWidth;e++){
-//					for(int o=0;o<tileSize-k;o++){
-//						shape[1][e *tileSize*2 + (i*tileSize*2)*width +o+k*width  +- tileSize] = Integer.parseUnsignedInt(row[e], 16);
-//					}
-//				}
-//			}
-//		}
-		
-		BufferedImage test = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);//TODO nur rumtesten
-	
-			test.setRGB(0,0,width,height,shape[0],0,width);
-		
-		AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(45));
-		Graphics2D testg = (Graphics2D) test.getGraphics();
-		testg.setTransform(at);
-//		testg.rotate(Math.toRadians(45));
-		testg.drawImage(test, 0, 0, width, height, null);
-		test.getRGB(0, 0, width, height, shape[1], 0, width);
-		testg.dispose();
-		
-		reader.close();
 	}
 	
 	public void move(int xChange,int yChange){

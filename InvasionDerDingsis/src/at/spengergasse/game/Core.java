@@ -38,6 +38,9 @@ public class Core implements Runnable{
 	
 //	boolean fullscreen;
 
+	private long rot;
+	private final long  TIMER_ROT = 150;
+	
 	@Override
 	public void run() {
 		
@@ -94,7 +97,7 @@ public class Core implements Runnable{
 		frame.setSize(screenWidth, screenHeight);
 		
 		entities = new ArrayList<Entity>();
-		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));entities.get(0).rotate(true);//bsp
+		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));//bsp der spieler
 		
 		data = new int[resolutionX*resolutionY];
 		
@@ -146,6 +149,8 @@ public class Core implements Runnable{
 	}
 	
 	private void handleMovement(){
+		long now = System.currentTimeMillis();
+		
 		int x = 0;
 		int y = 0;
 		if(keyboard.up){
@@ -154,11 +159,13 @@ public class Core implements Runnable{
 		if(keyboard.down){
 			y++;
 		}
-		if(keyboard.right){
-			x++;
+		if(keyboard.right && now > rot){
+			entities.get(0).rotate(true);
+			rot=System.currentTimeMillis()+TIMER_ROT;
 		}
-		if(keyboard.left){
-			x--;
+		if(keyboard.left && now > rot ){
+			entities.get(0).rotate(false);
+			rot=System.currentTimeMillis()+TIMER_ROT;
 		}
 		entities.get(0).move(x, y);//index 0 = player
 	}

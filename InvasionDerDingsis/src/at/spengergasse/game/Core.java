@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import at.spengergasse.entities.Entity;
 import at.spengergasse.input.Keyboard;
 import at.spengergasse.visual.Visual;
+import javafx.animation.PathTransition.OrientationType;
 
 public class Core implements Runnable{
 	
@@ -151,22 +152,69 @@ public class Core implements Runnable{
 	private void handleMovement(){
 		long now = System.currentTimeMillis();
 		
+		int movF = 2;
+		
+		int orientation = entities.get(0).getRotation();
+		
 		int x = 0;
 		int y = 0;
 		if(keyboard.up){
-			y--;
+			if(orientation == 0){
+				y-=movF;
+			}else if(orientation == 1){
+				y-=movF;
+				x+=movF;
+			}else if(orientation == 2){
+				x+=movF;
+			}else if(orientation == 3){
+				y+=movF;
+				x+=movF;
+			}else if(orientation == 4){
+				y+=movF;
+			}else if(orientation == 5){
+				y+=movF;
+				x-=movF;
+			}else if(orientation == 6){
+				x-=movF;
+			}else if(orientation == 7){
+				x-=movF;
+				y-=movF;
+			}
 		}
 		if(keyboard.down){
-			y++;
+			if(orientation == 0){
+				y+=movF;
+			}else if(orientation == 1){
+				y+=movF;
+				x-=movF;
+			}else if(orientation == 2){
+				x-=movF;
+			}else if(orientation == 3){
+				y-=movF;
+				x-=movF;
+			}else if(orientation == 4){
+				y-=movF;
+			}else if(orientation == 5){
+				y-=movF;
+				x+=movF;
+			}else if(orientation == 6){
+				x+=movF;
+			}else if(orientation == 7){
+				x+=movF;
+				y+=movF;
+			}
 		}
+		
 		if(keyboard.right && now > rot){
 			entities.get(0).rotate(true);
 			rot=System.currentTimeMillis()+TIMER_ROT;
 		}
+		
 		if(keyboard.left && now > rot ){
 			entities.get(0).rotate(false);
 			rot=System.currentTimeMillis()+TIMER_ROT;
 		}
+		
 		entities.get(0).move(x, y);//index 0 = player
 	}
 	

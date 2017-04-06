@@ -35,8 +35,8 @@ public class Entity {
 		simpleWidth =Integer.parseInt(reader.readLine());
 		simpleHeight =Integer.parseInt(reader.readLine());
 		
-		width=(simpleWidth*tileSize)+tileSize*5+1;//*2 wegen rotate//*2 is wieder raus
-		height=(simpleHeight*tileSize)+tileSize*5+1;
+		width=(simpleWidth*tileSize);//*2 wegen rotate//*2 is wieder raus
+		height=(simpleHeight*tileSize);//+tileSize*5+1
 		
 //		int diagonal = tileSize;//a²*b²=c² // ich glaube diagonal = 2*lenght -1 //length weil es egal ist ob width/height
 		
@@ -48,8 +48,8 @@ public class Entity {
 			String[] row = reader.readLine().split(";");
 			for(int k = 0;k<tileSize;k++){
 				for(int e=0;e<simpleWidth;e++){
-					for(int o=0;o<tileSize;o++){
-						shape[0][e *tileSize + (i*tileSize)*width +o+k*width + (tileSize/2) *5+1] = Integer.parseUnsignedInt(row[e], 16);
+					for(int o=0;o<tileSize;o++){//+ (tileSize/2) *5+1
+						shape[0][e *tileSize + (i*tileSize)*width +o+k*width ] = Integer.parseUnsignedInt(row[e], 16);
 					}
 				}
 			}

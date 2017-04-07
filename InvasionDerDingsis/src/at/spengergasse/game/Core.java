@@ -1,8 +1,5 @@
 package at.spengergasse.game;
 
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -11,23 +8,22 @@ import javax.swing.JFrame;
 import at.spengergasse.entities.Entity;
 import at.spengergasse.input.Keyboard;
 import at.spengergasse.visual.Visual;
-import javafx.animation.PathTransition.OrientationType;
 
 public class Core implements Runnable{
 	
-	private Keyboard keyboard;
+	private JFrame frame;
+	//--
+	private Thread thread;
 	//--
 	private Visual visual;
+	//--
+	private Keyboard keyboard;
 	//--
 	private int[] data;
 	private int[] collisionMap;
 	//--
-	private Thread thread;
+//	private DisplayMode dM;
 	//--
-	private DisplayMode dM;
-	//--
-	private JFrame frame;
-	
 	private int screenWidth,screenHeight;
 	private int resolutionX,resolutionY;
 	//--
@@ -39,7 +35,7 @@ public class Core implements Runnable{
 	
 //	boolean fullscreen;
 
-	private long rot;
+	private long rot; // rotation timer
 	private final long  TIMER_ROT = 150;
 	
 	@Override
@@ -66,27 +62,24 @@ public class Core implements Runnable{
 					now = System.nanoTime();
 					visual.render();
 				}
-				
-				
 				//60 mal die sekunde
 				
 				update();
 
-				
 				next = now + delta;
 			}
 		}
 		
 	}
 	
-	public Core() throws IOException{//TODO exception handling
-		dM = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+	public Core() throws IOException{
+//		dM = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
 		
-		tileSize = 10;
-		//1600x900 anfangs // es ist resizeable und fullscreen
+		tileSize = 5;
+		//1600x900   16:9
 		screenWidth = 1600;
 		screenHeight = 900;
-		//1920x1080
+		
 		resolutionX = screenWidth;
 		resolutionY = screenHeight;
 		
@@ -97,8 +90,8 @@ public class Core implements Runnable{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(screenWidth, screenHeight);
 		
-		entities = new ArrayList<Entity>();
-		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));//bsp der spieler
+		entities = new ArrayList<Entity>();//bsp der spieler
+		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));
 		
 		data = new int[resolutionX*resolutionY];
 		
@@ -136,8 +129,7 @@ public class Core implements Runnable{
 	}
 	
 	public void update(){//tick
-		keyboard.update();//tastatur eingaben werden überprüft //sollte vll wo anders hin verschoben werden weil ticks nur 60 mal die sekunde ablaufen
-		//im moment kommen hier die abfragen bezüglich welche tasten drücke registriert wurden
+		keyboard.update();
 		handleMovement();
 		
 		for(int i=0;i<data.length;i++){//clear
@@ -149,7 +141,7 @@ public class Core implements Runnable{
 		}
 	}
 	
-	private void handleMovement(){
+	private void handleMovement(){//provisorisch
 		long now = System.currentTimeMillis();
 		
 		int movF = 2;
@@ -206,12 +198,12 @@ public class Core implements Runnable{
 		}
 		
 		if(keyboard.right && now > rot){
-			entities.get(0).rotate(true);
+			entities.get(0).rotate(1);
 			rot=System.currentTimeMillis()+TIMER_ROT;
 		}
 		
 		if(keyboard.left && now > rot ){
-			entities.get(0).rotate(false);
+			entities.get(0).rotate(-1);
 			rot=System.currentTimeMillis()+TIMER_ROT;
 		}
 		
@@ -220,15 +212,20 @@ public class Core implements Runnable{
 	
 	public void load(Entity entity){//lädt das shape der entity ins data array
 		int[] shape = entity.getShape();
+		
 		int width = entity.getWidth();
 		int heigth = entity.getHeight();
+		
 		int x = entity.getX();
 		int y = entity.getY();
+
 		for(int posY = 0;posY<heigth;posY++){
 			for(int posX=0;posX<width;posX++){
+				
 				if(shape[posX+posY*width]!=0){
 					data[x + y * resolutionX + posX + posY * resolutionX] = shape[posX+posY*width];
 				}
+				
 			}
 		}
 	}

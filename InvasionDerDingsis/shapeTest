@@ -1,6 +1,10 @@
-3
-3
-ff0000;ff0000;0000ff
-000000;000000;000000
-ffffff;000000;00ff00
-
+8
+8
+000000;000000;000000;ffffff;ffffff;000000;000000;000000;
+000000;000000;000000;ffffff;ffffff;000000;000000;000000;
+000000;000000;ffffff;ffffff;ffffff;ffffff;000000;000000;
+ffffff;000000;ffffff;ff00ff;ff00ff;ffffff;000000;ffffff;
+ffffff;ffffff;ffffff;ffffff;ffffff;ffffff;ffffff;ffffff;
+ffffff;ffffff;ffffff;ffffff;ffffff;ffffff;ffffff;ffffff;
+ffffff;ffffff;ffffff;000000;000000;ffffff;ffffff;ffffff;
+ffffff;ffffff;000000;000000;000000;000000;ffffff;ffffff;

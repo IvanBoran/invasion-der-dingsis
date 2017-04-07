@@ -35,45 +35,50 @@ public class Entity {
 		simpleWidth =Integer.parseInt(reader.readLine());
 		simpleHeight =Integer.parseInt(reader.readLine());
 		
-		width=(simpleWidth*tileSize);//*2 wegen rotate//*2 is wieder raus
-		height=(simpleHeight*tileSize);//+tileSize*5+1
-		
-//		int diagonal = tileSize;//a²*b²=c² // ich glaube diagonal = 2*lenght -1 //length weil es egal ist ob width/height
-		
-		shape = new int[8][width*height];//*tileSize*tileSize
+		width=simpleWidth*tileSize+tileSize*4;//größe muss noch angepasst werden damit rotated image reinpasst
+		height=simpleHeight*tileSize+tileSize*4;//+tileSize*5+1
+				
+		shape = new int[8][width*height];
 		
 		reader.mark(simpleHeight*simpleWidth);
 		
-		for(int i=0;i<simpleHeight;i++){//TODO nicht optimal ?
+		for(int i=0;i<simpleHeight;i++){
+			
 			String[] row = reader.readLine().split(";");
+			
 			for(int k = 0;k<tileSize;k++){
 				for(int e=0;e<simpleWidth;e++){
+					
 					for(int o=0;o<tileSize;o++){//+ (tileSize/2) *5+1
-						shape[0][e *tileSize + (i*tileSize)*width +o+k*width ] = Integer.parseUnsignedInt(row[e], 16);
+						shape[0][e *tileSize + (i*tileSize)*width +o+k*width + (tileSize*2)*width + tileSize*2] = Integer.parseUnsignedInt(row[e], 16);
 					}
+					
 				}
 			}
+			
 		}
 		
 		int[] pixels = shape[0];
 		for(int l = 1;l<8;l++){
 			
-	     
 			BufferedImage unrotatedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			
 			for(int f = 0; f < height; f++)
 			{
-			for(int g = 0; g < width;g++)
-	       {
-	    	  unrotatedImage.setRGB(f, g, pixels[f + g * width]);
-	       }
-	     }
+				for(int g = 0; g < width;g++)
+				{
+					unrotatedImage.setRGB(f, g, pixels[f + g * width]);
+				}
+			}
 			
 			BufferedImage rotatedImage = new BufferedImage(unrotatedImage.getWidth(), unrotatedImage.getHeight(), unrotatedImage.getType());
-			AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(45*l), (unrotatedImage.getWidth() - 1) / 2, (unrotatedImage.getHeight() - 1) / 2);
+			AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(45*l), (unrotatedImage.getWidth()) / 2, (unrotatedImage.getHeight()) / 2 );
 			Graphics2D g = (Graphics2D) rotatedImage.getGraphics();
+			
 			g.setTransform(at);
 			g.drawImage(unrotatedImage, 0, 0, null);
-			g.dispose();    
+			g.dispose(); 
+			
 			rotatedImage.getRGB(0, 0, width, height, shape[l], 0, width);
 		}
 
@@ -108,13 +113,11 @@ public class Entity {
 		return rotation;
 	}
 	
-	public void rotate(boolean rightElseLeft){//0 - 7
-		int direction;
-		if(rightElseLeft)
-			direction = 1;
-		else
-			direction = -1;
-		
+	public int getId(){
+		return myId;
+	}
+	
+	public void rotate(int direction){//0 - 7		
 		rotation+=direction;
 		if(rotation==-1)
 			rotation=7;

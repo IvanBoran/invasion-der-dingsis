@@ -41,34 +41,33 @@ public class Core implements Runnable{
 	@Override
 	public void run() {
 		
-		while(running){// sync funktionalität nutzen
 			long now;
 			long next;
-			long delta = 1000000000 / 120;
+			long delta = 1000 / 40;//in ms
 			
-			while(running){	//testen mit zb thread.sleep
-				try { // gibt ab und so kleine ruckler
-					thread.sleep(0,10);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				now = System.nanoTime();
-				next = now + delta;
+			while(running){
 
+				now = System.currentTimeMillis();
+				next = now + delta;
+				
+				update();//60 mal die sekunde
+				visual.render();
+				
 				while(now < next){
 					//unbegrenzt oft in der sekunde
-					now = System.nanoTime();
-					visual.render();
+					now = System.currentTimeMillis();
+					
 				}
-				//60 mal die sekunde
 				
-				update();
-
+//				try { // gibt ab und so kleine ruckler
+//					thread.sleep(1000/120,0);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+				
 				next = now + delta;
 			}
-		}
 		
 	}
 	
@@ -123,7 +122,6 @@ public class Core implements Runnable{
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

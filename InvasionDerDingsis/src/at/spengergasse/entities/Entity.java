@@ -35,7 +35,7 @@ public class Entity {
 		simpleWidth =Integer.parseInt(reader.readLine());
 		simpleHeight =Integer.parseInt(reader.readLine());
 		
-		width=simpleWidth*tileSize+tileSize*4;//größe muss noch angepasst werden damit rotated image reinpasst
+		width=simpleWidth*tileSize+tileSize*4;
 		height=simpleHeight*tileSize+tileSize*4;//+tileSize*5+1
 				
 		shape = new int[8][width*height];
@@ -63,13 +63,16 @@ public class Entity {
 			
 			BufferedImage unrotatedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 			
-			for(int f = 0; f < height; f++)
-			{
-				for(int g = 0; g < width;g++)
-				{
-					unrotatedImage.setRGB(f, g, pixels[f + g * width]);
-				}
-			}
+//			for(int f = 0; f < height; f++)
+//			{
+//				for(int g = 0; g < width;g++)
+//				{
+//					unrotatedImage.setRGB(f, g, pixels[f + g * width]);
+//					
+//				}
+//			}
+			
+			unrotatedImage.setRGB(0, 0, width, height, pixels, 0, width);
 			
 			BufferedImage rotatedImage = new BufferedImage(unrotatedImage.getWidth(), unrotatedImage.getHeight(), unrotatedImage.getType());
 			AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(45*l), (unrotatedImage.getWidth()) / 2, (unrotatedImage.getHeight()) / 2 );

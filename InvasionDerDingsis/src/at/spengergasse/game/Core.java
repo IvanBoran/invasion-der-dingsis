@@ -2,6 +2,10 @@ package at.spengergasse.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import static java.util.concurrent.TimeUnit.*;
 
 import javax.swing.JFrame;
 
@@ -38,6 +42,9 @@ public class Core implements Runnable{
 	private long rot; // rotation timer
 	private final long  TIMER_ROT = 150;
 	
+	private final ScheduledExecutorService scheduler =
+		     Executors.newScheduledThreadPool(1);
+	
 	@Override
 	public void run() {
 		
@@ -45,7 +52,7 @@ public class Core implements Runnable{
 //			long next;
 //			long delta = 100000000 / 40;//in ms
 			
-			while(running){
+//			while(running){
 
 //				now = System.nanoTime();
 //				next = now + delta;
@@ -54,19 +61,19 @@ public class Core implements Runnable{
 				
 				visual.render();
 				
-				try {
-					Thread.sleep(1000/500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					Thread.sleep(1000/500);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 //				
 //				while(now < next){//unbegrenzt oft in der sekunde
 //					now = System.nanoTime();
 //				}
 				
 //				next = now + delta;
-			}
+//			}
 		
 	}
 	
@@ -114,6 +121,9 @@ public class Core implements Runnable{
 		running = true;
 		thread = new Thread(this,"Frame"); 
 		thread.start();
+		
+		final ScheduledFuture<?> loopHandle =
+			       scheduler.scheduleAtFixedRate(this, 0, 10, NANOSECONDS);
 	}
 	
 	public synchronized void stop(){

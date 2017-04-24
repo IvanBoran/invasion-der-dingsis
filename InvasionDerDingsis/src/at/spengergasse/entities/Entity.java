@@ -90,7 +90,7 @@ public class Entity {
 	
 	public void move(int xChange,int yChange){
 		x+=xChange;
-		y+=yChange;System.out.println(this.x);
+		y+=yChange;
 	}
 	
 	public int[] getShape(){

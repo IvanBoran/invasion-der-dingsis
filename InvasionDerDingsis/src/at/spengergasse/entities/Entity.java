@@ -12,19 +12,19 @@ import java.io.Writer;
 
 public class Entity {
 
-	private static int id;
+	private static int id;//Der Zähler damit jedes Entity eine eigene U_ID bekommt
 	
-	private final int U_ID;
+	private final int U_ID;//Bei jedem Entity eindeutig und wird gebraucht um die verschiedenen Entities zu indentifizieren
 	
 	private int x,y;
 
-	private int rotation;//rotation * 45°
+	private int rotation;//Der Grad der Rotation in 45° Schritten
 
-	private int[][] shape;
+	private int[][] shape;//Die Textur der Entity in jeder möglichen rotierten Position
 
 	private int width,height;
 
-	private int simpleWidth,simpleHeight;
+	private int simpleWidth,simpleHeight;//Die "einfache" Breite und Höhe dadurch das aus dennen dann mithilfe von tileSize die Textur hochgerechnet wird
 
 	public Entity(String pathShape,int x,int y,int tileSize) throws IOException{
 
@@ -33,19 +33,17 @@ public class Entity {
 		this.x=x;
 		this.y=y;
 
-		BufferedReader reader = new BufferedReader(new FileReader(pathShape));
+		BufferedReader reader = new BufferedReader(new FileReader(pathShape));//Siehe Java Docs - BufferdReader
 
 		simpleWidth =Integer.parseInt(reader.readLine());
 		simpleHeight =Integer.parseInt(reader.readLine());
 
 		width=simpleWidth*tileSize+tileSize*4;
-		height=simpleHeight*tileSize+tileSize*4;//+tileSize*5+1
+		height=simpleHeight*tileSize+tileSize*4;
 
 		shape = new int[8][width*height];
 
-		reader.mark(simpleHeight*simpleWidth);
-
-		for(int i=0;i<simpleHeight;i++){
+		for(int i=0;i<simpleHeight;i++){ // In den nächsten Schleifen werden die Texturen hochgerechnet
 
 			String[] row = reader.readLine().split(";");
 
@@ -58,19 +56,10 @@ public class Entity {
 			}
 		}
 
-		int[] pixels = shape[0];
 		for(int l = 1;l<8;l++){
 			BufferedImage unrotatedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
-			//			for(int f = 0; f < height; f++)
-			//			{
-			//				for(int g = 0; g < width;g++)
-			//				{
-			//					unrotatedImage.setRGB(f, g, pixels[f + g * width]);
-			//				}
-			//			}
-
-			unrotatedImage.setRGB(0, 0, width, height, pixels, 0, width);
+			unrotatedImage.setRGB(0, 0, width, height, shape[0], 0, width);
 
 			BufferedImage rotatedImage = new BufferedImage(unrotatedImage.getWidth(), unrotatedImage.getHeight(), unrotatedImage.getType());
 			AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(45*l), (unrotatedImage.getWidth()) / 2, (unrotatedImage.getHeight()) / 2 );

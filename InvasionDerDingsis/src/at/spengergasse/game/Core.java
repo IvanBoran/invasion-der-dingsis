@@ -15,99 +15,70 @@ import at.spengergasse.visual.Visual;
 
 public class Core implements Runnable{
 
-	private final int TICK_RATE = 60;// Die Tickrate mit der der Gameloop läuft
+	private final int TICK_RATE = 60;// Die Tickrate mit der der Gameloop läuft in nanosekunden (1 sec = 1000000000 ns)
 
-	private JFrame frame;
-	//--
-	//	private Thread thread;
-	//--
-	private Visual visual;
-	//--
-	private Keyboard keyboard;
-	//--
-	private int[] data;
-	private int[] collisionMap;
-	//--
-	//	private DisplayMode dM;
-	//--
-	private int screenWidth,screenHeight;
-	private int resolutionX,resolutionY;
-	//--
-	//	private boolean running = false;
-	//--
-	private ArrayList<Entity> entities;
-	//--
-	private int tileSize;//größe der "pixel"
+	private JFrame frame;// Das eigentliche Fenster in dem sich alles abspielt, wird jedoch vll aus dieser Klasse ausgelagert werden müssen wenn später ein Menü dazu kommt das im selben Fenster wie das Spiel stattfinden soll
+	private Visual visual;// Die Canvas("Leinwand) Klasse die benutzt wird um alle Elemenete darauf zu rendern
+	
+	private Keyboard keyboard;// Der KeyListener der überall im Spiel benutzt wird
+	
+	private int[] data;// Im data Array sind alle Pixel in Form von RGB Farbwerten vertreten (RGB -> 0xRRGGBB (hexadecimal -> 0xff0000 ist z.B pures Rot))
+	private int[] collisionMap;// Mithilfe der collisionMap wird später die Hitdetection umgesetzt
+	
+	//private DisplayMode dM; // DisplayMode wird vielleicht später für Fullscreen gebraucht und wird deswegen hier hinterlassen als Erinnerung
+	
+	private int screenWidth,screenHeight;// Die Größe des Fensters
+	private final int resolutionX,resolutionY;// Die Auflösung des Dargestelltem im Fenster aber ACHTUNG darf nicht größer sein als die Größe da sonst Pixel verschluckt werden und es zu verformungen kommen kann
+	
+	private ArrayList<Entity> entities;// Hier werden alle Entities vertreten sein die dann auch direkt hier rauß gerendert werden mit einer Schleife die in der Methode update implementiert ist (ein Entity ist alles was "lebt/sich bewegt" z.B Spieler,Gegner oder Geschosse
+	
+	private int tileSize;// Größe der Kacheln/Pixel der gerenderten Entities
 
-	//	boolean fullscreen;
+	private MovementHandler movementHandler;// Abstrakte super-Klasse von allen MovementHandlern damit man verschiedene benutzen kann um z.B in verschiedenen Spielmodie verschiedene Tasten belegen zu können
 
-	private MovementHandler movementHandler;
+	private long rot; // Der Timer für die Rotation des Spielers damit das drehen kontrollierbar wird
+	private final long  TIMER_ROT = 150;// Die Zeitdifferenz zwischen einmal rotieren und dem nächsten mal in millisekunden (1 sec = 1000 ms)
 
-	private long rot; // rotation timer
-	private final long  TIMER_ROT = 150;//verzögerung für rotation in ms
-
-	private final ScheduledExecutorService scheduler =
+	private final ScheduledExecutorService scheduler =    // Wird für den Gameloop benutzt, unten wird sie genauer erklärt
 			Executors.newSingleThreadScheduledExecutor();
 
 	@Override
-	public void run() {
+	public void run() { // run wird benötigt dadurch das Core das Interface Runnable hat, das Interface wird benötigt damit man den Gameloop benutzen kann mit dem scheduler
 
-		//			long now;
-		//			long next;
-		//			long delta = 100000000 / 40;//in ms
+		update();// Ein "Tick" / Es werden alle Positionen geupdated und alle Entities in data mit ihren neuen Positionen geladen
 
-		//			while(running){
+		visual.render();// Hier werden alle Daten aus data in das pixel Array von Visual geladen und dann gerendert -> siehe Visual
 
-		//				now = System.nanoTime();
-		//				next = now + delta;
-
-		update();
-
-		visual.render();
-
-		//				try {
-		//					Thread.sleep(1000/500);
-		//				} catch (InterruptedException e) {
-		//					// TODO Auto-generated catch block
-		//					e.printStackTrace();
-		//				}
-		//				
-		//				while(now < next){//unbegrenzt oft in der sekunde
-		//					now = System.nanoTime();
-		//				}
-
-		//				next = now + delta;
-		//			}
 	}
 
 	public Core() throws IOException{
-		//		dM = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+		//dM = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode(); //Wie oben beschrieben nur eventuell gebraucht
 
 		tileSize = 5;
-		//1600x900   16:9
+		
 		screenWidth = 1600;
 		screenHeight = 900;
 
 		resolutionX = screenWidth;
 		resolutionY = screenHeight;
 
-		frame = new JFrame("Invasion der Dingsis"); //falls menü und alles im selben fenster sein soll muss das dann ausgelagert werden
+		frame = new JFrame("Invasion der Dingsis");
 
-		movementHandler = new TestMovement();//TODO provisorisch
+		movementHandler = new TestMovement();//TestMovement ist ein movementHandler der erstmal zum Testen benutzt wird
 
 		keyboard = new Keyboard();
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Es wird das Standard verfahren gewählt was passieren soll wenn man versucht das Fenster zu schließen
 		frame.setSize(screenWidth, screenHeight);
 
-		entities = new ArrayList<Entity>();//bsp der spieler
-		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));
+		entities = new ArrayList<Entity>();//Dadurch dass der Spieler zuerst erstellt wird kommt er auf Index 0
+		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
 
 		data = new int[resolutionX*resolutionY];
 
 		collisionMap = new int[resolutionX*resolutionY];
 
-		visual = new Visual(resolutionX, resolutionY,screenWidth,screenHeight, data);
+		visual = new Visual(resolutionX, resolutionY,screenWidth,screenHeight, data);//Das visual Objekt wird mit der data Referenz erstellt und das sorgt dafür das man in Core nur data verändern muss und visual das dann direkt auslesen kann -> siehe Visual
 
 		visual.addKeyListener(keyboard);
 		frame.add(visual);
@@ -118,40 +89,35 @@ public class Core implements Runnable{
 
 		frame.pack();
 
-		start();
+		start();// Es wird start am ende des Konstruktors aufgerufen damit alles oben erstmal laden kann und dann erst angefangen wird zu Rendern
 	}
 
 
-	public synchronized void start(){
-		//		running = true;
-		//		thread = new Thread(this,"Frame"); 
-		//		thread.start();
-
-		final ScheduledFuture<?> loopHandle =
-				scheduler.scheduleAtFixedRate(this, 0, 1000000000/TICK_RATE, NANOSECONDS);//1000000000 ns = 1 sec
+	public synchronized void start(){//stop und start haben synchronized damit die zwei Methonden nicht miteinander in Konflikt kommen
+		final ScheduledFuture<?> gameLoop =
+				scheduler.scheduleAtFixedRate(this, 0, 1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
 	}
 
 	public synchronized void stop(){
 		frame.dispose();
-		scheduler.shutdown();
+		scheduler.shutdown();//Hier wird vielleicht später ExceptionHandling benötigt
 	}
 
-	public void update(){//tick
+	public void update(){//Wird TICK_RATE mal in der Sekunde aufgerufen vom GameLoop
 
-		keyboard.update();
-		movementHandler.handleMovement();
+		keyboard.update();//Der KeyListener keyboard fragt die Tasten ab
+		movementHandler.handleMovement();//Hier wird die Position vom Spieler geupdated aufgrund von Tastatureingaben
 
-		for(int i=0;i<data.length;i++){//clear
-			data[i]=0xaaaa00;
-			//			if(i%2==0){data[i]=0;}else data[i]=0xffffff;
+		for(int i=0;i<data.length;i++){//In dieser Schleife wird das data Array geleert damit alles neu darauf gerendert werden kann ohne überschneidungen mit dem letzten Frame zu haben
+			data[i]=0xaaaa00;//Momentan die Farbe Gelb 
 		}
 
-		for(Entity e:entities){//alle entities werden in data eingeschrieben
+		for(Entity e:entities){//Es werden alle Entities neu in data geladen mithilfe der Methode load
 			load(e);
 		}
 	}
 
-	public void load(Entity entity){//lädt das shape der entity ins data array
+	public void load(Entity entity){//Ruft alle Informationen vom jeweiligen Entity auf und lädt es so auf die richtige Position im data Array
 		int[] shape = entity.getShape();
 
 		int width = entity.getWidth();
@@ -169,7 +135,7 @@ public class Core implements Runnable{
 		}
 	}
 
-	private abstract class MovementHandler{
+	private abstract class MovementHandler{ // MovementHandler wie oben beschrieben wird dazu benutzt später verschiedene Tastaturlayouts benutzen zu können
 		public abstract void handleMovement();
 	}
 
@@ -243,7 +209,7 @@ public class Core implements Runnable{
 				rot=System.currentTimeMillis()+TIMER_ROT;
 			}
 
-			entities.get(0).move(x, y);//index 0 = player
+			entities.get(0).move(x, y);
 		}
 	}
 }

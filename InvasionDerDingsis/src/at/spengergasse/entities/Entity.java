@@ -52,15 +52,12 @@ public class Entity {
 					for(int o=0;o<tileSize;o++){//+ (tileSize/2) *5+1
 						shape[0][e *tileSize + (i*tileSize)*width +o+k*width + (tileSize*2)*width + tileSize*2] = Integer.parseUnsignedInt(row[e], 16);
 					}
-					
 				}
 			}
-			
 		}
 		
 		int[] pixels = shape[0];
 		for(int l = 1;l<8;l++){
-			
 			BufferedImage unrotatedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 			
 //			for(int f = 0; f < height; f++)
@@ -68,7 +65,6 @@ public class Entity {
 //				for(int g = 0; g < width;g++)
 //				{
 //					unrotatedImage.setRGB(f, g, pixels[f + g * width]);
-//					
 //				}
 //			}
 			
@@ -83,13 +79,18 @@ public class Entity {
 			g.dispose(); 
 			
 			rotatedImage.getRGB(0, 0, width, height, shape[l], 0, width);
+			
+			for(int k=0;k<shape[0].length;k++){
+				if(shape[l][k]==-16777216){
+					shape[l][k]=0;
+				}
+			}
 		}
-
 	}
 	
 	public void move(int xChange,int yChange){
 		x+=xChange;
-		y+=yChange;
+		y+=yChange;System.out.println(this.x);
 	}
 	
 	public int[] getShape(){

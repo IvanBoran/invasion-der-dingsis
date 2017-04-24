@@ -41,32 +41,31 @@ public class Core implements Runnable{
 	@Override
 	public void run() {
 		
-			long now;
-			long next;
-			long delta = 1000 / 40;//in ms
+//			long now;
+//			long next;
+//			long delta = 100000000 / 40;//in ms
 			
 			while(running){
 
-				now = System.currentTimeMillis();
-				next = now + delta;
+//				now = System.nanoTime();
+//				next = now + delta;
 				
-				update();//60 mal die sekunde
+				update();
+				
 				visual.render();
 				
-				while(now < next){
-					//unbegrenzt oft in der sekunde
-					now = System.currentTimeMillis();
-					
+				try {
+					Thread.sleep(1000/500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				
-//				try { // gibt ab und so kleine ruckler
-//					thread.sleep(1000/120,0);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
+//				
+//				while(now < next){//unbegrenzt oft in der sekunde
+//					now = System.nanoTime();
 //				}
 				
-				next = now + delta;
+//				next = now + delta;
 			}
 		
 	}
@@ -131,7 +130,11 @@ public class Core implements Runnable{
 		handleMovement();
 		
 		for(int i=0;i<data.length;i++){//clear
-			data[i]=0;
+			data[i]=0xaaaa00;
+//			if(i%2==0){
+//				data[i]=0;
+//			}else
+//				data[i]=0xffffff;
 		}
 		
 		for(Entity e:entities){//alle entities werden in data eingeschrieben
@@ -142,7 +145,7 @@ public class Core implements Runnable{
 	private void handleMovement(){//provisorisch
 		long now = System.currentTimeMillis();
 		
-		int movF = 2;
+		int movF = 1;
 		
 		int orientation = entities.get(0).getRotation();
 		
@@ -219,8 +222,7 @@ public class Core implements Runnable{
 
 		for(int posY = 0;posY<heigth;posY++){
 			for(int posX=0;posX<width;posX++){
-				
-				if(shape[posX+posY*width]!=0){
+				if(shape[posX+posY*width]!= 0){
 					data[x + y * resolutionX + posX + posY * resolutionX] = shape[posX+posY*width];
 				}
 				

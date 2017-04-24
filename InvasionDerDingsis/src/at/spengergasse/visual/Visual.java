@@ -31,11 +31,15 @@ public class Visual extends Canvas{
 		}
 		
 //		Graphics2D g = (Graphics2D)getGraphics();
-//		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+//		g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 		
 		Graphics g = getGraphics();
 		g.drawImage(image, 0, 0,getWidth(),getHeight(), null);
 		g.dispose();
+	}
+
+	public int[] getPixel() {
+		return pixel;
 	}
 
 }

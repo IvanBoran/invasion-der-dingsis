@@ -10,9 +10,9 @@ import static java.util.concurrent.TimeUnit.*;
 import javax.swing.JFrame;
 
 import at.spengergasse.entities.Entity;
-import at.spengergasse.entities.TestCollisionHandler;
 import at.spengergasse.input.Keyboard;
 import at.spengergasse.visual.Visual;
+import auslagerung.TestCollisionHandler;
 
 public class Core implements Runnable{
 
@@ -92,8 +92,8 @@ public class Core implements Runnable{
 
 		frame.pack();
 		//entities.add(new Entity(id++,resolutionX,resolutionY,"shapeTest",resolutionX/4, resolutionX/4, tileSize,new TestCollisionHandler(id,entities,collisionMap,resolutionX,resolutionY)));
-		entities.add(new Entity(id++,resolutionX,resolutionY,"shapeTest",resolutionX/4, resolutionX/4, tileSize,new TestCollisionHandler(id++, entities, collisionMap, resolutionX, resolutionY)));//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
-		entities.add(new Entity(id++,resolutionX,resolutionY,"shapeTest",resolutionX/2, resolutionX/2, tileSize,new TestCollisionHandler(id++, entities, collisionMap, resolutionX, resolutionY)));
+		entities.add(new Entity(id++,resolutionX,resolutionY,"shapeTest",resolutionX/4, resolutionX/4, tileSize));//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
+		entities.add(new Entity(id++,resolutionX,resolutionY,"shapeTest",resolutionX/2, resolutionX/2, tileSize));
 
 		start();// Es wird start am ende des Konstruktors aufgerufen damit alles oben erstmal laden kann und dann erst angefangen wird zu Rendern
 	}
@@ -155,7 +155,7 @@ public class Core implements Runnable{
 				int entity2Y=entities.get(e).getY();
 				
 				if(Math.abs(entityX-entity2X)<100){
-					entities.get(i).getCollisionHandler().detectCollision();
+					
 				}
 			}
 		}

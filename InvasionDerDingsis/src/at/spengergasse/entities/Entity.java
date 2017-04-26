@@ -24,16 +24,12 @@ public class Entity {
 
 	private int simpleWidth,simpleHeight;//Die "einfache" Breite und Höhe dadurch das aus dennen dann mithilfe von tileSize die Textur hochgerechnet wird
 	
-	private CollisionHandler collisionHandler;
-
 	private int resolutionX,resolutionY;
 	
-	public Entity(int id,int resolutionX,int resolutionY,String pathShape,int x,int y,int tileSize,CollisionHandler collisionHandler) throws IOException{
+	public Entity(int id,int resolutionX,int resolutionY,String pathShape,int x,int y,int tileSize) throws IOException{
 
 		this.resolutionX=resolutionX;
 		this.resolutionY=resolutionY;
-		
-		this.collisionHandler=collisionHandler;
 		
 		U_ID = id;
 
@@ -143,10 +139,6 @@ public class Entity {
 			rotation=7;
 		else if(rotation==8)
 			rotation=0;
-	}
-	
-	public CollisionHandler getCollisionHandler(){
-		return collisionHandler;
 	}
 	
 }

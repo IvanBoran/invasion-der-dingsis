@@ -44,6 +44,8 @@ public class Core implements Runnable{
 
 	private final ScheduledExecutorService scheduler =    // Wird für den Gameloop benutzt, unten wird sie genauer erklärt
 			Executors.newSingleThreadScheduledExecutor();
+	
+	private static int id;//Der Zähler damit jedes Entity eine eigene U_ID bekommt
 
 	@Override
 	public void run() { // run wird benötigt dadurch das Core das Interface Runnable hat, das Interface wird benötigt damit man den Gameloop benutzen kann mit dem scheduler
@@ -74,8 +76,7 @@ public class Core implements Runnable{
 		frame.setSize(screenWidth, screenHeight);
 
 		entities = new ArrayList<Entity>();//Dadurch dass der Spieler zuerst erstellt wird kommt er auf Index 
-		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize,new TestCollisionHandler(entities)));//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
-
+		
 		data = new int[resolutionX*resolutionY];
 
 		collisionMap = new int[resolutionX*resolutionY];
@@ -90,12 +91,16 @@ public class Core implements Runnable{
 		frame.setVisible(true);
 
 		frame.pack();
+		//entities.add(new Entity(id++,resolutionX,resolutionY,"shapeTest",resolutionX/4, resolutionX/4, tileSize,new TestCollisionHandler(id,entities,collisionMap,resolutionX,resolutionY)));
+		entities.add(new Entity(id++,resolutionX,resolutionY,"shapeTest",resolutionX/4, resolutionX/4, tileSize,new TestCollisionHandler(id++, entities, collisionMap, resolutionX, resolutionY)));//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
+		entities.add(new Entity(id++,resolutionX,resolutionY,"shapeTest",resolutionX/2, resolutionX/2, tileSize,new TestCollisionHandler(id++, entities, collisionMap, resolutionX, resolutionY)));
 
 		start();// Es wird start am ende des Konstruktors aufgerufen damit alles oben erstmal laden kann und dann erst angefangen wird zu Rendern
 	}
 
 
 	public synchronized void start(){//stop und start haben synchronized damit die zwei Methonden nicht miteinander in Konflikt kommen
+		System.out.println("Start");
 		final ScheduledFuture<?> gameLoop = scheduler.scheduleAtFixedRate(this, 0, 1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
 	}
 
@@ -105,7 +110,6 @@ public class Core implements Runnable{
 	}
 	
 	private void update(){//Wird TICK_RATE mal in der Sekunde aufgerufen vom GameLoop
-		
 		keyboard.update();//Der KeyListener keyboard fragt die Tasten ab
 		movementHandler.handleMovement();//Hier wird die Position vom Spieler geupdated aufgrund von Tastatureingaben
 		detectCollision();//TODO Unsicher - Muss vielleicht woanders hin verschoben werden
@@ -141,16 +145,17 @@ public class Core implements Runnable{
 		}
 	}
 	
-	private void detectCollision(){//TODO Unsicher Hitdetection - Erster entwurf
+	private void detectCollision(){//TODO Unsicher Hitdetection - Erster entwurf / Die Methode hier ist für die broad phase da -> vll nicht nötig
 		// Hits mit Entities müssen gehandelt werden und mit dem Rand -> kollision mit dem Rand = -1 / Der Spieler wird mit 1 eingetragen
-		for(int i=0;i<collisionMap.length;i++){//TODO Grober Gedanke -> nicht vergessen einen Abstand zu berücksichtigen
-			if(collisionMap[i]!=0){
-				int firstEntity = collisionMap[i];
-				int secondEntity = 0;
-				for(int e=i+1;e<collisionMap.length && secondEntity==0;e++){
-					if(collisionMap[e]!=0){
-						secondEntity = collisionMap[e];
-					}
+		for(int i=0;i<entities.size()-1 && entities.size()>1;i++){//TODO Grober Gedanke -> nicht vergessen einen Abstand zu berücksichtigen
+			int entityX=entities.get(i).getX();
+			int entityY=entities.get(i).getY();
+			for(int e=i+1;e<entities.size();e++){
+				int entity2X=entities.get(e).getX();
+				int entity2Y=entities.get(e).getY();
+				
+				if(Math.abs(entityX-entity2X)<100){
+					entities.get(i).getCollisionHandler().detectCollision();
 				}
 			}
 		}

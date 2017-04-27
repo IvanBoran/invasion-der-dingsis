@@ -31,7 +31,7 @@ public class Core implements Runnable{
 	private final int resolutionX,resolutionY;// Die Auflösung des Dargestelltem im Fenster aber ACHTUNG darf nicht größer sein als die Größe da sonst Pixel verschluckt werden und es zu verformungen kommen kann
 	
 	private ArrayList<Entity> entities;// Hier werden alle Entities vertreten sein die dann auch direkt hier rauß gerendert werden mit einer Schleife die in der Methode update implementiert ist (ein Entity ist alles was "lebt/sich bewegt" z.B Spieler,Gegner oder Geschosse
-	
+
 	private int tileSize;// Größe der Kacheln/Pixel der gerenderten Entities
 
 	private MovementHandler movementHandler;// Abstrakte super-Klasse von allen MovementHandlern damit man verschiedene benutzen kann um z.B in verschiedenen Spielmodie verschiedene Tasten belegen zu können
@@ -43,7 +43,9 @@ public class Core implements Runnable{
 			Executors.newSingleThreadScheduledExecutor();
 	
 	private final Entity PLAYER;
-
+	
+	private Thread thread;
+	
 	@Override
 	public void run() { // run wird benötigt dadurch das Core das Interface Runnable hat, das Interface wird benötigt damit man den Gameloop benutzen kann mit dem scheduler
 
@@ -97,15 +99,16 @@ public class Core implements Runnable{
 
 		start();// Es wird start am ende des Konstruktors aufgerufen damit alles oben erstmal laden kann und dann erst angefangen wird zu Rendern
 	}
-
-
+	
 	public synchronized void start(){//stop und start haben synchronized damit die zwei Methonden nicht miteinander in Konflikt kommen
+		thread = new Thread(this);
 		final ScheduledFuture<?> gameLoop =
-				scheduler.scheduleAtFixedRate(this, 0, 1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
+				scheduler.scheduleAtFixedRate(thread, 0, 1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
 	}
 
 	public synchronized void stop(){
 		frame.dispose();
+		//Unsicher ob START und STOP so richtig ist
 		scheduler.shutdown();//Hier wird vielleicht später ExceptionHandling benötigt
 	}
 

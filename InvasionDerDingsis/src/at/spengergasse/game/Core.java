@@ -41,6 +41,8 @@ public class Core implements Runnable{
 
 	private final ScheduledExecutorService scheduler =    // Wird für den Gameloop benutzt, unten wird sie genauer erklärt
 			Executors.newSingleThreadScheduledExecutor();
+	
+	private final Entity PLAYER;
 
 	@Override
 	public void run() { // run wird benötigt dadurch das Core das Interface Runnable hat, das Interface wird benötigt damit man den Gameloop benutzen kann mit dem scheduler
@@ -64,16 +66,18 @@ public class Core implements Runnable{
 
 		frame = new JFrame("Invasion der Dingsis");
 
-		movementHandler = new TestMovement();//TestMovement ist ein movementHandler der erstmal zum Testen benutzt wird
-
 		keyboard = new Keyboard();
+		movementHandler = new TestMovement();//TestMovement ist ein movementHandler der erstmal zum Testen benutzt wird
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Es wird das Standard verfahren gewählt was passieren soll wenn man versucht das Fenster zu schließen
 		frame.setSize(screenWidth, screenHeight);
 
 		entities = new ArrayList<Entity>();//Dadurch dass der Spieler zuerst erstellt wird kommt er auf Index 0
-		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
-
+		PLAYER = new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize);//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
+		entities.add(new Entity("shapeTest",resolutionX/4, resolutionX/4, tileSize));
+		
+		entities.add(PLAYER);
+		
 		data = new int[resolutionX*resolutionY];
 
 		collisionMap = new int[resolutionX*resolutionY];
@@ -87,6 +91,8 @@ public class Core implements Runnable{
 
 		frame.setVisible(true);
 
+		visual.requestFocus();
+		
 		frame.pack();
 
 		start();// Es wird start am ende des Konstruktors aufgerufen damit alles oben erstmal laden kann und dann erst angefangen wird zu Rendern
@@ -113,12 +119,15 @@ public class Core implements Runnable{
 		}
 
 		for(Entity e:entities){//Es werden alle Entities neu in data geladen mithilfe der Methode load
+			e.update();
 			load(e);
 		}
 	}
-
+	
 	public void load(Entity entity){//Ruft alle Informationen vom jeweiligen Entity auf und lädt es so auf die richtige Position im data Array
 		int[] shape = entity.getShape();
+		
+		int id = entity.getId();
 
 		int width = entity.getWidth();
 		int heigth = entity.getHeight();
@@ -130,6 +139,8 @@ public class Core implements Runnable{
 			for(int posX=0;posX<width;posX++){
 				if(shape[posX+posY*width]!= 0){
 					data[x + y * resolutionX + posX + posY * resolutionX] = shape[posX+posY*width];
+					
+					collisionMap[x + y * resolutionX + posX + posY * resolutionX]=id;
 				}
 			}
 		}
@@ -143,11 +154,18 @@ public class Core implements Runnable{
 
 		@Override
 		public void handleMovement() {
+			
 			long now = System.currentTimeMillis();
 
 			int moveFactor = 5;
 
-			int orientation = entities.get(0).getRotation();
+			int orientation = PLAYER.getRotation();
+			
+			int width = PLAYER.getWidth();
+			int height = PLAYER.getHeight();
+			
+			int posX = PLAYER.getX();
+			int posY = PLAYER.getY();
 
 			int x = 0;
 			int y = 0;
@@ -200,16 +218,29 @@ public class Core implements Runnable{
 			}
 
 			if(keyboard.right && now > rot){
-				entities.get(0).rotate(1);
+				PLAYER.rotate(1);
 				rot=System.currentTimeMillis()+TIMER_ROT;
 			}
 
 			if(keyboard.left && now > rot ){
-				entities.get(0).rotate(-1);
+				PLAYER.rotate(-1);
 				rot=System.currentTimeMillis()+TIMER_ROT;
 			}
+			
+			if(posX+width+ x > resolutionX){
+				x=resolutionX-posX-width;
+			}else if(posX + x < 0){
+				x= -posX;
+			}
+				
+			
+			if(posY+height+ y > resolutionY){
+				y=resolutionY-posY-height;
+			}else if(posY + y < 0){
+				y= -posY;
+			}
 
-			entities.get(0).move(x, y);
+			PLAYER.move(x, y);
 		}
 	}
 }

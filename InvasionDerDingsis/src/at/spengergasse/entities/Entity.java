@@ -78,6 +78,10 @@ public class Entity {
 			}
 		}
 	}
+	
+	public void update(){
+		
+	}
 
 	public void move(int xChange,int yChange){
 		x+=xChange;

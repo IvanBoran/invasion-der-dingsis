@@ -1,4 +1,4 @@
-package auslagerung;
+package at.spengergasse.entities;
 
 import java.util.ArrayList;
 

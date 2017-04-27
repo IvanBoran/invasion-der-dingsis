@@ -1,8 +1,6 @@
-package auslagerung;
+package at.spengergasse.entities;
 
 import java.util.ArrayList;
-
-import at.spengergasse.entities.Entity;
 
 public class TestCollisionHandler extends CollisionHandler{
 	

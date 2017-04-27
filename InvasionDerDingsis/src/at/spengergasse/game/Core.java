@@ -10,7 +10,6 @@ import static java.util.concurrent.TimeUnit.*;
 import javax.swing.JFrame;
 
 import at.spengergasse.entities.Entity;
-import at.spengergasse.entities.TestCollisionHandler;
 import at.spengergasse.input.Keyboard;
 import at.spengergasse.visual.Visual;
 
@@ -33,8 +32,6 @@ public class Core implements Runnable{
 	
 	private ArrayList<Entity> entities;// Hier werden alle Entities vertreten sein die dann auch direkt hier rauß gerendert werden mit einer Schleife die in der Methode update implementiert ist (ein Entity ist alles was "lebt/sich bewegt" z.B Spieler,Gegner oder Geschosse
 	
-	private final int INDEX_PLAYER = 0;// Wichtig die ID vom Player ist 1
-	
 	private int tileSize;// Größe der Kacheln/Pixel der gerenderten Entities
 
 	private MovementHandler movementHandler;// Abstrakte super-Klasse von allen MovementHandlern damit man verschiedene benutzen kann um z.B in verschiedenen Spielmodie verschiedene Tasten belegen zu können
@@ -47,6 +44,7 @@ public class Core implements Runnable{
 
 	@Override
 	public void run() { // run wird benötigt dadurch das Core das Interface Runnable hat, das Interface wird benötigt damit man den Gameloop benutzen kann mit dem scheduler
+
 		update();// Ein "Tick" / Es werden alle Positionen geupdated und alle Entities in data mit ihren neuen Positionen geladen
 
 		visual.render();// Hier werden alle Daten aus data in das pixel Array von Visual geladen und dann gerendert -> siehe Visual
@@ -73,8 +71,8 @@ public class Core implements Runnable{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Es wird das Standard verfahren gewählt was passieren soll wenn man versucht das Fenster zu schließen
 		frame.setSize(screenWidth, screenHeight);
 
-		entities = new ArrayList<Entity>();//Dadurch dass der Spieler zuerst erstellt wird kommt er auf Index 
-		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize,new TestCollisionHandler(entities)));//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
+		entities = new ArrayList<Entity>();//Dadurch dass der Spieler zuerst erstellt wird kommt er auf Index 0
+		entities.add(new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize));//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
 
 		data = new int[resolutionX*resolutionY];
 
@@ -96,19 +94,19 @@ public class Core implements Runnable{
 
 
 	public synchronized void start(){//stop und start haben synchronized damit die zwei Methonden nicht miteinander in Konflikt kommen
-		final ScheduledFuture<?> gameLoop = scheduler.scheduleAtFixedRate(this, 0, 1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
+		final ScheduledFuture<?> gameLoop =
+				scheduler.scheduleAtFixedRate(this, 0, 1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
 	}
 
 	public synchronized void stop(){
 		frame.dispose();
 		scheduler.shutdown();//Hier wird vielleicht später ExceptionHandling benötigt
 	}
-	
-	private void update(){//Wird TICK_RATE mal in der Sekunde aufgerufen vom GameLoop
-		
+
+	public void update(){//Wird TICK_RATE mal in der Sekunde aufgerufen vom GameLoop
+
 		keyboard.update();//Der KeyListener keyboard fragt die Tasten ab
 		movementHandler.handleMovement();//Hier wird die Position vom Spieler geupdated aufgrund von Tastatureingaben
-		detectCollision();//TODO Unsicher - Muss vielleicht woanders hin verschoben werden
 
 		for(int i=0;i<data.length;i++){//In dieser Schleife wird das data Array geleert damit alles neu darauf gerendert werden kann ohne überschneidungen mit dem letzten Frame zu haben
 			data[i]=0xaaaa00;//Momentan die Farbe Gelb 
@@ -119,7 +117,7 @@ public class Core implements Runnable{
 		}
 	}
 
-	private void load(Entity entity){//Ruft alle Informationen vom jeweiligen Entity auf und lädt es so auf die richtige Position im data Array
+	public void load(Entity entity){//Ruft alle Informationen vom jeweiligen Entity auf und lädt es so auf die richtige Position im data Array
 		int[] shape = entity.getShape();
 
 		int width = entity.getWidth();
@@ -127,30 +125,11 @@ public class Core implements Runnable{
 
 		int x = entity.getX();
 		int y = entity.getY();
-		
-		int id = entity.getId();
 
 		for(int posY = 0;posY<heigth;posY++){
 			for(int posX=0;posX<width;posX++){
 				if(shape[posX+posY*width]!= 0){
 					data[x + y * resolutionX + posX + posY * resolutionX] = shape[posX+posY*width];
-					
-					collisionMap[x + y * resolutionX + posX + posY * resolutionX] = id;//TODO Hitdetection - Es wird bei jedem Tick auf Hits überprüft werden müssen aber nicht innerhalb von load das wird eine neue Methode die in update kommt
-				}
-			}
-		}
-	}
-	
-	private void detectCollision(){//TODO Unsicher Hitdetection - Erster entwurf
-		// Hits mit Entities müssen gehandelt werden und mit dem Rand -> kollision mit dem Rand = -1 / Der Spieler wird mit 1 eingetragen
-		for(int i=0;i<collisionMap.length;i++){//TODO Grober Gedanke -> nicht vergessen einen Abstand zu berücksichtigen
-			if(collisionMap[i]!=0){
-				int firstEntity = collisionMap[i];
-				int secondEntity = 0;
-				for(int e=i+1;e<collisionMap.length && secondEntity==0;e++){
-					if(collisionMap[e]!=0){
-						secondEntity = collisionMap[e];
-					}
 				}
 			}
 		}
@@ -168,7 +147,7 @@ public class Core implements Runnable{
 
 			int moveFactor = 5;
 
-			int orientation = entities.get(INDEX_PLAYER).getRotation();
+			int orientation = entities.get(0).getRotation();
 
 			int x = 0;
 			int y = 0;
@@ -221,16 +200,16 @@ public class Core implements Runnable{
 			}
 
 			if(keyboard.right && now > rot){
-				entities.get(INDEX_PLAYER).rotate(1);
+				entities.get(0).rotate(1);
 				rot=System.currentTimeMillis()+TIMER_ROT;
 			}
 
 			if(keyboard.left && now > rot ){
-				entities.get(INDEX_PLAYER).rotate(-1);
+				entities.get(0).rotate(-1);
 				rot=System.currentTimeMillis()+TIMER_ROT;
 			}
 
-			entities.get(INDEX_PLAYER).move(x, y);
+			entities.get(0).move(x, y);
 		}
 	}
 }

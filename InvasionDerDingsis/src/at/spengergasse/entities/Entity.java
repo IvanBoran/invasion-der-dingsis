@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 public class Entity {
+
+	private static int id;//Der Zähler damit jedes Entity eine eigene U_ID bekommt
 	
 	private final int U_ID;//Bei jedem Entity eindeutig und wird gebraucht um die verschiedenen Entities zu indentifizieren
 	
@@ -23,19 +25,10 @@ public class Entity {
 	private int width,height;
 
 	private int simpleWidth,simpleHeight;//Die "einfache" Breite und Höhe dadurch das aus dennen dann mithilfe von tileSize die Textur hochgerechnet wird
-	
-	private CollisionHandler collisionHandler;
 
-	private int resolutionX,resolutionY;
-	
-	public Entity(int id,int resolutionX,int resolutionY,String pathShape,int x,int y,int tileSize,CollisionHandler collisionHandler) throws IOException{
+	public Entity(String pathShape,int x,int y,int tileSize) throws IOException{
 
-		this.resolutionX=resolutionX;
-		this.resolutionY=resolutionY;
-		
-		this.collisionHandler=collisionHandler;
-		
-		U_ID = id;
+		U_ID = id++;
 
 		this.x=x;
 		this.y=y;
@@ -87,26 +80,8 @@ public class Entity {
 	}
 
 	public void move(int xChange,int yChange){
-		
-		if(x+xChange+width>resolutionX){
-			x=resolutionX-width;
-//			collisionHandler.handleCollision(-1);//TODO Es wird ne andere Methode für Rand Kollision gebraucht
-		}else if(x+xChange<0){
-			x=0;
-//			collisionHandler.handleCollision(-1);
-		}else{
-			x+=xChange;
-		}
-		
-		if(y+yChange+height>resolutionY){
-			y=resolutionY-height;
-//			collisionHandler.handleCollision(-1);
-		}else if(y+yChange<0){
-			y=0;
-//			collisionHandler.handleCollision(-1);
-		}else{
-			y+=yChange;
-		}
+		x+=xChange;
+		y+=yChange;
 	}
 
 	public int[] getShape(){
@@ -144,9 +119,5 @@ public class Entity {
 		else if(rotation==8)
 			rotation=0;
 	}
-	
-	public CollisionHandler getCollisionHandler(){
-		return collisionHandler;
-	}
-	
+
 }

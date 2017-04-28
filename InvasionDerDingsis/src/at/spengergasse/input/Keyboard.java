@@ -5,15 +5,14 @@ import java.awt.event.KeyListener;
 
 public class Keyboard implements KeyListener{//Siehe Java Docs - KeyListener
 
-	private boolean[] keys = new boolean[250];
-	public boolean up, down, left, right,f11;
+	private boolean[] keys = new boolean[150];
+	public boolean up, down, left, right;
 
 	public void update(){
-		up = keys[KeyEvent.VK_UP] || keys[KeyEvent.VK_W];
-		down = keys[KeyEvent.VK_DOWN] || keys[KeyEvent.VK_S];
-		left = keys[KeyEvent.VK_LEFT] || keys[KeyEvent.VK_A];
-		right = keys[KeyEvent.VK_RIGHT] || keys[KeyEvent.VK_D];
-		f11 = keys[KeyEvent.VK_F11];
+		up = keys[KeyEvent.VK_UP] ;
+		down = keys[KeyEvent.VK_DOWN] ;
+		left = keys[KeyEvent.VK_LEFT] ;
+		right = keys[KeyEvent.VK_RIGHT] ;
 
 		//for(int i = 0;i < keys.length;i++) {
 		//	if(keys[i]){

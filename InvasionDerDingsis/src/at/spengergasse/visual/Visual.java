@@ -24,7 +24,7 @@ public class Visual extends Canvas{
 		setPreferredSize(new Dimension(screenWidth,screenHeight));//Diese Zeile sorgt dafür das vom Rahmen des Fensters die Größe nicht eingeschränkt wird
 
 	}
-
+	
 	public void render(){// Hier werden die ganzen Daten erstmal ins pixel Array übertragen und dann mit drawImage auf Canvas gerendert
 		for(int i = 0;i<data.length;i++){ 
 			pixel[i] = data[i];

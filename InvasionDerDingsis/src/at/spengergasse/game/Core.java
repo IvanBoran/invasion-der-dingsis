@@ -15,7 +15,7 @@ import at.spengergasse.visual.Visual;
 
 public class Core implements Runnable{
 
-	private final int TICK_RATE = 60;// Die Tickrate mit der der Gameloop l‰uft in nanosekunden (1 sec = 1000000000 ns)
+	private final int TICK_RATE = 100;// Die Tickrate mit der der Gameloop l‰uft in nanosekunden (1 sec = 1000000000 ns)
 
 	private JFrame frame;// Das eigentliche Fenster in dem sich alles abspielt, wird jedoch vll aus dieser Klasse ausgelagert werden m¸ssen wenn sp‰ter ein Men¸ dazu kommt das im selben Fenster wie das Spiel stattfinden soll
 	private Visual visual;// Die Canvas("Leinwand) Klasse die benutzt wird um alle Elemenete darauf zu rendern
@@ -44,13 +44,10 @@ public class Core implements Runnable{
 	
 	private final Entity PLAYER;
 	
-	private Thread thread;
-	
 	@Override
 	public void run() { // run wird benˆtigt dadurch das Core das Interface Runnable hat, das Interface wird benˆtigt damit man den Gameloop benutzen kann mit dem scheduler
 
 		update();// Ein "Tick" / Es werden alle Positionen geupdated und alle Entities in data mit ihren neuen Positionen geladen
-
 		visual.render();// Hier werden alle Daten aus data in das pixel Array von Visual geladen und dann gerendert -> siehe Visual
 
 	}
@@ -69,14 +66,14 @@ public class Core implements Runnable{
 		frame = new JFrame("Invasion der Dingsis");
 
 		keyboard = new Keyboard();
-		movementHandler = new TestMovement();//TestMovement ist ein movementHandler der erstmal zum Testen benutzt wird
+		movementHandler = new DefaultMovement();//TestMovement ist ein movementHandler der erstmal zum Testen benutzt wird
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Es wird das Standard verfahren gew‰hlt was passieren soll wenn man versucht das Fenster zu schlieﬂen
 		frame.setSize(screenWidth, screenHeight);
 
 		entities = new ArrayList<Entity>();//Dadurch dass der Spieler zuerst erstellt wird kommt er auf Index 0
 		PLAYER = new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize);//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
-		entities.add(new Entity("shapeTest",resolutionX/4, resolutionX/4, tileSize));
+		entities.add(new Entity("shapeTest",resolutionX/4, resolutionX/2, tileSize));
 		
 		entities.add(PLAYER);
 		
@@ -85,7 +82,7 @@ public class Core implements Runnable{
 		collisionMap = new int[resolutionX*resolutionY];
 
 		visual = new Visual(resolutionX, resolutionY,screenWidth,screenHeight, data);//Das visual Objekt wird mit der data Referenz erstellt und das sorgt daf¸r das man in Core nur data ver‰ndern muss und visual das dann direkt auslesen kann -> siehe Visual
-
+		
 		visual.addKeyListener(keyboard);
 		frame.add(visual);
 
@@ -101,9 +98,8 @@ public class Core implements Runnable{
 	}
 	
 	public synchronized void start(){//stop und start haben synchronized damit die zwei Methonden nicht miteinander in Konflikt kommen
-		thread = new Thread(this);
 		final ScheduledFuture<?> gameLoop =
-				scheduler.scheduleAtFixedRate(thread, 0, 1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
+				scheduler.scheduleAtFixedRate(this, 0,1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
 	}
 
 	public synchronized void stop(){
@@ -122,8 +118,8 @@ public class Core implements Runnable{
 		}
 
 		for(Entity e:entities){//Es werden alle Entities neu in data geladen mithilfe der Methode load
-			e.update();
-			load(e);
+				e.update();
+				load(e);
 		}
 	}
 	
@@ -151,6 +147,48 @@ public class Core implements Runnable{
 
 	private abstract class MovementHandler{ // MovementHandler wie oben beschrieben wird dazu benutzt sp‰ter verschiedene Tastaturlayouts benutzen zu kˆnnen
 		public abstract void handleMovement();
+	}
+	
+	private class DefaultMovement extends MovementHandler{
+
+		@Override
+		public void handleMovement() {
+			
+			int x = 0;
+			int y = 0;
+
+			int moveFactor = 5;
+			
+			if(keyboard.right){
+				x+=moveFactor;
+			}
+			
+			if(keyboard.left){
+				x-=moveFactor;
+			}
+			
+			int width = PLAYER.getWidth();
+			int height = PLAYER.getHeight();
+			
+			int posX = PLAYER.getX();
+			int posY = PLAYER.getY();
+
+			if(posX+width+ x > resolutionX){
+				x=resolutionX-posX-width;
+			}else if(posX + x < 0){
+				x= -posX;
+			}
+				
+			
+			if(posY+height+ y > resolutionY){
+				y=resolutionY-posY-height;
+			}else if(posY + y < 0){
+				y= -posY;
+			}
+
+			PLAYER.move(x, y);
+		}
+		
 	}
 
 	private class TestMovement extends MovementHandler{

@@ -15,7 +15,7 @@ import at.spengergasse.visual.Visual;
 
 public class Core implements Runnable{
 
-	private final int TICK_RATE = 100;// Die Tickrate mit der der Gameloop läuft in nanosekunden (1 sec = 1000000000 ns)
+	private final int TICK_RATE = 60;// Die Tickrate mit der der Gameloop läuft in nanosekunden (1 sec = 1000000000 ns)
 
 	private JFrame frame;// Das eigentliche Fenster in dem sich alles abspielt, wird jedoch vll aus dieser Klasse ausgelagert werden müssen wenn später ein Menü dazu kommt das im selben Fenster wie das Spiel stattfinden soll
 	private Visual visual;// Die Canvas("Leinwand) Klasse die benutzt wird um alle Elemenete darauf zu rendern
@@ -38,6 +38,9 @@ public class Core implements Runnable{
 
 	private long rot; // Der Timer für die Rotation des Spielers damit das drehen kontrollierbar wird
 	private final long  TIMER_ROT = 150;// Die Zeitdifferenz zwischen einmal rotieren und dem nächsten mal in millisekunden (1 sec = 1000 ms)
+	
+	private Thread thread;
+	private boolean running;
 
 	private final ScheduledExecutorService scheduler =    // Wird für den Gameloop benutzt, unten wird sie genauer erklärt
 			Executors.newSingleThreadScheduledExecutor();
@@ -46,10 +49,27 @@ public class Core implements Runnable{
 	
 	@Override
 	public void run() { // run wird benötigt dadurch das Core das Interface Runnable hat, das Interface wird benötigt damit man den Gameloop benutzen kann mit dem scheduler
+		
+		long now = System.nanoTime();
+		final long delta =1000000000/100;
+		long next = now + delta;
+		
+		long mEnd=0;
+		long mStart=0;
+		
+		while(running){
 
-		update();// Ein "Tick" / Es werden alle Positionen geupdated und alle Entities in data mit ihren neuen Positionen geladen
-		visual.render();// Hier werden alle Daten aus data in das pixel Array von Visual geladen und dann gerendert -> siehe Visual
+			while(now < next){
+				now = System.nanoTime();	
+			}
 
+			mStart=System.nanoTime();
+			visual.render();// Hier werden alle Daten aus data in das pixel Array von Visual geladen und dann gerendert -> siehe Visual
+			update();// Ein "Tick" / Es werden alle Positionen geupdated und alle Entities in data mit ihren neuen Positionen geladen
+			mEnd=System.nanoTime();
+			
+			next = now + delta;
+		}
 	}
 
 	public Core() throws IOException{
@@ -98,14 +118,23 @@ public class Core implements Runnable{
 	}
 	
 	public synchronized void start(){//stop und start haben synchronized damit die zwei Methonden nicht miteinander in Konflikt kommen
-		final ScheduledFuture<?> gameLoop =
-				scheduler.scheduleAtFixedRate(this, 0,1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
+//		final ScheduledFuture<?> gameLoop =
+//				scheduler.scheduleAtFixedRate(this, 0,1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
+		running = true;
+		thread = new Thread(this);
+		thread.start();
 	}
 
 	public synchronized void stop(){
-		frame.dispose();
-		//Unsicher ob START und STOP so richtig ist
-		scheduler.shutdown();//Hier wird vielleicht später ExceptionHandling benötigt
+//		Unsicher ob START und STOP so richtig ist
+//		scheduler.shutdown();//Hier wird vielleicht später ExceptionHandling benötigt
+		running = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void update(){//Wird TICK_RATE mal in der Sekunde aufgerufen vom GameLoop

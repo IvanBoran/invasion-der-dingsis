@@ -50,7 +50,7 @@ public class Entity {
 			for(int k = 0;k<tileSize;k++){
 				for(int e=0;e<simpleWidth;e++){
 					for(int o=0;o<tileSize;o++){//+ (tileSize/2) *5+1
-						shape[0][e *tileSize + (i*tileSize)*width +o+k*width + (tileSize*2)*width + tileSize*2] = Integer.parseUnsignedInt(row[e], 16);
+						shape[0][e *tileSize + (i*tileSize)*width +o+k*width + (tileSize*2)*width + tileSize*2] = (0xff<<24)+Integer.parseUnsignedInt(row[e], 16);
 					}
 				}
 			}

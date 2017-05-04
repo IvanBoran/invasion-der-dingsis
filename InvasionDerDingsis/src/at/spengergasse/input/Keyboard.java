@@ -1,41 +1,34 @@
 package at.spengergasse.input;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
-public class Keyboard implements KeyListener{//Siehe Java Docs - KeyListener
-
-	private boolean[] keys = new boolean[150];
-	public boolean up, down, left, right;
-
-	public void update(){
-		up = keys[KeyEvent.VK_UP] ;
-		down = keys[KeyEvent.VK_DOWN] ;
-		left = keys[KeyEvent.VK_LEFT] ;
-		right = keys[KeyEvent.VK_RIGHT] ;
-
-		//for(int i = 0;i < keys.length;i++) {
-		//	if(keys[i]){
-		//		System.out.println("KEY: "+ i);
-		//	} 
-		//}
-	}
+public class Keyboard implements EventHandler<KeyEvent>{
+	
+	public boolean up,down,left,right;
 
 	@Override
-	public void keyPressed(KeyEvent k) {
-			keys[k.getKeyCode()]= true;
-			//System.out.println("KEY: "+ k);
-	}
-
-	@Override
-	public void keyReleased(KeyEvent k) {
-			keys[k.getKeyCode()]= false;
-			//System.out.println("KEY: "+ k);
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		//System.out.println("KEY: Typed");
+	public void handle(KeyEvent event) {
+		if(event.getEventType()==KeyEvent.KEY_PRESSED){
+			if(event.getCode()==KeyCode.UP)
+				up=true;
+			else if(event.getCode()==KeyCode.DOWN)
+				down=true;
+			else if(event.getCode()==KeyCode.LEFT)
+				left=true;
+			else if(event.getCode()==KeyCode.RIGHT)
+				right=true;
+		}else{
+			if(event.getCode()==KeyCode.UP)
+				up=false;
+			else if(event.getCode()==KeyCode.DOWN)
+				down=false;
+			else if(event.getCode()==KeyCode.LEFT)
+				left=false;
+			else if(event.getCode()==KeyCode.RIGHT)
+				right=false;
+		}
 	}
 
 }

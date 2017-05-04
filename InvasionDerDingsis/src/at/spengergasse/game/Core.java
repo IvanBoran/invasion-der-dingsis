@@ -1,157 +1,141 @@
 package at.spengergasse.game;
 
 import java.io.IOException;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import static java.util.concurrent.TimeUnit.*;
 
-import javax.swing.JFrame;
+import com.sun.javafx.sg.prism.EffectFilter;
 
 import at.spengergasse.entities.Entity;
 import at.spengergasse.input.Keyboard;
-import at.spengergasse.visual.Visual;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.Effect;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.scene.image.PixelFormat;
 
-public class Core implements Runnable{
-
-	private final int TICK_RATE = 60;// Die Tickrate mit der der Gameloop läuft in nanosekunden (1 sec = 1000000000 ns)
-
-	private JFrame frame;// Das eigentliche Fenster in dem sich alles abspielt, wird jedoch vll aus dieser Klasse ausgelagert werden müssen wenn später ein Menü dazu kommt das im selben Fenster wie das Spiel stattfinden soll
-	private Visual visual;// Die Canvas("Leinwand) Klasse die benutzt wird um alle Elemenete darauf zu rendern
+public class Core extends Application {
 	
-	private Keyboard keyboard;// Der KeyListener der überall im Spiel benutzt wird
+	private Entity player;
+	private ArrayList<Entity> entities;
 	
-	private int[] data;// Im data Array sind alle Pixel in Form von RGB Farbwerten vertreten (RGB -> 0xRRGGBB (hexadecimal -> 0xff0000 ist z.B pures Rot))
-	private int[] collisionMap;// Mithilfe der collisionMap wird später die Hitdetection umgesetzt
+	private Canvas canvas;
+	private WritableImage image;
+	private PixelWriter pixelWriter;
 	
-	//private DisplayMode dM; // DisplayMode wird vielleicht später für Fullscreen gebraucht und wird deswegen hier hinterlassen als Erinnerung
+	private GraphicsContext graphicsContext;
 	
-	private int screenWidth,screenHeight;// Die Größe des Fensters
-	private final int resolutionX,resolutionY;// Die Auflösung des Dargestelltem im Fenster aber ACHTUNG darf nicht größer sein als die Größe da sonst Pixel verschluckt werden und es zu verformungen kommen kann
+	private Group group;
+	private Scene scene;
 	
-	private ArrayList<Entity> entities;// Hier werden alle Entities vertreten sein die dann auch direkt hier rauß gerendert werden mit einer Schleife die in der Methode update implementiert ist (ein Entity ist alles was "lebt/sich bewegt" z.B Spieler,Gegner oder Geschosse
-
-	private int tileSize;// Größe der Kacheln/Pixel der gerenderten Entities
+	private int[] data;
+	private int[] collisionMap;
+	
+	private int screenX,screenY;
+	
+	private Timeline gameloop;
+	
+	private PixelFormat<IntBuffer> pixelFormat;
+	
+	private Keyboard keyboard;
 
 	private MovementHandler movementHandler;// Abstrakte super-Klasse von allen MovementHandlern damit man verschiedene benutzen kann um z.B in verschiedenen Spielmodie verschiedene Tasten belegen zu können
 
 	private long rot; // Der Timer für die Rotation des Spielers damit das drehen kontrollierbar wird
 	private final long  TIMER_ROT = 150;// Die Zeitdifferenz zwischen einmal rotieren und dem nächsten mal in millisekunden (1 sec = 1000 ms)
 	
-	private Thread thread;
-	private boolean running;
-
-	private final ScheduledExecutorService scheduler =    // Wird für den Gameloop benutzt, unten wird sie genauer erklärt
-			Executors.newSingleThreadScheduledExecutor();
 	
-	private final Entity PLAYER;
-	
-	@Override
-	public void run() { // run wird benötigt dadurch das Core das Interface Runnable hat, das Interface wird benötigt damit man den Gameloop benutzen kann mit dem scheduler
+	public void init() throws IOException{
+		screenX = 1600;
+		screenY = 900;
 		
-		long now = System.nanoTime();
-		final long delta =1000000000/100;
-		long next = now + delta;
+		entities = new ArrayList<>();
 		
-		long mEnd=0;
-		long mStart=0;
+		player = new Entity("shapeTest",screenX/2-40, screenY-80, 5);//TODO
+		entities.add(player);
 		
-		while(running){
-
-			while(now < next){
-				now = System.nanoTime();	
-			}
-
-			mStart=System.nanoTime();
-			visual.render();// Hier werden alle Daten aus data in das pixel Array von Visual geladen und dann gerendert -> siehe Visual
-			update();// Ein "Tick" / Es werden alle Positionen geupdated und alle Entities in data mit ihren neuen Positionen geladen
-			mEnd=System.nanoTime();
-			
-			next = now + delta;
-		}
-	}
-
-	public Core() throws IOException{
-		//dM = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode(); //Wie oben beschrieben nur eventuell gebraucht
-
-		tileSize = 5;
+		group = new Group();
+		scene = new Scene(group,screenX,screenY);
 		
-		screenWidth = 1600;
-		screenHeight = 900;
-
-		resolutionX = screenWidth;
-		resolutionY = screenHeight;
-
-		frame = new JFrame("Invasion der Dingsis");
-
+		data = new int[screenX*screenY];
+		
+		collisionMap = new int[screenX*screenY];
+		
+		image = new WritableImage(screenX, screenY);
+		canvas = new Canvas(screenX,screenY);
+		pixelWriter = image.getPixelWriter();
+		
+		pixelFormat = PixelFormat.getIntArgbInstance();
+		
 		keyboard = new Keyboard();
-		movementHandler = new DefaultMovement();//TestMovement ist ein movementHandler der erstmal zum Testen benutzt wird
-
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Es wird das Standard verfahren gewählt was passieren soll wenn man versucht das Fenster zu schließen
-		frame.setSize(screenWidth, screenHeight);
-
-		entities = new ArrayList<Entity>();//Dadurch dass der Spieler zuerst erstellt wird kommt er auf Index 0
-		PLAYER = new Entity("shapeTest",resolutionX/2, resolutionX/2, tileSize);//Momentan wird hier der Spieler erstellt damit man das Spiel testen kann
-		entities.add(new Entity("shapeTest",resolutionX/4, resolutionX/2, tileSize));
+		scene.addEventHandler(KeyEvent.KEY_PRESSED, keyboard);
+		scene.addEventHandler(KeyEvent.KEY_RELEASED, keyboard);
 		
-		entities.add(PLAYER);
+		movementHandler = new TestMovement();
 		
-		data = new int[resolutionX*resolutionY];
-
-		collisionMap = new int[resolutionX*resolutionY];
-
-		visual = new Visual(resolutionX, resolutionY,screenWidth,screenHeight, data);//Das visual Objekt wird mit der data Referenz erstellt und das sorgt dafür das man in Core nur data verändern muss und visual das dann direkt auslesen kann -> siehe Visual
+		graphicsContext = canvas.getGraphicsContext2D();
 		
-		visual.addKeyListener(keyboard);
-		frame.add(visual);
-
-		frame.setResizable(false);
-
-		frame.setVisible(true);
-
-		visual.requestFocus();
+		group.getChildren().add(canvas);
 		
-		frame.pack();
+		gameloop = new Timeline();
+		gameloop.setCycleCount(Timeline.INDEFINITE);
+		
+	}
 
-		start();// Es wird start am ende des Konstruktors aufgerufen damit alles oben erstmal laden kann und dann erst angefangen wird zu Rendern
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		primaryStage.setWidth(screenX+6);
+		primaryStage.setHeight(screenY+29);
+		
+		primaryStage.setScene(scene);
+		
+		primaryStage.setResizable(false);
+		
+		primaryStage.show();
+		
+		KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.016666666666666666666),new EventHandler<ActionEvent>()
+        {
+            public void handle(ActionEvent ae)
+            {
+            	draw();
+            	update();
+            }
+        });
+		
+		gameloop.getKeyFrames().add( keyFrame );
+		gameloop.play();
 	}
 	
-	public synchronized void start(){//stop und start haben synchronized damit die zwei Methonden nicht miteinander in Konflikt kommen
-//		final ScheduledFuture<?> gameLoop =
-//				scheduler.scheduleAtFixedRate(this, 0,1000000000/TICK_RATE, NANOSECONDS);//Hier wird der Game Loop gestartet mit der oben definierten TICK_RATE in nanosekunden (1 sec = 1000000000 ns)
-		running = true;
-		thread = new Thread(this);
-		thread.start();
-	}
-
-	public synchronized void stop(){
-//		Unsicher ob START und STOP so richtig ist
-//		scheduler.shutdown();//Hier wird vielleicht später ExceptionHandling benötigt
-		running = false;
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void update(){//Wird TICK_RATE mal in der Sekunde aufgerufen vom GameLoop
-
-		keyboard.update();//Der KeyListener keyboard fragt die Tasten ab
-		movementHandler.handleMovement();//Hier wird die Position vom Spieler geupdated aufgrund von Tastatureingaben
-
-		for(int i=0;i<data.length;i++){//In dieser Schleife wird das data Array geleert damit alles neu darauf gerendert werden kann ohne überschneidungen mit dem letzten Frame zu haben
-			data[i]=0xaaaa00;//Momentan die Farbe Gelb 
-		}
-
-		for(Entity e:entities){//Es werden alle Entities neu in data geladen mithilfe der Methode load
-				e.update();
-				load(e);
-		}
+	private void draw(){
+		pixelWriter.setPixels(0, 0, screenX, screenY,pixelFormat,data,0, screenX);
+		graphicsContext.drawImage(image, 0, 0);
 	}
 	
+	private void update(){
+		for(int i = 0;i<data.length;i++){
+			data[i]=0xff000000;
+			collisionMap[i]=0;
+		}
+		
+		movementHandler.handleMovement();//nur für player
+		
+		for(Entity e:entities){ 
+			load(e);
+		}
+	}
+		
 	public void load(Entity entity){//Ruft alle Informationen vom jeweiligen Entity auf und lädt es so auf die richtige Position im data Array
 		int[] shape = entity.getShape();
 		
@@ -166,14 +150,14 @@ public class Core implements Runnable{
 		for(int posY = 0;posY<heigth;posY++){
 			for(int posX=0;posX<width;posX++){
 				if(shape[posX+posY*width]!= 0){
-					data[x + y * resolutionX + posX + posY * resolutionX] = shape[posX+posY*width];
+					data[x + y * screenX + posX + posY * screenX] = shape[posX+posY*width];
 					
-					collisionMap[x + y * resolutionX + posX + posY * resolutionX]=id;
+					collisionMap[x + y * screenX + posX + posY * screenX] = id;
 				}
 			}
 		}
 	}
-
+	
 	private abstract class MovementHandler{ // MovementHandler wie oben beschrieben wird dazu benutzt später verschiedene Tastaturlayouts benutzen zu können
 		public abstract void handleMovement();
 	}
@@ -184,9 +168,8 @@ public class Core implements Runnable{
 		public void handleMovement() {
 			
 			int x = 0;
-			int y = 0;
 
-			int moveFactor = 5;
+			int moveFactor = 10;
 			
 			if(keyboard.right){
 				x+=moveFactor;
@@ -196,26 +179,17 @@ public class Core implements Runnable{
 				x-=moveFactor;
 			}
 			
-			int width = PLAYER.getWidth();
-			int height = PLAYER.getHeight();
+			int width = player.getWidth();
 			
-			int posX = PLAYER.getX();
-			int posY = PLAYER.getY();
+			int posX = player.getX();
 
-			if(posX+width+ x > resolutionX){
-				x=resolutionX-posX-width;
+			if(posX+width+ x > screenX){
+				x=screenX-posX-width;
 			}else if(posX + x < 0){
 				x= -posX;
 			}
-				
-			
-			if(posY+height+ y > resolutionY){
-				y=resolutionY-posY-height;
-			}else if(posY + y < 0){
-				y= -posY;
-			}
 
-			PLAYER.move(x, y);
+			player.move(x, 0);
 		}
 		
 	}
@@ -229,13 +203,13 @@ public class Core implements Runnable{
 
 			int moveFactor = 5;
 
-			int orientation = PLAYER.getRotation();
+			int orientation = player.getRotation();
 			
-			int width = PLAYER.getWidth();
-			int height = PLAYER.getHeight();
+			int width = player.getWidth();
+			int height = player.getHeight();
 			
-			int posX = PLAYER.getX();
-			int posY = PLAYER.getY();
+			int posX = player.getX();
+			int posY = player.getY();
 
 			int x = 0;
 			int y = 0;
@@ -288,29 +262,31 @@ public class Core implements Runnable{
 			}
 
 			if(keyboard.right && now > rot){
-				PLAYER.rotate(1);
+				player.rotate(1);
 				rot=System.currentTimeMillis()+TIMER_ROT;
 			}
 
 			if(keyboard.left && now > rot ){
-				PLAYER.rotate(-1);
+				player.rotate(-1);
 				rot=System.currentTimeMillis()+TIMER_ROT;
 			}
 			
-			if(posX+width+ x > resolutionX){
-				x=resolutionX-posX-width;
+			if(posX+width+ x > screenX){
+				x=screenX-posX-width;
 			}else if(posX + x < 0){
 				x= -posX;
 			}
 				
 			
-			if(posY+height+ y > resolutionY){
-				y=resolutionY-posY-height;
+			if(posY+height+ y > screenY){
+				y=screenY-posY-height;
 			}else if(posY + y < 0){
 				y= -posY;
 			}
 
-			PLAYER.move(x, y);
+			player.move(x, y);
 		}
 	}
+
+	
 }

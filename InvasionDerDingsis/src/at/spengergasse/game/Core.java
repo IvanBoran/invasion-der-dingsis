@@ -10,11 +10,8 @@ import java.util.ArrayList;
 
 import at.spengergasse.entities.Entity;
 import at.spengergasse.input.Keyboard;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -23,7 +20,6 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import javafx.scene.image.PixelFormat;
 
 public class Core extends Application {
@@ -45,8 +41,6 @@ public class Core extends Application {
 	
 	private int screenX,screenY;
 	
-	private Timeline gameloop;
-	
 	private PixelFormat<IntBuffer> pixelFormat;
 	
 	private Keyboard keyboard;
@@ -56,20 +50,20 @@ public class Core extends Application {
 	private long rot; // Der Timer für die Rotation des Spielers damit das drehen kontrollierbar wird
 	private final long  TIMER_ROT = 150;// Die Zeitdifferenz zwischen einmal rotieren und dem nächsten mal in millisekunden (1 sec = 1000 ms)
 	
-	private DisplayMode dm;
-	
+//	private DisplayMode dm;
 	
 	public void init() throws IOException{
-		dm = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+//		dm = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
 //		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		screenX = dm.getWidth()-dm.getWidth()/16;
-		screenY = dm.getHeight()-dm.getHeight()/9;
+		screenX = 1080;
+		screenY = 720;
 		
 		entities = new ArrayList<>();
 		
-		player = new Entity("shapeTest",screenX/2-40, screenY-80, 5);//TODO
+		player = new Entity("shapeTest",screenX/2-40, screenY-80, 3);//TODO
 		entities.add(player);
+		entities.add(new Entity("shapeTest",screenX/4-40, screenY-80, 3));
 		
 		group = new Group();
 		scene = new Scene(group,screenX,screenY);
@@ -88,14 +82,12 @@ public class Core extends Application {
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, keyboard);
 		scene.addEventHandler(KeyEvent.KEY_RELEASED, keyboard);
 		
-		movementHandler = new TestMovement();
+		movementHandler = new DefaultMovement();
 		
 		graphicsContext = canvas.getGraphicsContext2D();
 		
 		group.getChildren().add(canvas);
 		
-		gameloop = new Timeline();
-		gameloop.setCycleCount(Timeline.INDEFINITE);
 		
 	}
 
@@ -109,17 +101,15 @@ public class Core extends Application {
 		primaryStage.setResizable(false);
 		
 		primaryStage.show();
-		KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.016666666666666666666),new EventHandler<ActionEvent>()
-        {
-            public void handle(ActionEvent ae)
-            {
-            	draw();
-            	update();
-            }
-        });
-		
-		gameloop.getKeyFrames().add( keyFrame );
-		gameloop.play();
+
+		new AnimationTimer() {
+			
+			@Override
+			public void handle(long now) {
+				update();
+				draw();
+			}
+		}.start();;
 	}
 	
 	private void draw(){
@@ -129,7 +119,7 @@ public class Core extends Application {
 	
 	private void update(){
 		for(int i = 0;i<data.length;i++){
-			data[i]=0xff000000;
+			data[i]=0xffff0000;
 			collisionMap[i]=0;
 		}
 		
@@ -137,10 +127,29 @@ public class Core extends Application {
 		
 		for(Entity e:entities){ 
 			load(e);
+			check(e);
+		}
+	}
+	
+	private void check(Entity e){
+		int id = e.getId();
+		
+		int width = e.getWidth();
+		int heigth = e.getHeight();
+		
+		int x = e.getX();
+		int y = e.getY();
+		
+		for(int posY = 0;posY<heigth;posY++){
+			for(int posX=0;posX<width;posX++){
+				if(collisionMap[x + y * screenX + posX + posY * screenX]==id){
+					
+				}
+			}
 		}
 	}
 		
-	public void load(Entity entity){//Ruft alle Informationen vom jeweiligen Entity auf und lädt es so auf die richtige Position im data Array
+	private void load(Entity entity){//Ruft alle Informationen vom jeweiligen Entity auf und lädt es so auf die richtige Position im data Array
 		int[] shape = entity.getShape();
 		
 		int id = entity.getId();
@@ -155,8 +164,9 @@ public class Core extends Application {
 			for(int posX=0;posX<width;posX++){
 				if(shape[posX+posY*width]!= 0){
 					data[x + y * screenX + posX + posY * screenX] = shape[posX+posY*width];
-					
 					collisionMap[x + y * screenX + posX + posY * screenX] = id;
+					
+//					data[x + y * screenX + posX + posY * screenX] = id*0xff;
 				}
 			}
 		}
@@ -173,7 +183,7 @@ public class Core extends Application {
 			
 			int x = 0;
 
-			int moveFactor = 10;
+			int moveFactor = 1;
 			
 			if(keyboard.right){
 				x+=moveFactor;

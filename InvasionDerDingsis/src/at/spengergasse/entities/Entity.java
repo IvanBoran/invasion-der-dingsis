@@ -26,11 +26,9 @@ public class Entity {
 
 	private int simpleWidth,simpleHeight;//Die "einfache" Breite und Höhe dadurch das aus dennen dann mithilfe von tileSize die Textur hochgerechnet wird
 	
-	
-
 	public Entity(String pathShape,int x,int y,int tileSize) throws IOException{
 
-		U_ID = ++id;System.out.println(U_ID);
+		U_ID = ++id;
 
 		this.x=x;
 		this.y=y;
@@ -77,6 +75,11 @@ public class Entity {
 				if(shape[l][k] == -16777216){
 					shape[l][k]=0;
 				}
+			}
+		}
+		for(int k=0;k<shape[0].length;k++){
+			if(shape[0][k] == -16777216){
+				shape[0][k]=0;
 			}
 		}
 	}

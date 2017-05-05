@@ -1,10 +1,12 @@
 package at.spengergasse.game;
 
+import java.awt.Dimension;
+import java.awt.DisplayMode;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-
-import com.sun.javafx.sg.prism.EffectFilter;
 
 import at.spengergasse.entities.Entity;
 import at.spengergasse.input.Keyboard;
@@ -17,11 +19,9 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.image.PixelFormat;
@@ -56,10 +56,15 @@ public class Core extends Application {
 	private long rot; // Der Timer für die Rotation des Spielers damit das drehen kontrollierbar wird
 	private final long  TIMER_ROT = 150;// Die Zeitdifferenz zwischen einmal rotieren und dem nächsten mal in millisekunden (1 sec = 1000 ms)
 	
+	private DisplayMode dm;
+	
 	
 	public void init() throws IOException{
-		screenX = 1600;
-		screenY = 900;
+		dm = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		screenX = dm.getWidth()-dm.getWidth()/16;
+		screenY = dm.getHeight()-dm.getHeight()/9;
 		
 		entities = new ArrayList<>();
 		
@@ -104,7 +109,6 @@ public class Core extends Application {
 		primaryStage.setResizable(false);
 		
 		primaryStage.show();
-		
 		KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.016666666666666666666),new EventHandler<ActionEvent>()
         {
             public void handle(ActionEvent ae)

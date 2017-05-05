@@ -25,6 +25,8 @@ public class Entity {
 	private int width,height;
 
 	private int simpleWidth,simpleHeight;//Die "einfache" Breite und Höhe dadurch das aus dennen dann mithilfe von tileSize die Textur hochgerechnet wird
+	
+	
 
 	public Entity(String pathShape,int x,int y,int tileSize) throws IOException{
 

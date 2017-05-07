@@ -28,7 +28,7 @@ public class Entity {
 	
 	public Entity(String pathShape,int x,int y,int tileSize) throws IOException{
 
-		U_ID = ++id;
+		U_ID = id++;
 
 		this.x=x;
 		this.y=y;

@@ -61,8 +61,10 @@ public class Core extends Application {
 		
 		entities = new ArrayList<>();
 		
-		player = new Entity("shapeTest",screenX/2-40, screenY-80, 3);//TODO
-		entities.add(player);
+//		player = new Entity("shapeTest",screenX/2-40, screenY-80, 3);//TODO
+//		entities.add(player);
+		entities.add(new Entity("shapeTest",screenX/2-40, screenY-80, 3));
+		player=entities.get(0);
 		entities.add(new Entity("shapeTest",screenX/4-40, screenY-80, 3));
 		
 		group = new Group();
@@ -120,13 +122,18 @@ public class Core extends Application {
 	private void update(){
 		for(int i = 0;i<data.length;i++){
 			data[i]=0xffff0000;
-			collisionMap[i]=0;
+			collisionMap[i]=-1;
 		}
 		
-		movementHandler.handleMovement();//nur für player
+		if(player!=null){
+			movementHandler.handleMovement();//nur für player
+		}
 		
 		for(Entity e:entities){ 
 			load(e);
+		}
+		
+		for(Entity e:entities){ 
 			check(e);
 		}
 	}
@@ -143,7 +150,27 @@ public class Core extends Application {
 		for(int posY = 0;posY<heigth;posY++){
 			for(int posX=0;posX<width;posX++){
 				if(collisionMap[x + y * screenX + posX + posY * screenX]==id){
-					
+					if(collisionMap[(x + y * screenX + posX + posY * screenX)-1]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)-1]!=id){
+						entities.remove(collisionMap[(x + y * screenX + posX + posY * screenX)-1]);System.out.println(collisionMap[(x + y * screenX + posX + posY * screenX)-1]+" "+id);
+						entities.remove(id);
+						
+						return;
+					}
+					if(collisionMap[(x + y * screenX + posX + posY * screenX)+1]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)+1]!=id){
+						entities.remove(id);
+						entities.remove(collisionMap[(x + y * screenX + posX + posY * screenX)+1]);
+						return;
+					}
+					if(collisionMap[(x + y * screenX + posX + posY * screenX)+1*screenX]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)+1*screenX]!=id){
+						entities.remove(id);
+						entities.remove(collisionMap[(x + y * screenX + posX + posY * screenX)+1*screenX]);
+						return;
+					}
+					if(collisionMap[(x + y * screenX + posX + posY * screenX)-1*screenX]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)-1*screenX]!=id){
+						entities.remove(id);
+						entities.remove(collisionMap[(x + y * screenX + posX + posY * screenX)-1*screenX]);
+						return;
+					}
 				}
 			}
 		}
@@ -165,8 +192,6 @@ public class Core extends Application {
 				if(shape[posX+posY*width]!= 0){
 					data[x + y * screenX + posX + posY * screenX] = shape[posX+posY*width];
 					collisionMap[x + y * screenX + posX + posY * screenX] = id;
-					
-//					data[x + y * screenX + posX + posY * screenX] = id*0xff;
 				}
 			}
 		}

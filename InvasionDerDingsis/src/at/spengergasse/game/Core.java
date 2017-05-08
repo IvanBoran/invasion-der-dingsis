@@ -1,12 +1,9 @@
 package at.spengergasse.game;
 
-import java.awt.Dimension;
-import java.awt.DisplayMode;
-import java.awt.GraphicsEnvironment;
-import java.awt.Toolkit;
 import java.io.IOException;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Random;
 
 import at.spengergasse.entities.Entity;
 import at.spengergasse.input.Keyboard;
@@ -53,6 +50,7 @@ public class Core extends Application {
 	private final long  TIMER_ROT = 150;// Die Zeitdifferenz zwischen einmal rotieren und dem nächsten mal in millisekunden (1 sec = 1000 ms)
 	
 	private long sht;
+	private long shtK=System.currentTimeMillis();
 	
 //	private DisplayMode dm;
 	
@@ -149,7 +147,7 @@ public class Core extends Application {
 			if(keyboard.space){
 				if(sht<=System.currentTimeMillis()-500){
 					try {
-						entities.add(player.shoot(id++));
+						entities.add(player.shoot(id++,0,-8));
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -158,6 +156,18 @@ public class Core extends Application {
 				}
 			}
 		}
+		
+//		if(shtK < System.currentTimeMillis()-1000) {
+//			
+//			try {
+//				entities.add(entities.get(new Random().nextInt(entities.size()-1)+1).shoot(id++, 0, +4));
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			
+//			shtK=System.currentTimeMillis();
+//		}
 		
 		for(Entity e:entities){ 
 			if(!e.isDead()){

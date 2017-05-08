@@ -105,8 +105,8 @@ public class Entity {
 		move(momentumX,momentumY);
 	}
 	
-	public Entity shoot(int id) throws IOException{
-		return new Entity("shapeShoot", x+width/2-tileSize-4, y-tileSize*2, 2,id,0,-8);
+	public Entity shoot(int id,int xC,int yC) throws IOException{
+		return new Entity("shapeShoot", x+width/2-tileSize-4, y-tileSize*2, 2,id,xC,yC);
 	}
 
 	public void move(int xChange,int yChange){

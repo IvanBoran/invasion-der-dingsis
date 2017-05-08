@@ -24,6 +24,8 @@ import javafx.scene.image.PixelFormat;
 
 public class Core extends Application {
 	
+	private static int id;//Der Zähler damit jedes Entity eine eigene U_ID bekommt
+	
 	private Entity player;
 	private ArrayList<Entity> entities;
 	
@@ -50,6 +52,8 @@ public class Core extends Application {
 	private long rot; // Der Timer für die Rotation des Spielers damit das drehen kontrollierbar wird
 	private final long  TIMER_ROT = 150;// Die Zeitdifferenz zwischen einmal rotieren und dem nächsten mal in millisekunden (1 sec = 1000 ms)
 	
+	private long sht;
+	
 //	private DisplayMode dm;
 	
 	public void init() throws IOException{
@@ -61,11 +65,27 @@ public class Core extends Application {
 		
 		entities = new ArrayList<>();
 		
-//		player = new Entity("shapeTest",screenX/2-40, screenY-80, 3);//TODO
-//		entities.add(player);
-		entities.add(new Entity("shapeTest",screenX/2-40, screenY-80, 3));
+		entities.add(new Entity("shapePlayer",screenX/2-40, screenY-80, 3,id++,0,0));
 		player=entities.get(0);
-		entities.add(new Entity("shapeTest",screenX/4-40, screenY-80, 3));
+		
+		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*2, screenY/4-80, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*3, screenY/4-80, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*4, screenY/4-80, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*5, screenY/4-80, 3,id++,0,0));
+		
+		entities.add(new Entity("shapeEnemy",screenX-40-100*6, screenY/4-80, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*7, screenY/4-80, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*8, screenY/4-80, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*9, screenY/4-80, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*10, screenY/4-80, 3,id++,0,0));
+		
+		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80-80*1, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80-80*2, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80-80*3, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80-80*4, 3,id++,0,0));
+		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80-80*5, 3,id++,0,0));
+		
 		
 		group = new Group();
 		scene = new Scene(group,screenX,screenY);
@@ -89,7 +109,6 @@ public class Core extends Application {
 		graphicsContext = canvas.getGraphicsContext2D();
 		
 		group.getChildren().add(canvas);
-		
 		
 	}
 
@@ -121,20 +140,32 @@ public class Core extends Application {
 	
 	private void update(){
 		for(int i = 0;i<data.length;i++){
-			data[i]=0xffff0000;
+			data[i]=0xff000000;
 			collisionMap[i]=-1;
 		}
 		
 		if(player!=null){
 			movementHandler.handleMovement();//nur für player
+			if(keyboard.space){
+				if(sht<=System.currentTimeMillis()-500){
+					try {
+						entities.add(player.shoot(id++));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					sht=System.currentTimeMillis();
+				}
+			}
 		}
 		
 		for(Entity e:entities){ 
-			load(e);
-		}
-		
-		for(Entity e:entities){ 
-			check(e);
+			if(!e.isDead()){
+				if(load(e)){
+					check(e);
+					e.update();
+				}
+			}
 		}
 	}
 	
@@ -151,24 +182,23 @@ public class Core extends Application {
 			for(int posX=0;posX<width;posX++){
 				if(collisionMap[x + y * screenX + posX + posY * screenX]==id){
 					if(collisionMap[(x + y * screenX + posX + posY * screenX)-1]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)-1]!=id){
-						entities.remove(collisionMap[(x + y * screenX + posX + posY * screenX)-1]);System.out.println(collisionMap[(x + y * screenX + posX + posY * screenX)-1]+" "+id);
-						entities.remove(id);
-						
+						entities.get(collisionMap[(x + y * screenX + posX + posY * screenX)-1]).died();
+						entities.get(id).died();
 						return;
 					}
 					if(collisionMap[(x + y * screenX + posX + posY * screenX)+1]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)+1]!=id){
-						entities.remove(id);
-						entities.remove(collisionMap[(x + y * screenX + posX + posY * screenX)+1]);
+						entities.get(id).died();
+						entities.get(collisionMap[(x + y * screenX + posX + posY * screenX)+1]).died();
 						return;
 					}
 					if(collisionMap[(x + y * screenX + posX + posY * screenX)+1*screenX]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)+1*screenX]!=id){
-						entities.remove(id);
-						entities.remove(collisionMap[(x + y * screenX + posX + posY * screenX)+1*screenX]);
+						entities.get(id).died();
+						entities.get(collisionMap[(x + y * screenX + posX + posY * screenX)+1*screenX]).died();
 						return;
 					}
 					if(collisionMap[(x + y * screenX + posX + posY * screenX)-1*screenX]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)-1*screenX]!=id){
-						entities.remove(id);
-						entities.remove(collisionMap[(x + y * screenX + posX + posY * screenX)-1*screenX]);
+						entities.get(id).died();
+						entities.get(collisionMap[(x + y * screenX + posX + posY * screenX)-1*screenX]).died();
 						return;
 					}
 				}
@@ -176,7 +206,7 @@ public class Core extends Application {
 		}
 	}
 		
-	private void load(Entity entity){//Ruft alle Informationen vom jeweiligen Entity auf und lädt es so auf die richtige Position im data Array
+	private boolean load(Entity entity){//Ruft alle Informationen vom jeweiligen Entity auf und lädt es so auf die richtige Position im data Array
 		int[] shape = entity.getShape();
 		
 		int id = entity.getId();
@@ -186,6 +216,11 @@ public class Core extends Application {
 
 		int x = entity.getX();
 		int y = entity.getY();
+		
+		if(x>screenX-1 || y>screenY-1 ||x<=1 || y<=1){
+			entity.died();
+			return false;
+		}
 
 		for(int posY = 0;posY<heigth;posY++){
 			for(int posX=0;posX<width;posX++){
@@ -195,6 +230,7 @@ public class Core extends Application {
 				}
 			}
 		}
+		return true;
 	}
 	
 	private abstract class MovementHandler{ // MovementHandler wie oben beschrieben wird dazu benutzt später verschiedene Tastaturlayouts benutzen zu können
@@ -208,7 +244,7 @@ public class Core extends Application {
 			
 			int x = 0;
 
-			int moveFactor = 1;
+			int moveFactor = 4;
 			
 			if(keyboard.right){
 				x+=moveFactor;
@@ -222,10 +258,10 @@ public class Core extends Application {
 			
 			int posX = player.getX();
 
-			if(posX+width+ x > screenX){
-				x=screenX-posX-width;
-			}else if(posX + x < 0){
-				x= -posX;
+			if(posX+width+ x +3> screenX){
+				x =screenX-posX-width-3;
+			}else if(posX + x -3< 0){
+				x = - posX+3;
 			}
 
 			player.move(x, 0);
@@ -310,10 +346,10 @@ public class Core extends Application {
 				rot=System.currentTimeMillis()+TIMER_ROT;
 			}
 			
-			if(posX+width+ x > screenX){
-				x=screenX-posX-width;
-			}else if(posX + x < 0){
-				x= -posX;
+			if(posX+width+ x +3> screenX){
+				x =screenX-posX-width-3;
+			}else if(posX + x -3< 0){
+				x = - posX+3;
 			}
 				
 			

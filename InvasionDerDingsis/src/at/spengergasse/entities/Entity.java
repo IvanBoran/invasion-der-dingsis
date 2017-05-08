@@ -12,8 +12,6 @@ import java.io.Writer;
 
 public class Entity {
 
-	private static int id;//Der Zähler damit jedes Entity eine eigene U_ID bekommt
-	
 	private final int U_ID;//Bei jedem Entity eindeutig und wird gebraucht um die verschiedenen Entities zu indentifizieren
 	
 	private int x,y;
@@ -26,9 +24,20 @@ public class Entity {
 
 	private int simpleWidth,simpleHeight;//Die "einfache" Breite und Höhe dadurch das aus dennen dann mithilfe von tileSize die Textur hochgerechnet wird
 	
-	public Entity(String pathShape,int x,int y,int tileSize) throws IOException{
+	private boolean dead=false;
+	
+	private int momentumX,momentumY;
+	
+	private int tileSize;
+	
+	public Entity(String pathShape,int x,int y,int tileSize,int id,int momentumX,int momentumY) throws IOException{
+		
+		this.momentumX=momentumX;
+		this.momentumY=momentumY;
 
 		U_ID = id++;
+		
+		this.tileSize=tileSize;
 
 		this.x=x;
 		this.y=y;
@@ -84,8 +93,20 @@ public class Entity {
 		}
 	}
 	
+	public boolean isDead(){
+		return dead;
+	}
+	
+	public void died(){
+		dead=true;
+	}
+	
 	public void update(){
-		
+		move(momentumX,momentumY);
+	}
+	
+	public Entity shoot(int id) throws IOException{
+		return new Entity("shapeShoot", x+width/2-tileSize-4, y-tileSize*2, 2,id,0,-8);
 	}
 
 	public void move(int xChange,int yChange){

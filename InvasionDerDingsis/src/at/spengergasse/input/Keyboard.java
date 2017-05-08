@@ -6,7 +6,7 @@ import javafx.scene.input.KeyEvent;
 
 public class Keyboard implements EventHandler<KeyEvent>{
 	
-	public boolean up,down,left,right;
+	public boolean up,down,left,right,space;
 
 	@Override
 	public void handle(KeyEvent event) {
@@ -19,6 +19,8 @@ public class Keyboard implements EventHandler<KeyEvent>{
 				left=true;
 			else if(event.getCode()==KeyCode.RIGHT)
 				right=true;
+			else if(event.getCode()==KeyCode.SPACE)
+				space=true;
 		}else{
 			if(event.getCode()==KeyCode.UP)
 				up=false;
@@ -28,6 +30,8 @@ public class Keyboard implements EventHandler<KeyEvent>{
 				left=false;
 			else if(event.getCode()==KeyCode.RIGHT)
 				right=false;
+			else if(event.getCode()==KeyCode.SPACE)
+				space=false;
 		}
 	}
 

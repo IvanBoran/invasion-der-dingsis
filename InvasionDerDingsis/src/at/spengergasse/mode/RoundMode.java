@@ -1,24 +1,27 @@
 package at.spengergasse.mode;
 
+import java.awt.Adjustable;
 import java.io.IOException;
 
 import at.spengergasse.enemyInput.EnemyInput;
+import at.spengergasse.enemyInput.RoundInput;
 import at.spengergasse.entities.AdvancedEntity;
 import at.spengergasse.input.Keyboard;
 
 public class RoundMode extends Mode{
+	private RoundInput enemyInput;
 
-	public RoundMode(int screenX, int screenY, int[] data, Keyboard keyboard, int difficulty,EnemyInput enemyInput) throws NumberFormatException, IOException {
+	public RoundMode(int screenX, int screenY, int[] data, Keyboard keyboard, int difficulty,RoundInput enemyInput) throws NumberFormatException, IOException {
 		super(screenX, screenY, data, keyboard, difficulty);
+		
+		this.enemyInput=enemyInput;
 		
 		player = new AdvancedEntity(screenX / 2, screenY - 100, "src/entities/shapePlayer", 4, 100, 0);
 		advancedEntities.add(player);
 
 		switch (difficulty) {
 		case 1:
-			for (int g = 1; g <= 8; g++) {
-				advancedEntities.add(new AdvancedEntity(g * 170, screenY / 13, "src/entities/shapeEnemy1", 4, 100, 1));
-			}
+			advancedEntities.add(new AdvancedEntity(screenX / 2, 200, "src/entities/shapeEnemy1", 4, 100, 1));
 			break;
 
 		case 2:
@@ -191,36 +194,146 @@ public class RoundMode extends Mode{
 
 		if (keyboard.s) {
 			try {
-				if (!player.isDead()) {
 					if (System.currentTimeMillis() > timeS) {
 						simpleEntities.add(
 								player.shoot(xOffset, yOffset, 6, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 						timeF = System.currentTimeMillis() + shotDelayF;
 						timeS = System.currentTimeMillis() + shotDelayS;
 					}
-				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else if (keyboard.f) {
 			try {
-				if (!player.isDead()) {
 					if (System.currentTimeMillis() > timeF) {
 						simpleEntities.add(
 								player.shoot(xOffset, yOffset, 7, 500, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 						timeF = System.currentTimeMillis() + shotDelayF;
 						timeS = System.currentTimeMillis() + shotDelayS;
 					}
-				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
+	
 	@Override
 	protected void updateEnemies() {
+		int xP = player.getX();
+		int yP = player.getY();
 		
+		int movementSpeed = 3;
+		
+		for(int e=1;e<advancedEntities.size();e++){
+			int x = advancedEntities.get(e).getX();
+			int y = advancedEntities.get(e).getY();
+			int rotation = advancedEntities.get(e).getRotation();
+			
+			int dX=0;
+			int dY=0;
+			int dR=0;
+			
+			int vX=xP-x;
+			int vY=yP-y;
+			
+			switch(rotation){//TODO abstand halten
+			
+			case 0:
+				if(vX<=150 && vX>=-150){
+					if(vX==0){
+						break;
+					}
+					if(vX<=movementSpeed+1 && vX>=-movementSpeed-1){
+						dX=vX;
+						break;
+					}
+					if(vX<0){
+						dX-=movementSpeed;
+					}else{
+						dX+=movementSpeed;
+					}
+				}else{
+					if(vX<0){
+						dR=1;
+					}else{
+						dR=-1;
+					}
+				}
+				break;
+			case 1:
+
+				break;
+			case 2:
+				if(vY<=150 && vY>=-150){
+					if(vY==0){
+						break;
+					}
+					if(vY<0){
+						dY-=movementSpeed;
+					}else{
+						dY+=movementSpeed;
+					}
+				}else{
+					if(vY<0){
+						dR=1;
+					}else{
+						dR=-1;
+					}
+				}
+				break;
+			case 3:
+
+				break;
+			case 4:
+				if(vX<=150 && vX>=-150){
+					if(vX==0){
+						break;
+					}
+					if(vX<0){
+						dX-=movementSpeed;
+					}else{
+						dX+=movementSpeed;
+					}
+				}else{
+					if(vX<0){
+						dR=1;
+					}else{
+						dR=-1;
+					}
+				}
+				break;
+			case 5:
+				break;
+			case 6:
+				if(vY<=150 && vY>=-150){
+					if(vY==0){
+						break;
+					}
+					if(vY<0){
+						dY-=movementSpeed;
+					}else{
+						dY+=movementSpeed;
+					}
+				}else{
+					if(vY<0){
+						dR=1;
+					}else{
+						dR=-1;
+					}
+				}
+				break;
+			case 7:
+			
+				break;
+				
+			}
+			
+			advancedEntities.get(e).rotate(dR);
+			advancedEntities.get(e).move(dX, dY);
+		}
+		
+		enemyInput.update(advancedEntities.size()-1);
 	}
 
 }

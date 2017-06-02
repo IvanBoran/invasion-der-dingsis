@@ -1,377 +1,394 @@
 package at.spengergasse.game;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Random;
 
-import at.spengergasse.entities.Entity;
+import at.spengergasse.enemyInput.InvadersInput;
+import at.spengergasse.enemyInput.RoundInput;
 import at.spengergasse.input.Keyboard;
+import at.spengergasse.input.MenuKeyboard;
+import at.spengergasse.mode.InvadersMode;
+import at.spengergasse.mode.Mode;
+import at.spengergasse.mode.RoundMode;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.scene.image.PixelFormat;
 
 public class Core extends Application {
-	
-	private static int id;//Der Zähler damit jedes Entity eine eigene U_ID bekommt
-	
-	private Entity player;
-	private ArrayList<Entity> entities;
-	
+
+	private Stage primaryStage;
+
+	// game
+	private int screenX, screenY;
+
+	private Group groupG;
+	private Scene sceneG;
+
 	private Canvas canvas;
 	private WritableImage image;
 	private PixelWriter pixelWriter;
-	
+
 	private GraphicsContext graphicsContext;
-	
-	private Group group;
-	private Scene scene;
-	
-	private int[] data;
-	private int[] collisionMap;
-	
-	private int screenX,screenY;
-	
 	private PixelFormat<IntBuffer> pixelFormat;
-	
+
+	private AnimationTimer loop;
+
+	private Mode mode;
+
 	private Keyboard keyboard;
 
-	private MovementHandler movementHandler;// Abstrakte super-Klasse von allen MovementHandlern damit man verschiedene benutzen kann um z.B in verschiedenen Spielmodie verschiedene Tasten belegen zu können
+	private int[] data;
 
-	private long rot; // Der Timer für die Rotation des Spielers damit das drehen kontrollierbar wird
-	private final long  TIMER_ROT = 150;// Die Zeitdifferenz zwischen einmal rotieren und dem nächsten mal in millisekunden (1 sec = 1000 ms)
-	
-	private long sht;
-	private long shtK=System.currentTimeMillis();
-	
-//	private DisplayMode dm;
-	
-	public void init() throws IOException{
-//		dm = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
-//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	// menü
+	private Scene sceneM;
+
+	private MenuKeyboard keyboardM;
+
+	private int menuState;
+
+	private HBox hBoxStart;
+	// private HBox hBoxOptions;
+	private HBox hBoxQuitGame;
+
+	private Scene sceneMs;
+
+	private int menuStateS;
+
+	private HBox[][] levels;
+
+	private boolean menuStateL;
+
+	private HBox top1, top2;
+	private FlowPane fPane;
+
+	private ProgressBar healthBar;
 		
-		screenX = 1080;
-		screenY = 720;
-		
-		entities = new ArrayList<>();
-		
-		entities.add(new Entity("shapePlayer",screenX/2-40, screenY-80, 3,id++,0,0));
-		player=entities.get(0);
-		
-		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*2, screenY/4-80, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*3, screenY/4-80, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*4, screenY/4-80, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*5, screenY/4-80, 3,id++,0,0));
-		
-		entities.add(new Entity("shapeEnemy",screenX-40-100*6, screenY/4-80, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*7, screenY/4-80, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*8, screenY/4-80, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*9, screenY/4-80, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*10, screenY/4-80, 3,id++,0,0));
-		
-		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80-80*1, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80-80*2, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80-80*3, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80-80*4, 3,id++,0,0));
-		entities.add(new Entity("shapeEnemy",screenX-40-100*1, screenY/4-80-80*5, 3,id++,0,0));
-		
-		
-		group = new Group();
-		scene = new Scene(group,screenX,screenY);
-		
-		data = new int[screenX*screenY];
-		
-		collisionMap = new int[screenX*screenY];
-		
-		image = new WritableImage(screenX, screenY);
-		canvas = new Canvas(screenX,screenY);
-		pixelWriter = image.getPixelWriter();
-		
+	private Label finishScreen,finishScreen2,finishScreen3;
+
+	public void init() {
+		screenX = 1440;
+		screenY = 810;
+
+		// game
+		data = new int[screenX * screenY];
+
+		groupG = new Group();
+		sceneG = new Scene(groupG, screenX, screenY);
+
+		healthBar = new ProgressBar();
+		healthBar.relocate(30, screenY - 30);
+		healthBar.setMinSize(200, 15);
+		healthBar.setStyle("-fx-accent: red; -fx-padding: 0;-fx-background: black;");
+
 		pixelFormat = PixelFormat.getIntArgbInstance();
-		
-		keyboard = new Keyboard();
-		scene.addEventHandler(KeyEvent.KEY_PRESSED, keyboard);
-		scene.addEventHandler(KeyEvent.KEY_RELEASED, keyboard);
-		
-		movementHandler = new DefaultMovement();
-		
+		image = new WritableImage(screenX, screenY);
+		canvas = new Canvas(screenX, screenY);
+		pixelWriter = image.getPixelWriter();
+
 		graphicsContext = canvas.getGraphicsContext2D();
+
+		groupG.getChildren().add(canvas);
+
+		keyboard = new Keyboard();
+		sceneG.addEventHandler(KeyEvent.KEY_PRESSED, keyboard);
+		sceneG.addEventHandler(KeyEvent.KEY_RELEASED, keyboard);
+
+		loop = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				if(mode.finished()!=0){
+					finish(mode.finished());
+				}
+				healthBar.setProgress( mode.getPlayer().getHealth() / 100);
+				mode.update();
+				draw();
+			}
+		};
+
+		// menü
+
+		Pane pane = new Pane();
+
+		keyboardM = new MenuKeyboard(this);
+
+		sceneM = new Scene(pane, screenX, screenY);
+		sceneM.addEventHandler(KeyEvent.KEY_PRESSED, keyboardM);
+		sceneM.addEventHandler(KeyEvent.KEY_RELEASED, keyboardM);
+
+		pane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+		HBox hBoxTitel = new HBox();
+		Image imageTitel = new Image("file:src/menu/iddMenu.jpg");
+		hBoxTitel.getChildren().add(new ImageView(imageTitel));
+		hBoxTitel.relocate(screenX / 2 - imageTitel.getWidth() / 2, 50);
+		pane.getChildren().add(hBoxTitel);
+
+		hBoxStart = new HBox();
+		Image imageStart = new Image("file:src/menu/startGame.jpg");
+		hBoxStart.getChildren().add(new ImageView(imageStart));
+		hBoxStart.relocate(screenX / 2 - imageStart.getWidth() / 2, screenY / 2 - 100);
+		hBoxStart.setBorder(
+				new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
+		pane.getChildren().add(hBoxStart);
+
+		hBoxQuitGame = new HBox();
+		Image imageQuitGame = new Image("file:src/menu/quitGame.jpg");
+		hBoxQuitGame.getChildren().add(new ImageView(imageQuitGame));
+		hBoxQuitGame.relocate(screenX / 2 - imageQuitGame.getWidth() / 2, screenY / 2 + 50);
+		pane.getChildren().add(hBoxQuitGame);
+
+		Pane paneS = new Pane();
+
+		sceneMs = new Scene(paneS, screenX, screenY);
+
+		sceneMs.addEventHandler(KeyEvent.KEY_PRESSED, keyboardM);
+		sceneMs.addEventHandler(KeyEvent.KEY_RELEASED, keyboardM);
+
+		paneS.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+		fPane = new FlowPane();
+		paneS.getChildren().add(fPane);
+		fPane.relocate(10, 300);
+		fPane.setPrefWidth(screenX - 20);
+
+		HBox top = new HBox();
+		paneS.getChildren().add(top);
+		top.relocate(screenX / 2 - 200, 1);
+
+		top1 = new HBox();
+		top2 = new HBox();
+		top.getChildren().addAll(top1, top2);// top.getChildren().addAll(top1,top2,top3);
+
+		top1.getChildren().add(new ImageView(new Image("file:src/menu/invadersMenu.jpg")));
+		top1.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
+		top2.getChildren().add(new ImageView(new Image("file:src/menu/360Menu.jpg")));
+
+		levels = new HBox[2][10];
+
+		fPane.setHgap(150);
+		fPane.setVgap(50);
+		fPane.setPadding(new Insets(50, 50, 50, 140));
 		
-		group.getChildren().add(canvas);
+		groupG.getChildren().add(healthBar);
 		
+		
+		
+		finishScreen = new Label("Level Finished");
+		finishScreen.setStyle("-fx-text-fill: white;");
+		
+		finishScreen.relocate(screenX/2-300, screenY/2-200);
+		finishScreen.addEventHandler(KeyEvent.KEY_PRESSED, keyboardM);
+		finishScreen.addEventHandler(KeyEvent.KEY_RELEASED, keyboardM);
+		
+		finishScreen2 = new Label("Press Enter to return");
+		finishScreen2.setStyle("-fx-text-fill: white;");
+		
+		finishScreen2.relocate(screenX/2-300, screenY/2-110);
+		
+		finishScreen3 = new Label("Level Failed");
+		finishScreen3.setStyle("-fx-text-fill: white;");
+		
+		finishScreen3.relocate(screenX/2-300, screenY/2-200);
+		finishScreen3.addEventHandler(KeyEvent.KEY_PRESSED, keyboardM);
+		finishScreen3.addEventHandler(KeyEvent.KEY_RELEASED, keyboardM);
+		
+		try {
+			Font myFont = Font.loadFont(new FileInputStream(new File("src/menu/BACKTO1982.TTF")), 50);
+			Font myFont2 = Font.loadFont(new FileInputStream(new File("src/menu/BACKTO1982.TTF")), 20);
+			finishScreen3.setFont(myFont);
+			finishScreen2.setFont(myFont2);
+			finishScreen.setFont(myFont);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setWidth(screenX+6);
-		primaryStage.setHeight(screenY+29);
-		
-		primaryStage.setScene(scene);
-		
+		this.primaryStage = primaryStage;
+
+		primaryStage.setWidth(screenX + 6);
+		primaryStage.setHeight(screenY + 29);
+
+		primaryStage.setScene(sceneM);
+
 		primaryStage.setResizable(false);
-		
+		primaryStage.setTitle("Invasion der Dingsis");
+
+		primaryStage.getIcons().add(new Image("file:src/menu/icon.jpg"));
+
 		primaryStage.show();
 
-		new AnimationTimer() {
-			
-			@Override
-			public void handle(long now) {
-				update();
-				draw();
+	}
+
+	public void menu(int e) {
+		if (!menuStateL) {
+			menuState += e;
+			if (menuState > 1) {
+				menuState = 0;
+			} else if (menuState < 0) {
+				menuState = 1;
 			}
-		}.start();;
+		}
+
+		menuStateS += e;
+		if (menuStateS > 9) {
+			menuStateS = 0;
+		} else if (menuStateS < 0) {
+			menuStateS = 9;
+		}
+
+		if (primaryStage.getScene() == sceneM) {
+			switch (menuState) {
+			case 0:
+				hBoxStart.setBorder(
+						new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
+				hBoxQuitGame.setBorder(null);
+				break;// hBoxOptions.setBorder(null)
+			case 1:
+				hBoxQuitGame.setBorder(
+						new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
+				hBoxStart.setBorder(null);
+				break;// hBoxOptions.setBorder(null);
+			}
+		} else if (primaryStage.getScene() == sceneMs && !menuStateL) {
+			switch (menuState) {
+			case 0:
+				top1.setBorder(
+						new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
+				top2.setBorder(null);
+				break;
+			case 1:
+				top2.setBorder(
+						new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
+				top1.setBorder(null);
+				break;
+			}
+		} else {
+			for (int h = 0; h < levels[menuState].length; h++)
+				levels[menuState][h].setBorder(null);
+			levels[menuState][menuStateS].setBorder(
+					new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
+		}
 	}
 	
-	private void draw(){
-		pixelWriter.setPixels(0, 0, screenX, screenY,pixelFormat,data,0, screenX);
+	private void finish(int modeFinish){
+		if(modeFinish==1){
+			loop.stop();
+			groupG.getChildren().add(finishScreen);
+			groupG.getChildren().add(finishScreen2);
+			finishScreen.requestFocus();
+		}else{
+			loop.stop();
+			groupG.getChildren().add(finishScreen3);
+			groupG.getChildren().add(finishScreen2);
+			finishScreen3.requestFocus();
+		}
+	}
+
+	public void enter() {
+		if (primaryStage.getScene() == sceneM) {
+			if (menuState == 0) {
+				primaryStage.setScene(sceneMs);
+			} else if (menuState == 1) {
+				System.exit(0);
+			}
+		} else if (primaryStage.getScene() == sceneMs) {
+			if (!menuStateL) {
+				menuStateL = true;
+				loadLevels(menuState);
+				fPane.getChildren().clear();
+				fPane.getChildren().addAll(levels[menuState]);
+			} else {
+				if (menuState == 0) {
+					keyboard.clean();
+					try {
+						mode = new InvadersMode(screenX, screenY, data, keyboard, menuStateS + 1,new InvadersInput());
+					} catch (NumberFormatException | IOException e) {
+						e.printStackTrace();
+					}
+					primaryStage.setScene(sceneG);
+					loop.start();
+				} else {
+					keyboard.clean();
+					try {
+						mode = new RoundMode(screenX, screenY, data, keyboard, menuStateS + 1,new RoundInput());
+					} catch (NumberFormatException | IOException e) {
+						e.printStackTrace();
+					}
+					primaryStage.setScene(sceneG);
+					loop.start();
+				}
+			}
+		}
+		else if (primaryStage.getScene()==sceneG){
+				primaryStage.setScene(sceneM);
+				menuState=0;
+				menuStateL=false;
+				groupG.getChildren().remove(finishScreen);
+				groupG.getChildren().remove(finishScreen2);
+				groupG.getChildren().remove(finishScreen3);
+				fPane.getChildren().clear();
+		}
+		menuStateS = 0;
+		menu(0);
+	}
+
+	private void loadLevels(int e) {
+		for (int i = 0; i < levels[e].length; i++) {// TODO
+			HBox box = new HBox();
+			box.getChildren().add(new ImageView(new Image("file:src/menu/levels/level" + (i + 1) + ".jpg")));
+			levels[e][i] = box;
+		}
+	}
+
+	public void escape() {
+		if (primaryStage.getScene() != sceneM) {
+			if (primaryStage.getScene() == sceneMs) {
+				if (menuStateL) {
+					fPane.getChildren().clear();
+					menuStateL = false;
+				} else {
+					primaryStage.setScene(sceneM);
+				}
+			}
+			menuStateS = 0;
+			menu(0);
+		}
+	}
+
+	private void draw() {
+		pixelWriter.setPixels(0, 0, screenX, screenY, pixelFormat, data, 0, screenX);
 		graphicsContext.drawImage(image, 0, 0);
 	}
-	
-	private void update(){
-		for(int i = 0;i<data.length;i++){
-			data[i]=0xff000000;
-			collisionMap[i]=-1;
-		}
-		
-		if(player!=null){
-			movementHandler.handleMovement();//nur für player
-			if(keyboard.space){
-				if(sht<=System.currentTimeMillis()-500){
-					try {
-						entities.add(player.shoot(id++,0,-8));
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					sht=System.currentTimeMillis();
-				}
-			}
-		}
-		
-//		if(shtK < System.currentTimeMillis()-1000) {
-//			
-//			try {
-//				entities.add(entities.get(new Random().nextInt(entities.size()-1)+1).shoot(id++, 0, +4));
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			
-//			shtK=System.currentTimeMillis();
-//		}
-		
-		for(Entity e:entities){ 
-			if(!e.isDead()){
-				if(load(e)){
-					check(e);
-					e.update();
-				}
-			}
-		}
-	}
-	
-	private void check(Entity e){
-		int id = e.getId();
-		
-		int width = e.getWidth();
-		int heigth = e.getHeight();
-		
-		int x = e.getX();
-		int y = e.getY();
-		
-		for(int posY = 0;posY<heigth;posY++){
-			for(int posX=0;posX<width;posX++){
-				if(collisionMap[x + y * screenX + posX + posY * screenX]==id){
-					if(collisionMap[(x + y * screenX + posX + posY * screenX)-1]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)-1]!=id){
-						entities.get(collisionMap[(x + y * screenX + posX + posY * screenX)-1]).died();
-						entities.get(id).died();
-						return;
-					}
-					if(collisionMap[(x + y * screenX + posX + posY * screenX)+1]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)+1]!=id){
-						entities.get(id).died();
-						entities.get(collisionMap[(x + y * screenX + posX + posY * screenX)+1]).died();
-						return;
-					}
-					if(collisionMap[(x + y * screenX + posX + posY * screenX)+1*screenX]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)+1*screenX]!=id){
-						entities.get(id).died();
-						entities.get(collisionMap[(x + y * screenX + posX + posY * screenX)+1*screenX]).died();
-						return;
-					}
-					if(collisionMap[(x + y * screenX + posX + posY * screenX)-1*screenX]!=-1 && collisionMap[(x + y * screenX + posX + posY * screenX)-1*screenX]!=id){
-						entities.get(id).died();
-						entities.get(collisionMap[(x + y * screenX + posX + posY * screenX)-1*screenX]).died();
-						return;
-					}
-				}
-			}
-		}
-	}
-		
-	private boolean load(Entity entity){//Ruft alle Informationen vom jeweiligen Entity auf und lädt es so auf die richtige Position im data Array
-		int[] shape = entity.getShape();
-		
-		int id = entity.getId();
 
-		int width = entity.getWidth();
-		int heigth = entity.getHeight();
-
-		int x = entity.getX();
-		int y = entity.getY();
-		
-		if(x>screenX-1 || y>screenY-1 ||x<=1 || y<=1){
-			entity.died();
-			return false;
-		}
-
-		for(int posY = 0;posY<heigth;posY++){
-			for(int posX=0;posX<width;posX++){
-				if(shape[posX+posY*width]!= 0){
-					data[x + y * screenX + posX + posY * screenX] = shape[posX+posY*width];
-					collisionMap[x + y * screenX + posX + posY * screenX] = id;
-				}
-			}
-		}
-		return true;
-	}
-	
-	private abstract class MovementHandler{ // MovementHandler wie oben beschrieben wird dazu benutzt später verschiedene Tastaturlayouts benutzen zu können
-		public abstract void handleMovement();
-	}
-	
-	private class DefaultMovement extends MovementHandler{
-
-		@Override
-		public void handleMovement() {
-			
-			int x = 0;
-
-			int moveFactor = 4;
-			
-			if(keyboard.right){
-				x+=moveFactor;
-			}
-			
-			if(keyboard.left){
-				x-=moveFactor;
-			}
-			
-			int width = player.getWidth();
-			
-			int posX = player.getX();
-
-			if(posX+width+ x +3> screenX){
-				x =screenX-posX-width-3;
-			}else if(posX + x -3< 0){
-				x = - posX+3;
-			}
-
-			player.move(x, 0);
-		}
-		
-	}
-
-	private class TestMovement extends MovementHandler{
-
-		@Override
-		public void handleMovement() {
-			
-			long now = System.currentTimeMillis();
-
-			int moveFactor = 5;
-
-			int orientation = player.getRotation();
-			
-			int width = player.getWidth();
-			int height = player.getHeight();
-			
-			int posX = player.getX();
-			int posY = player.getY();
-
-			int x = 0;
-			int y = 0;
-
-			if(keyboard.up){
-				if(orientation == 0){
-					y-=moveFactor+2;
-				}else if(orientation == 1){
-					y-=moveFactor;
-					x+=moveFactor;
-				}else if(orientation == 2){
-					x+=moveFactor+2;
-				}else if(orientation == 3){
-					y+=moveFactor;
-					x+=moveFactor;
-				}else if(orientation == 4){
-					y+=moveFactor+2;
-				}else if(orientation == 5){
-					y+=moveFactor;
-					x-=moveFactor;
-				}else if(orientation == 6){
-					x-=moveFactor+2;
-				}else if(orientation == 7){
-					x-=moveFactor;
-					y-=moveFactor;
-				}
-			}
-			if(keyboard.down){
-				if(orientation == 0){
-					y+=moveFactor+2;
-				}else if(orientation == 1){
-					y+=moveFactor;
-					x-=moveFactor;
-				}else if(orientation == 2){
-					x-=moveFactor+2;
-				}else if(orientation == 3){
-					y-=moveFactor;
-					x-=moveFactor;
-				}else if(orientation == 4){
-					y-=moveFactor+2;
-				}else if(orientation == 5){
-					y-=moveFactor;
-					x+=moveFactor;
-				}else if(orientation == 6){
-					x+=moveFactor+2;
-				}else if(orientation == 7){
-					x+=moveFactor;
-					y+=moveFactor;
-				}
-			}
-
-			if(keyboard.right && now > rot){
-				player.rotate(1);
-				rot=System.currentTimeMillis()+TIMER_ROT;
-			}
-
-			if(keyboard.left && now > rot ){
-				player.rotate(-1);
-				rot=System.currentTimeMillis()+TIMER_ROT;
-			}
-			
-			if(posX+width+ x +3> screenX){
-				x =screenX-posX-width-3;
-			}else if(posX + x -3< 0){
-				x = - posX+3;
-			}
-				
-			
-			if(posY+height+ y > screenY){
-				y=screenY-posY-height;
-			}else if(posY + y < 0){
-				y= -posY;
-			}
-
-			player.move(x, y);
-		}
-	}
-
-	
 }

@@ -476,7 +476,24 @@ public class RoundMode extends Mode{
 			}
 			
 			advancedEntities.get(e).rotate(dR);
-			advancedEntities.get(e).move(dX, dY);
+//			advancedEntities.get(e).move(dX, dY);
+			
+			//TODO
+			if(advancedEntities.get(e).getX()+dX<=1){
+				advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), 0);
+			}
+			else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1){
+				advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth()+2 - (screenX-1), 0);
+			}
+			else if(advancedEntities.get(e).getY()+dY<=1){
+				advancedEntities.get(e).move(0, 1-advancedEntities.get(e).getY());
+			}
+			else if(advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){
+				advancedEntities.get(e).move(0, advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight()+2 - (screenY-1));
+			}
+			else {
+				advancedEntities.get(e).move(dX, dY);
+			}
 			
 			for(int z = 1;z<advancedEntities.size();z++){
 				if(enemyInput.shoot[e-1]==1){

@@ -309,7 +309,6 @@ public class Core extends Application {
 	}
 	
 	private void finish(int modeFinish){
-		bossBar.setOpacity(100);
 		if(modeFinish==1){
 			loop.stop();
 			groupG.getChildren().add(finishScreen);
@@ -324,6 +323,7 @@ public class Core extends Application {
 	}
 
 	public void enter() {
+		bossBar.setOpacity(100);
 		if (primaryStage.getScene() == sceneM) {
 			if (menuState == 0) {
 				primaryStage.setScene(sceneMs);
@@ -355,6 +355,9 @@ public class Core extends Application {
 						mode = new RoundMode(screenX, screenY, data, keyboard, menuStateS + 1,new RoundInput());
 					} catch (NumberFormatException | IOException e) {
 						e.printStackTrace();
+					}
+					if(menuStateS +1 != 10){
+						bossBar.setOpacity(0);
 					}
 					primaryStage.setScene(sceneG);
 					loop.start();

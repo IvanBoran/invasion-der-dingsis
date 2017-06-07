@@ -310,17 +310,17 @@ public class InvadersMode extends Mode {
 				if (!player.isDead()) {
 					if (System.currentTimeMillis() > timeD) {
 						simpleEntities.add(
-								player.shoot(xOffset-8, yOffset, 3, 30, -2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+								player.shoot(xOffset-8, yOffset, 3, 20, -2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 						simpleEntities.add(
-								player.shoot(xOffset-4, yOffset, 3, 30, -1, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+								player.shoot(xOffset-4, yOffset, 3, 20, -1, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 
 						simpleEntities.add(
-								player.shoot(xOffset, yOffset, 3, 30, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+								player.shoot(xOffset, yOffset, 3, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
 
 						simpleEntities.add(
-								player.shoot(xOffset+4, yOffset, 3, 30, 1, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+								player.shoot(xOffset+4, yOffset, 3, 20, 1, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 						simpleEntities.add(
-								player.shoot(xOffset+8, yOffset, 3, 30, 2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+								player.shoot(xOffset+8, yOffset, 3, 20, 2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 						timeF = System.currentTimeMillis() + shotDelayD;
 						timeD = System.currentTimeMillis() + shotDelayD;
 						timeS = System.currentTimeMillis() + shotDelayD;
@@ -334,7 +334,7 @@ public class InvadersMode extends Mode {
 				if (!player.isDead()) {
 					if (System.currentTimeMillis() > timeF) {
 						simpleEntities.add(
-								player.shoot(xOffset, yOffset, 7, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+								player.shoot(xOffset, yOffset, 7, 15, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 						timeF = System.currentTimeMillis() + shotDelayF;
 						timeD = System.currentTimeMillis() + shotDelayF;
 						timeS = System.currentTimeMillis() + shotDelayF;

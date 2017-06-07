@@ -476,20 +476,64 @@ public class RoundMode extends Mode{
 			}
 			
 			advancedEntities.get(e).rotate(dR);
-//			advancedEntities.get(e).move(dX, dY);
 			
-			//TODO
-			if(advancedEntities.get(e).getX()+dX<=1){
-				advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), 0);
+			//TODO Rechts und unten vibriert
+//			if(advancedEntities.get(e).getX()+dX<=1 && advancedEntities.get(e).getY()+dY<=1){ // links oben
+//				advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), 1-advancedEntities.get(e).getY());
+//			} 
+//			else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1 && advancedEntities.get(e).getY()+dY<=1){ // rechts oben
+//				advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), 1-advancedEntities.get(e).getY());
+//			}
+//			else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1 && advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){ // rechts unten
+//				advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+//			}
+//			else if(advancedEntities.get(e).getX()+dX<=1 && advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){ // links unten
+//				advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+//			}
+			
+			if(advancedEntities.get(e).getX()+dX<=1){ // links
+				if(advancedEntities.get(e).getY()+dY<=1){
+					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), 1-advancedEntities.get(e).getY());
+				}
+				else if(advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){
+					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+				}
+				else{
+					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), dY);
+				}
 			}
-			else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1){
-				advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth()+2 - (screenX-1), 0);
+			else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1){ // rechts
+				if(advancedEntities.get(e).getY()+dY<=1){
+					advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), 1-advancedEntities.get(e).getY());
+				}
+				else if(advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){
+					advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+				}
+				else{
+					advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), dY);
+				}
 			}
-			else if(advancedEntities.get(e).getY()+dY<=1){
-				advancedEntities.get(e).move(0, 1-advancedEntities.get(e).getY());
+			else if(advancedEntities.get(e).getY()+dY<=1){ // oben
+				if(advancedEntities.get(e).getX()+dX<=1){
+					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), 1-advancedEntities.get(e).getY());
+				}
+				else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1){
+					advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), 1-advancedEntities.get(e).getY());
+				}
+				else{
+					advancedEntities.get(e).move(dX, 1-advancedEntities.get(e).getY());
+				}
 			}
-			else if(advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){
-				advancedEntities.get(e).move(0, advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight()+2 - (screenY-1));
+			else if(advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){ // unten
+				if(advancedEntities.get(e).getX()+dX<=1){
+					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+				}
+				else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1){
+					advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+				}
+				else{
+					advancedEntities.get(e).move(dX, advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+				}
 			}
 			else {
 				advancedEntities.get(e).move(dX, dY);

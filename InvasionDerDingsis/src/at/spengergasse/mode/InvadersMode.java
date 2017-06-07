@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
+
 import at.spengergasse.enemyInput.EnemyInput;
 import at.spengergasse.enemyInput.InvadersInput;
 import at.spengergasse.entities.AdvancedEntity;
@@ -164,14 +166,18 @@ public class InvadersMode extends Mode {
 		int yOffset = 0;
 		int y = 0;
 		int modolX = 0;
+		int bossFRate = 0;
 		
 		if(!(advancedEntities.size()>1)){
 			return;
 		}
 		
 		int x=0;
-		if(advancedEntities.size() == 2){
+		if(getBoss() != null){
 			movementSpeedE = 3;
+		}
+		if(getBoss() != null && getBoss().getHealth() <= 1000){
+			movementSpeedE = 6;
 		}
 		
 		if(enemyInput.left){
@@ -209,7 +215,10 @@ public class InvadersMode extends Mode {
 						}else if(advancedEntities.get(e).getType()==3){
 							simpleEntities.add(advancedEntities.get(e).shoot(-15, advancedEntities.get(e).getHeight()-20, -6, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 						}else{
-							if(enemyInput.shoot[e-1] <= 8){
+							if(advancedEntities.get(e).getHealth() <= 1000){
+								bossFRate = 12;
+							} else bossFRate = 8;
+							if(enemyInput.shoot[e-1] <= bossFRate){
 								t = r.nextInt(4);
 								if(t == 0){
 									simpleEntities.add(advancedEntities.get(e).shoot(-30, advancedEntities.get(e).getHeight()-65, -9, 80, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));

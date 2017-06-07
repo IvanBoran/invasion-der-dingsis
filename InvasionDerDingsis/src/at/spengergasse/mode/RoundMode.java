@@ -2,6 +2,7 @@ package at.spengergasse.mode;
 
 import java.awt.Adjustable;
 import java.io.IOException;
+import java.util.Random;
 
 import at.spengergasse.enemyInput.EnemyInput;
 import at.spengergasse.enemyInput.RoundInput;
@@ -9,7 +10,9 @@ import at.spengergasse.entities.AdvancedEntity;
 import at.spengergasse.input.Keyboard;
 
 public class RoundMode extends Mode{
+	
 	private RoundInput enemyInput;
+	private long[] timers;
 
 	public RoundMode(int screenX, int screenY, int[] data, Keyboard keyboard, int difficulty,RoundInput enemyInput) throws NumberFormatException, IOException {
 		super(screenX, screenY, data, keyboard, difficulty);
@@ -22,6 +25,8 @@ public class RoundMode extends Mode{
 		switch (difficulty) {
 		case 1:
 			advancedEntities.add(new AdvancedEntity(screenX / 2, 200, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(screenX / 3, 200, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(screenX / 3, 200, "src/entities/shapeEnemy1", 4, 100, 1));
 			break;
 
 		case 2:
@@ -60,6 +65,8 @@ public class RoundMode extends Mode{
 			
 			break;
 		}
+		
+		timers = new long[advancedEntities.size()-1];
 	}
 
 	@Override
@@ -220,6 +227,9 @@ public class RoundMode extends Mode{
 	}
 
 	
+	int delay = 650;
+	int last = 0;
+	
 	@Override
 	protected void updateEnemies() {
 		int xP = player.getX();
@@ -243,11 +253,13 @@ public class RoundMode extends Mode{
 			
 			case 0:
 				if(vX<=150 && vX>=-150){
-					if(vX==0){
-						break;
+					if(vY<250){
+						dY-=movementSpeed*2;
+					}else if(vY>350){
+						dY+=movementSpeed*2;
 					}
-					if(vX<=movementSpeed+1 && vX>=-movementSpeed-1){
-						dX=vX;
+					
+					if(vX<=movementSpeed && vX >= -movementSpeed){
 						break;
 					}
 					if(vX<0){
@@ -255,6 +267,7 @@ public class RoundMode extends Mode{
 					}else{
 						dX+=movementSpeed;
 					}
+					
 				}else{
 					if(vX<0){
 						dR=1;
@@ -262,13 +275,47 @@ public class RoundMode extends Mode{
 						dR=-1;
 					}
 				}
+				
 				break;
 			case 1:
-
+				if(vX<=-75 && vY>=75){
+					if(vY-vX<250){
+						dY-=movementSpeed*2;
+						dX+=movementSpeed*2;
+					}else if(vY-vX>350){
+						dY+=movementSpeed*2;
+						dX-=movementSpeed*2;
+					}
+					
+					if(vY+vX<movementSpeed+1 &&vY+vX>-movementSpeed+1){
+						break;
+					}
+					if(-vX>vY){
+						dY-=movementSpeed/2;
+						dX-=movementSpeed/2;
+					}else{
+						dY+=movementSpeed/2;
+						dX+=movementSpeed/2;
+					}
+					
+				}else{
+					if(vX>-75){
+						dR=-1;
+					}else{
+						dR=1;
+					}
+				}
 				break;
 			case 2:
 				if(vY<=150 && vY>=-150){
-					if(vY==0){
+					
+					if(-vX<250){
+						dX+=movementSpeed*2;
+					}else if(-vX>350){
+						dX-=movementSpeed*2;
+					}
+					
+					if(vY<=movementSpeed && vY >= -movementSpeed){
 						break;
 					}
 					if(vY<0){
@@ -285,11 +332,44 @@ public class RoundMode extends Mode{
 				}
 				break;
 			case 3:
-
+				if(vX<=-75 && vY<=-75){
+					if(-vY-vX<250){
+						dY+=movementSpeed*2;
+						dX+=movementSpeed*2;
+					}else if(-vY-vX>350){
+						dY-=movementSpeed*2;
+						dX-=movementSpeed*2;
+					}
+					
+					if(-vY+vX<movementSpeed+1 &&-vY+vX>-movementSpeed+1){
+						break;
+					}
+					if(vX>vY){
+						dY-=movementSpeed/2;
+						dX+=movementSpeed/2;
+					}else{
+						dY+=movementSpeed/2;
+						dX-=movementSpeed/2;
+					}
+					
+				}else{
+					if(vX>-75){
+						dR=1;
+					}else{
+						dR=-1;
+					}
+				}
 				break;
 			case 4:
 				if(vX<=150 && vX>=-150){
-					if(vX==0){
+					
+					if(-vY<250){
+						dY+=movementSpeed*2;
+					}else if(-vY>350){
+						dY-=movementSpeed*2;
+					}
+					
+					if(vX<=movementSpeed && vX >= -movementSpeed){
 						break;
 					}
 					if(vX<0){
@@ -299,17 +379,50 @@ public class RoundMode extends Mode{
 					}
 				}else{
 					if(vX<0){
-						dR=1;
-					}else{
 						dR=-1;
+					}else{
+						dR=1;
 					}
 				}
 				break;
 			case 5:
+				if(vX>=75 && vY<=-75){
+					if(-vY+vX<250){
+						dY+=movementSpeed*2;
+						dX-=movementSpeed*2;
+					}else if(-vY+vX>350){
+						dY-=movementSpeed*2;
+						dX+=movementSpeed*2;
+					}
+					
+					if(vY+vX<movementSpeed+1 &&vY+vX>-movementSpeed+1){
+						break;
+					}
+					
+					if(vX>-vY){
+						dY+=movementSpeed/2;
+						dX+=movementSpeed/2;
+					}else{
+						dY-=movementSpeed/2;
+						dX-=movementSpeed/2;
+					}					
+				}else{
+					if(vX<75){
+						dR=-1;
+					}else{
+						dR=1;
+					}
+				}
 				break;
 			case 6:
 				if(vY<=150 && vY>=-150){
-					if(vY==0){
+					if(vX<250){
+						dX-=movementSpeed*2;
+					}else if(vX>350){
+						dX+=movementSpeed*2;
+					}
+					
+					if(vY<=movementSpeed && vY >= -movementSpeed){
 						break;
 					}
 					if(vY<0){
@@ -319,20 +432,69 @@ public class RoundMode extends Mode{
 					}
 				}else{
 					if(vY<0){
+						dR=-1;
+					}else{
+						dR=1;
+					}
+				}
+				break;
+			case 7:
+				if(vX>=75 && vY>=75){
+					if(vY+vX<250){
+						dY-=movementSpeed*2;
+						dX-=movementSpeed*2;
+					}else if(vY+vX>350){
+						dY+=movementSpeed*2;
+						dX+=movementSpeed*2;
+					}
+					
+					if(vY-vX<movementSpeed+1 &&vY-vX>-movementSpeed+1){
+						break;
+					}
+					
+					if(vX>vY){
+						dY-=movementSpeed/2;
+						dX+=movementSpeed/2;
+					}else{
+						dY+=movementSpeed/2;
+						dX-=movementSpeed/2;
+					}
+				}else{
+					if(vX<75){
 						dR=1;
 					}else{
 						dR=-1;
 					}
 				}
 				break;
-			case 7:
-			
-				break;
 				
 			}
 			
 			advancedEntities.get(e).rotate(dR);
 			advancedEntities.get(e).move(dX, dY);
+			
+			for(int z = 1;z<advancedEntities.size();z++){
+				if(enemyInput.shoot[e-1]==1){
+					try {
+						if(timers[e-1] + delay< System.currentTimeMillis() && (!(e == last) || advancedEntities.size()==2)){
+								if(advancedEntities.get(e).getType()==1){
+								simpleEntities.add(advancedEntities.get(e).shoot(-12, advancedEntities.get(e).getHeight()-20, -4, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+							}else if(advancedEntities.get(e).getType()==2){
+								simpleEntities.add(advancedEntities.get(e).shoot(-13, advancedEntities.get(e).getHeight()-25, -5, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+							}else if(advancedEntities.get(e).getType()==3){
+								simpleEntities.add(advancedEntities.get(e).shoot(-15, advancedEntities.get(e).getHeight()-20, -6, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+							}else{
+								simpleEntities.add(advancedEntities.get(e).shoot(-50, advancedEntities.get(e).getHeight()-65, -5, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+							}
+							timers[e-1] = System.currentTimeMillis()-(new Random().nextInt(300)+100);
+							last = e;
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
 		}
 		
 		enemyInput.update(advancedEntities.size()-1);

@@ -24,9 +24,10 @@ public class RoundMode extends Mode{
 
 		switch (difficulty) {
 		case 1:
-			advancedEntities.add(new AdvancedEntity(screenX / 2, 200, "src/entities/shapeEnemy1", 4, 100, 1));
-			advancedEntities.add(new AdvancedEntity(screenX / 3, 200, "src/entities/shapeEnemy1", 4, 100, 1));
-			advancedEntities.add(new AdvancedEntity(screenX / 3, 200, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(100, screenY-100, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(screenX-100, screenY-100, "src/entities/shapeEnemy1", 4, 100, 1));
 			break;
 
 		case 2:
@@ -230,6 +231,8 @@ public class RoundMode extends Mode{
 	int delay = 650;
 	int last = 0;
 	
+	int idOffset = 30;
+	
 	@Override
 	protected void updateEnemies() {
 		int xP = player.getX();
@@ -242,6 +245,8 @@ public class RoundMode extends Mode{
 			int y = advancedEntities.get(e).getY();
 			int rotation = advancedEntities.get(e).getRotation();
 			
+			int id = advancedEntities.get(e).getID();
+			
 			int dX=0;
 			int dY=0;
 			int dR=0;
@@ -253,9 +258,9 @@ public class RoundMode extends Mode{
 			
 			case 0:
 				if(vX<=150 && vX>=-150){
-					if(vY<250){
+					if(vY<250+id*idOffset){
 						dY-=movementSpeed*2;
-					}else if(vY>350){
+					}else if(vY>350+id*idOffset){
 						dY+=movementSpeed*2;
 					}
 					
@@ -279,10 +284,10 @@ public class RoundMode extends Mode{
 				break;
 			case 1:
 				if(vX<=-75 && vY>=75){
-					if(vY-vX<250){
+					if(vY-vX<250+id*idOffset){
 						dY-=movementSpeed*2;
 						dX+=movementSpeed*2;
-					}else if(vY-vX>350){
+					}else if(vY-vX>350+id*idOffset){
 						dY+=movementSpeed*2;
 						dX-=movementSpeed*2;
 					}
@@ -309,9 +314,9 @@ public class RoundMode extends Mode{
 			case 2:
 				if(vY<=150 && vY>=-150){
 					
-					if(-vX<250){
+					if(-vX<250+id*idOffset){
 						dX+=movementSpeed*2;
-					}else if(-vX>350){
+					}else if(-vX>350+id*idOffset){
 						dX-=movementSpeed*2;
 					}
 					
@@ -333,10 +338,10 @@ public class RoundMode extends Mode{
 				break;
 			case 3:
 				if(vX<=-75 && vY<=-75){
-					if(-vY-vX<250){
+					if(-vY-vX<250+id*idOffset){
 						dY+=movementSpeed*2;
 						dX+=movementSpeed*2;
-					}else if(-vY-vX>350){
+					}else if(-vY-vX>350+id*idOffset){
 						dY-=movementSpeed*2;
 						dX-=movementSpeed*2;
 					}
@@ -363,9 +368,9 @@ public class RoundMode extends Mode{
 			case 4:
 				if(vX<=150 && vX>=-150){
 					
-					if(-vY<250){
+					if(-vY<250+id*idOffset){
 						dY+=movementSpeed*2;
-					}else if(-vY>350){
+					}else if(-vY>350+id*idOffset){
 						dY-=movementSpeed*2;
 					}
 					
@@ -387,10 +392,10 @@ public class RoundMode extends Mode{
 				break;
 			case 5:
 				if(vX>=75 && vY<=-75){
-					if(-vY+vX<250){
+					if(-vY+vX<250+id*idOffset){
 						dY+=movementSpeed*2;
 						dX-=movementSpeed*2;
-					}else if(-vY+vX>350){
+					}else if(-vY+vX>350+id*idOffset){
 						dY-=movementSpeed*2;
 						dX+=movementSpeed*2;
 					}
@@ -416,9 +421,9 @@ public class RoundMode extends Mode{
 				break;
 			case 6:
 				if(vY<=150 && vY>=-150){
-					if(vX<250){
+					if(vX<250+id*idOffset){
 						dX-=movementSpeed*2;
-					}else if(vX>350){
+					}else if(vX>350+id*idOffset){
 						dX+=movementSpeed*2;
 					}
 					
@@ -440,10 +445,10 @@ public class RoundMode extends Mode{
 				break;
 			case 7:
 				if(vX>=75 && vY>=75){
-					if(vY+vX<250){
+					if(vY+vX<250+id*idOffset){
 						dY-=movementSpeed*2;
 						dX-=movementSpeed*2;
-					}else if(vY+vX>350){
+					}else if(vY+vX>350+id*idOffset){
 						dY+=movementSpeed*2;
 						dX+=movementSpeed*2;
 					}
@@ -478,13 +483,13 @@ public class RoundMode extends Mode{
 					try {
 						if(timers[e-1] + delay< System.currentTimeMillis() && (!(e == last) || advancedEntities.size()==2)){
 								if(advancedEntities.get(e).getType()==1){
-								simpleEntities.add(advancedEntities.get(e).shoot(-12, advancedEntities.get(e).getHeight()-20, -4, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 							}else if(advancedEntities.get(e).getType()==2){
-								simpleEntities.add(advancedEntities.get(e).shoot(-13, advancedEntities.get(e).getHeight()-25, -5, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
 							}else if(advancedEntities.get(e).getType()==3){
-								simpleEntities.add(advancedEntities.get(e).shoot(-15, advancedEntities.get(e).getHeight()-20, -6, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 							}else{
-								simpleEntities.add(advancedEntities.get(e).shoot(-50, advancedEntities.get(e).getHeight()-65, -5, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 							}
 							timers[e-1] = System.currentTimeMillis()-(new Random().nextInt(300)+100);
 							last = e;

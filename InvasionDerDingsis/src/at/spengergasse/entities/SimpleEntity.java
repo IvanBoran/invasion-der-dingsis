@@ -15,10 +15,14 @@ public class SimpleEntity extends Entity {
 	private int modolX, modolY;
 
 	private int updates = 0;
+	
+	private int aId;
 
 	public SimpleEntity(int x, int y, String shapePath, int tileSize, int momentumX, int momentumY, int modolX,
-			int modolY, int damage) throws IOException {
+			int modolY, int damage, int aId) throws IOException {
 		super(-1, x, y);
+		
+		this.aId = aId;
 
 		this.modolX = modolX;
 		this.modolY = modolY;
@@ -57,6 +61,10 @@ public class SimpleEntity extends Entity {
 
 	public int getDamage() {
 		return damage;
+	}
+
+	public int getAId() {
+		return aId;
 	}
 
 	public void update() {

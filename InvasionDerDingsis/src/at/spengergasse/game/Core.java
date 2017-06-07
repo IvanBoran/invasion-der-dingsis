@@ -90,6 +90,7 @@ public class Core extends Application {
 	private FlowPane fPane;
 
 	private ProgressBar healthBar;
+	private ProgressBar bossBar;
 		
 	private Label finishScreen,finishScreen2,finishScreen3;
 
@@ -104,9 +105,14 @@ public class Core extends Application {
 		sceneG = new Scene(groupG, screenX, screenY);
 
 		healthBar = new ProgressBar();
-		healthBar.relocate(30, screenY - 30);
+		healthBar.relocate(30, screenY - 35);
 		healthBar.setMinSize(200, 15);
 		healthBar.setStyle("-fx-accent: red; -fx-padding: 0;-fx-background: black;");
+		
+		bossBar = new ProgressBar();
+		bossBar.relocate(screenX/2 - 250, 20);
+		bossBar.setMinSize(500, 30);
+		bossBar.setStyle("-fx-accent: red; -fx-padding: 0;-fx-background: black;");
 
 		pixelFormat = PixelFormat.getIntArgbInstance();
 		image = new WritableImage(screenX, screenY);
@@ -120,7 +126,7 @@ public class Core extends Application {
 		keyboard = new Keyboard();
 		sceneG.addEventHandler(KeyEvent.KEY_PRESSED, keyboard);
 		sceneG.addEventHandler(KeyEvent.KEY_RELEASED, keyboard);
-
+		
 		loop = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
@@ -128,6 +134,9 @@ public class Core extends Application {
 					finish(mode.finished());
 				}
 				healthBar.setProgress( mode.getPlayer().getHealth() / 100);
+				if(mode.getBoss() != null){
+					bossBar.setProgress( mode.getBoss().getHealth() / 2000);
+				}
 				mode.update();
 				draw();
 			}
@@ -198,8 +207,7 @@ public class Core extends Application {
 		fPane.setPadding(new Insets(50, 50, 50, 140));
 		
 		groupG.getChildren().add(healthBar);
-		
-		
+		groupG.getChildren().add(bossBar);
 		
 		finishScreen = new Label("Level Finished");
 		finishScreen.setStyle("-fx-text-fill: white;");
@@ -227,7 +235,6 @@ public class Core extends Application {
 			finishScreen2.setFont(myFont2);
 			finishScreen.setFont(myFont);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -302,6 +309,7 @@ public class Core extends Application {
 	}
 	
 	private void finish(int modeFinish){
+		bossBar.setOpacity(100);
 		if(modeFinish==1){
 			loop.stop();
 			groupG.getChildren().add(finishScreen);
@@ -335,6 +343,9 @@ public class Core extends Application {
 						mode = new InvadersMode(screenX, screenY, data, keyboard, menuStateS + 1,new InvadersInput());
 					} catch (NumberFormatException | IOException e) {
 						e.printStackTrace();
+					}
+					if(menuStateS +1 != 10){
+						bossBar.setOpacity(0);
 					}
 					primaryStage.setScene(sceneG);
 					loop.start();

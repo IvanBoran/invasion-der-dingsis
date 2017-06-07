@@ -2,6 +2,7 @@ package at.spengergasse.mode;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import at.spengergasse.enemyInput.EnemyInput;
 import at.spengergasse.enemyInput.InvadersInput;
@@ -36,10 +37,10 @@ public class InvadersMode extends Mode {
 			fRow = 1; // 8 2er
 			sRow = 1; // 5 1er
 			for(int i = 1; i <= 13; i++){
-				advancedEntities.add(new AdvancedEntity(fRow * 160 - 10*4, screenY / 13, "src/entities/shapeEnemy2", 5, 100, 2));
+				advancedEntities.add(new AdvancedEntity(fRow * 160 - 10*4, screenY / 13, "src/entities/shapeEnemy2", 5, 200, 2));
 				fRow ++;
 				if(fRow >= 8/2-1 && sRow <= 5){
-					advancedEntities.add(new AdvancedEntity((sRow * 160 + (160+160/2)) - 8*4, screenY / 5, "src/entities/shapeEnemy1", 4, 200, 1));
+					advancedEntities.add(new AdvancedEntity((sRow * 160 + (160+160/2)) - 8*4, screenY / 5, "src/entities/shapeEnemy1", 4, 100, 1));
 					sRow++;
 					i++;
 				}
@@ -64,10 +65,10 @@ public class InvadersMode extends Mode {
 			fRow = 1; // 12 2er
 			sRow = 1; // 7 1er
 			for(int i = 1; i <= 19; i++){
-				advancedEntities.add(new AdvancedEntity(fRow * 110 - 10*4, screenY / 13, "src/entities/shapeEnemy2", 5, 300, 2));
+				advancedEntities.add(new AdvancedEntity(fRow * 110 - 10*4, screenY / 13, "src/entities/shapeEnemy2", 5, 200, 2));
 				fRow ++;
 				if(fRow >= 12/2-2 && sRow <= 7){
-					advancedEntities.add(new AdvancedEntity((sRow * 110 + (110*2+110/2)) - 8*4, screenY / 5, "src/entities/shapeEnemy1", 4, 200, 1));
+					advancedEntities.add(new AdvancedEntity((sRow * 110 + (110*2+110/2)) - 8*4, screenY / 5, "src/entities/shapeEnemy1", 4, 100, 1));
 					sRow++;
 					i++;
 				}
@@ -78,10 +79,10 @@ public class InvadersMode extends Mode {
 			fRow = 1; // 8 3er
 			sRow = 1; // 5 2er
 			for(int i = 1; i <= 13; i++){
-				advancedEntities.add(new AdvancedEntity(fRow * 160 - 10*5, screenY / 13, "src/entities/shapeEnemy3", 6, 400, 3));
+				advancedEntities.add(new AdvancedEntity(fRow * 160 - 10*5, screenY / 13, "src/entities/shapeEnemy3", 6, 300, 3));
 				fRow ++;
 				if(fRow >= 8/2-1 && sRow <= 5){
-					advancedEntities.add(new AdvancedEntity((sRow * 160 + (160+160/2)) - 7*4, screenY / 5, "src/entities/shapeEnemy2", 5, 300, 2));
+					advancedEntities.add(new AdvancedEntity((sRow * 160 + (160+160/2)) - 7*4, screenY / 5, "src/entities/shapeEnemy2", 5, 200, 2));
 					sRow++;
 					i++;
 				}
@@ -92,10 +93,10 @@ public class InvadersMode extends Mode {
 			fRow = 1; // 12 3er
 			sRow = 1; // 5 2er
 			for(int i = 1; i <= 17; i++){
-				advancedEntities.add(new AdvancedEntity(fRow * 110 - 10*5, screenY / 13, "src/entities/shapeEnemy3", 6, 400, 3));
+				advancedEntities.add(new AdvancedEntity(fRow * 110 - 10*5, screenY / 13, "src/entities/shapeEnemy3", 6, 300, 3));
 				fRow ++;
 				if(fRow >= 12/2-1 && sRow <= 5){
-					advancedEntities.add(new AdvancedEntity((sRow * 110 + (110*3+110/2)) - (7*4+2), screenY / 5, "src/entities/shapeEnemy2", 5, 300, 2));
+					advancedEntities.add(new AdvancedEntity((sRow * 110 + (110*3+110/2)) - (7*4+2), screenY / 5, "src/entities/shapeEnemy2", 5, 200, 2));
 					sRow++;
 					i++;
 				}
@@ -106,10 +107,10 @@ public class InvadersMode extends Mode {
 			fRow = 1; // 12 3er
 			sRow = 1; // 7 2er
 			for(int i = 1; i <= 19; i++){
-				advancedEntities.add(new AdvancedEntity(fRow * 110 - 10*5, screenY / 13, "src/entities/shapeEnemy3", 6, 500, 3));
+				advancedEntities.add(new AdvancedEntity(fRow * 110 - 10*5, screenY / 13, "src/entities/shapeEnemy3", 6, 300, 3));
 				fRow ++;
 				if(fRow >= 12/2-2 && sRow <= 7){
-					advancedEntities.add(new AdvancedEntity((sRow * 110 + (110*2+110/2)) - (7*4+2), screenY / 5, "src/entities/shapeEnemy2", 5, 400, 2));
+					advancedEntities.add(new AdvancedEntity((sRow * 110 + (110*2+110/2)) - (7*4+2), screenY / 5, "src/entities/shapeEnemy2", 5, 200, 2));
 					sRow++;
 					i++;
 				}
@@ -120,10 +121,10 @@ public class InvadersMode extends Mode {
 			fRow = 1; // 12 3er
 			sRow = 1; // 9 2er
 			for(int i = 1; i <= 21; i++){
-				advancedEntities.add(new AdvancedEntity(fRow * 110 - 10*5, screenY / 13, "src/entities/shapeEnemy3", 6, 500, 3));
+				advancedEntities.add(new AdvancedEntity(fRow * 110 - 10*5, screenY / 13, "src/entities/shapeEnemy3", 6, 300, 3));
 				fRow ++;
 				if(fRow >= 12/2-3 && sRow <= 9){
-					advancedEntities.add(new AdvancedEntity((sRow * 110 + (110+110/2)) - 10*4, screenY / 5, "src/entities/shapeEnemy2", 5, 400, 2));
+					advancedEntities.add(new AdvancedEntity((sRow * 110 + (110+110/2)) - 10*4, screenY / 5, "src/entities/shapeEnemy2", 5, 200, 2));
 					sRow++;
 					i++;
 				}
@@ -134,10 +135,10 @@ public class InvadersMode extends Mode {
 			fRow = 1; // 12 3er
 			sRow = 1; // 11 2er
 			for(int i = 1; i <= 23; i++){
-				advancedEntities.add(new AdvancedEntity(fRow * 110 - 10*5, screenY / 13, "src/entities/shapeEnemy3", 5, 600, 3));
+				advancedEntities.add(new AdvancedEntity(fRow * 110 - 10*5, screenY / 13, "src/entities/shapeEnemy3", 5, 300, 3));
 				fRow ++;
 				if(fRow >= 12/2-4 && sRow <= 11){
-					advancedEntities.add(new AdvancedEntity((sRow * 110 + 110/2) - 10*4, screenY / 5, "src/entities/shapeEnemy2", 5, 500, 2));
+					advancedEntities.add(new AdvancedEntity((sRow * 110 + 110/2) - 10*4, screenY / 5, "src/entities/shapeEnemy2", 5, 200, 2));
 					sRow++;
 					i++;
 				}
@@ -145,7 +146,7 @@ public class InvadersMode extends Mode {
 			break;
 			
 		case 10:
-			advancedEntities.add(new AdvancedEntity(screenX /2 - 10*17, 1, "src/entities/shapeEnemy4", 17, 1000, 4));
+			advancedEntities.add(new AdvancedEntity(screenX /2 - 10*17, 1, "src/entities/shapeEnemy4", 17, 2000, 4));
 		}
 		
 		timers = new long[advancedEntities.size()-1];
@@ -157,11 +158,21 @@ public class InvadersMode extends Mode {
 	
 	protected void updateEnemies(){
 		
+		Random r = new Random();
+		int t = 0;
+		int xOffset = 0;
+		int yOffset = 0;
+		int y = 0;
+		int modolX = 0;
+		
 		if(!(advancedEntities.size()>1)){
 			return;
 		}
 		
 		int x=0;
+		if(advancedEntities.size() == 2){
+			movementSpeedE = 3;
+		}
 		
 		if(enemyInput.left){
 			x-=movementSpeedE;
@@ -192,13 +203,52 @@ public class InvadersMode extends Mode {
 				try {
 					if(timers[e-1] + delay< System.currentTimeMillis() && (!(e == last) || advancedEntities.get(e).getType() == 4)){
 							if(advancedEntities.get(e).getType()==1){
-							simpleEntities.add(advancedEntities.get(e).shoot(-12, advancedEntities.get(e).getHeight()-20, -4, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+							simpleEntities.add(advancedEntities.get(e).shoot(-12, advancedEntities.get(e).getHeight()-20, -4, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 						}else if(advancedEntities.get(e).getType()==2){
-							simpleEntities.add(advancedEntities.get(e).shoot(-13, advancedEntities.get(e).getHeight()-25, -5, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+							simpleEntities.add(advancedEntities.get(e).shoot(-13, advancedEntities.get(e).getHeight()-25, -5, 30, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
 						}else if(advancedEntities.get(e).getType()==3){
-							simpleEntities.add(advancedEntities.get(e).shoot(-15, advancedEntities.get(e).getHeight()-20, -6, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+							simpleEntities.add(advancedEntities.get(e).shoot(-15, advancedEntities.get(e).getHeight()-20, -6, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 						}else{
-							simpleEntities.add(advancedEntities.get(e).shoot(-50, advancedEntities.get(e).getHeight()-65, -5, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+							if(enemyInput.shoot[e-1] <= 8){
+								t = r.nextInt(4);
+								if(t == 0){
+									simpleEntities.add(advancedEntities.get(e).shoot(-30, advancedEntities.get(e).getHeight()-65, -9, 80, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								}else if(t == 1){
+									simpleEntities.add(advancedEntities.get(e).shoot(-120, advancedEntities.get(e).getHeight()-65, -5, 50, -6, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-90, advancedEntities.get(e).getHeight()-65, -5, 50, -4, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-60, advancedEntities.get(e).getHeight()-65, -5, 50, -2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-30, advancedEntities.get(e).getHeight()-65, -5, 50, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(0, advancedEntities.get(e).getHeight()-65, -5, 50, 2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+30, advancedEntities.get(e).getHeight()-65, -5, 50, 4, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+60, advancedEntities.get(e).getHeight()-65, -5, 50, 6, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+								} else if(t == 2){
+									simpleEntities.add(advancedEntities.get(e).shoot(-180, advancedEntities.get(e).getHeight()-125, -5, 40, -10, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-150, advancedEntities.get(e).getHeight()-105, -5, 40, -8, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-120, advancedEntities.get(e).getHeight()-85, -5, 40, -6, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-90, advancedEntities.get(e).getHeight()-65, -5, 40, -4, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-60, advancedEntities.get(e).getHeight()-65, -5, 40, -2, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-30, advancedEntities.get(e).getHeight()-65, -5, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(0, advancedEntities.get(e).getHeight()-65, -5, 40, 2, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+30, advancedEntities.get(e).getHeight()-65, -5, 40, 4, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+60, advancedEntities.get(e).getHeight()-85, -5, 40, 6, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+90, advancedEntities.get(e).getHeight()-105, -5, 40, 8, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+120, advancedEntities.get(e).getHeight()-125, -5, 40, 10, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+								} else{
+									xOffset = -210;
+									yOffset = -145;
+									modolX = -6;
+									y = 25;
+									for(int i = 0; i < 11; i++){ 
+										if(i == 6){
+											y = -y;
+										}
+										xOffset += 35;
+										yOffset +=y;
+										modolX += 2;
+										simpleEntities.add(advancedEntities.get(e).shoot(xOffset, advancedEntities.get(e).getHeight()+yOffset, -5, 50, modolX, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									}
+								}
+							}
 						}
 						timers[e-1] = System.currentTimeMillis()-(new Random().nextInt(300)+100);
 						last = e;
@@ -218,8 +268,8 @@ public class InvadersMode extends Mode {
 	long timeS, timeD, timeF = 0;
 	
 	int shotDelayS = 500;
-	int shotDelayD = 1500;
-	int shotDelayF = 200;
+	int shotDelayD = 800;
+	int shotDelayF = 250;
 
 	int xOffset = -14;
 	int yOffset = 0;
@@ -247,7 +297,7 @@ public class InvadersMode extends Mode {
 			try {
 				if (System.currentTimeMillis() > timeS) {
 					simpleEntities.add(
-							player.shoot(xOffset, yOffset, 6, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+							player.shoot(xOffset, yOffset, 6, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 					timeF = System.currentTimeMillis() + shotDelayS;
 					timeD = System.currentTimeMillis() + shotDelayS;
 					timeS = System.currentTimeMillis() + shotDelayS;
@@ -260,17 +310,17 @@ public class InvadersMode extends Mode {
 				if (!player.isDead()) {
 					if (System.currentTimeMillis() > timeD) {
 						simpleEntities.add(
-								player.shoot(xOffset-8, yOffset, 1, 10, -2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+								player.shoot(xOffset-8, yOffset, 3, 30, -2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 						simpleEntities.add(
-								player.shoot(xOffset-4, yOffset, 1, 10, -1, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+								player.shoot(xOffset-4, yOffset, 3, 30, -1, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 
 						simpleEntities.add(
-								player.shoot(xOffset, yOffset, 1, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+								player.shoot(xOffset, yOffset, 3, 30, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
 
 						simpleEntities.add(
-								player.shoot(xOffset+4, yOffset, 1, 10, 1, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+								player.shoot(xOffset+4, yOffset, 3, 30, 1, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 						simpleEntities.add(
-								player.shoot(xOffset+8, yOffset, 1, 10, 2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+								player.shoot(xOffset+8, yOffset, 3, 30, 2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 						timeF = System.currentTimeMillis() + shotDelayD;
 						timeD = System.currentTimeMillis() + shotDelayD;
 						timeS = System.currentTimeMillis() + shotDelayD;
@@ -284,7 +334,7 @@ public class InvadersMode extends Mode {
 				if (!player.isDead()) {
 					if (System.currentTimeMillis() > timeF) {
 						simpleEntities.add(
-								player.shoot(xOffset, yOffset, 7, 500, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+								player.shoot(xOffset, yOffset, 7, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 						timeF = System.currentTimeMillis() + shotDelayF;
 						timeD = System.currentTimeMillis() + shotDelayF;
 						timeS = System.currentTimeMillis() + shotDelayF;
@@ -306,12 +356,12 @@ public class InvadersMode extends Mode {
 				advancedEntities.get(getAdvancedEntity(id2)).hit(COLLISION_DAMAGE);
 			} else if (id1 < 0 || id2 < 0) {
 				if (id1 < 0) {
-					if(!advancedEntities.get(getAdvancedEntity(id2)).getHit()){
+					if(!advancedEntities.get(getAdvancedEntity(id2)).getHit() && (advancedEntities.get(getAdvancedEntity(id2)).getType() == 0 || advancedEntities.get(getAdvancedEntity(simpleEntities.get(getSimpleEntity(id1)).getAId())).getType() == 0)){
 						advancedEntities.get(getAdvancedEntity(id2)).hit(simpleEntities.get(getSimpleEntity(id1)).getDamage());
 						simpleEntities.get(getSimpleEntity(id1)).died();
 					}
 				} else {
-					if(!advancedEntities.get(getAdvancedEntity(id1)).getHit()){
+					if(!advancedEntities.get(getAdvancedEntity(id1)).getHit() && (advancedEntities.get(getAdvancedEntity(id1)).getType() == 0 || advancedEntities.get(getAdvancedEntity(simpleEntities.get(getSimpleEntity(id2)).getAId())).getType() == 0)){
 						advancedEntities.get(getAdvancedEntity(id1)).hit(simpleEntities.get(getSimpleEntity(id2)).getDamage());
 						simpleEntities.get(getSimpleEntity(id2)).died();
 					}

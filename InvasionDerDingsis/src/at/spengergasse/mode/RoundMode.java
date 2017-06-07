@@ -68,16 +68,18 @@ public class RoundMode extends Mode{
 		if (id1 < 0 && id2 < 0) {// Beide simple
 
 		} else if (id1 > 0 && id2 > 0) {
-			advancedEntities.get(getAdvancedEntity(id1)).hit(COLLISION_DAMAGE);
-			advancedEntities.get(getAdvancedEntity(id2)).hit(COLLISION_DAMAGE);
+			if(advancedEntities.get(getAdvancedEntity(id1)).getType() == 0 || advancedEntities.get(getAdvancedEntity(id2)).getType() == 0){
+				advancedEntities.get(getAdvancedEntity(id1)).hit(COLLISION_DAMAGE);
+				advancedEntities.get(getAdvancedEntity(id2)).hit(COLLISION_DAMAGE);
+			}
 		} else if (id1 < 0 || id2 < 0) {
 			if (id1 < 0) {
-				if(!advancedEntities.get(getAdvancedEntity(id2)).getHit()){
+				if(!advancedEntities.get(getAdvancedEntity(id2)).getHit() && (advancedEntities.get(getAdvancedEntity(id2)).getType() == 0 || advancedEntities.get(getAdvancedEntity(simpleEntities.get(getSimpleEntity(id1)).getAId())).getType() == 0)){
 					advancedEntities.get(getAdvancedEntity(id2)).hit(simpleEntities.get(getSimpleEntity(id1)).getDamage());
 					simpleEntities.get(getSimpleEntity(id1)).died();
 				}
 			} else {
-				if(!advancedEntities.get(getAdvancedEntity(id1)).getHit()){
+				if(!advancedEntities.get(getAdvancedEntity(id1)).getHit() && (advancedEntities.get(getAdvancedEntity(id1)).getType() == 0 || advancedEntities.get(getAdvancedEntity(simpleEntities.get(getSimpleEntity(id2)).getAId())).getType() == 0)){
 					advancedEntities.get(getAdvancedEntity(id1)).hit(simpleEntities.get(getSimpleEntity(id2)).getDamage());
 					simpleEntities.get(getSimpleEntity(id2)).died();
 				}

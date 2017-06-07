@@ -144,7 +144,7 @@ public class AdvancedEntity extends Entity {
 		}
 		}
 
-		return new SimpleEntity(x + xOffset, y + yOffset, pathShape, tileSize, mX, mY, modolX, modolY, damage);
+		return new SimpleEntity(x + xOffset, y + yOffset, pathShape, tileSize, mX, mY, modolX, modolY, damage, this.ID);
 	}
 
 	public void move(int x, int y) {

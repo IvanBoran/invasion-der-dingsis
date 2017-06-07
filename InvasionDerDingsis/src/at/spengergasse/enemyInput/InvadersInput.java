@@ -16,7 +16,7 @@ public class InvadersInput extends EnemyInput{
 		right=false;
 		if(counter == 0){
 			z*=-1;
-			counter = (new Random().nextInt(3)+1)*30;
+			counter = (new Random().nextInt(3)+1)*35;
 		}else{
 			if(z<0){
 				left=true;

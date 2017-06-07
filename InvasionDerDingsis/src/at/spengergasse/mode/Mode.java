@@ -155,4 +155,10 @@ public abstract class Mode {
 		return player;
 	}
 
+	public AdvancedEntity getBoss(){
+		if(advancedEntities.size() != 1 && advancedEntities.get(1).getType() == 4){
+			return advancedEntities.get(1);
+		}
+		return null;
+	}
 }

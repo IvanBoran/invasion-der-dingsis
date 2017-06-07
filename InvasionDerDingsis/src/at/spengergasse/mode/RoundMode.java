@@ -245,7 +245,7 @@ public class RoundMode extends Mode{
 			int y = advancedEntities.get(e).getY();
 			int rotation = advancedEntities.get(e).getRotation();
 			
-			int id = advancedEntities.get(e).getID();
+			int id = e;
 			
 			int dX=0;
 			int dY=0;

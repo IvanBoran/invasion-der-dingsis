@@ -19,7 +19,7 @@ public class RoundMode extends Mode{
 		
 		this.enemyInput=enemyInput;
 		
-		player = new AdvancedEntity(screenX / 2, screenY/2, "src/entities/shapePlayer", 4, 100, 0);
+		player = new AdvancedEntity(screenX / 2, screenY/2, "src/entities/shapePlayer", 4, 10000, 0);
 		advancedEntities.add(player);
 
 		switch (difficulty) {
@@ -79,7 +79,7 @@ public class RoundMode extends Mode{
 			break;
 			
 		case 8:
-			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy3", 3, 300, 3));
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy3", 4, 300, 3));
 			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy3", 4, 300, 3));
 			advancedEntities.add(new AdvancedEntity(100, screenY-200, "src/entities/shapeEnemy3", 4, 300, 3));
 			advancedEntities.add(new AdvancedEntity(screenX-100, screenY-200, "src/entities/shapeEnemy3", 4, 300, 3));
@@ -99,7 +99,7 @@ public class RoundMode extends Mode{
 			break;
 			
 		case 10:
-			advancedEntities.add(new AdvancedEntity(200, 100,"src/entities/shapeEnemy4", 5, 1000, 4));
+			advancedEntities.add(new AdvancedEntity(200, 100,"src/entities/shapeEnemy4", 6, 2000, 4));
 			break;
 		}
 		
@@ -141,10 +141,11 @@ public class RoundMode extends Mode{
 		return 0;
 	}
 
-	long timeS, timeF;
+	long timeS, timeF, timeD;
 	int movementSpeed = 5;
 
 	int shotDelayS = 500;
+	int shotDelayD = 20;
 	int shotDelayF = 150;
 
 	int xOffset = -9;
@@ -178,49 +179,49 @@ public class RoundMode extends Mode{
 		
 		if(keyboard.up){
 			if(orientation == 0){
-				y-=movementSpeed+2;
-			}else if(orientation == 1){
-				y-=movementSpeed;
-				x+=movementSpeed;
-			}else if(orientation == 2){
-				x+=movementSpeed+2;
-			}else if(orientation == 3){
-				y+=movementSpeed;
-				x+=movementSpeed;
-			}else if(orientation == 4){
 				y+=movementSpeed+2;
-			}else if(orientation == 5){
+			}else if(orientation == 1){
 				y+=movementSpeed;
 				x-=movementSpeed;
-			}else if(orientation == 6){
+			}else if(orientation == 2){
 				x-=movementSpeed+2;
-			}else if(orientation == 7){
-				x-=movementSpeed;
+			}else if(orientation == 3){
 				y-=movementSpeed;
+				x-=movementSpeed;
+			}else if(orientation == 4){
+				y-=movementSpeed+2;
+			}else if(orientation == 5){
+				y-=movementSpeed;
+				x+=movementSpeed;
+			}else if(orientation == 6){
+				x+=movementSpeed+2;
+			}else if(orientation == 7){
+				x+=movementSpeed;
+				y+=movementSpeed;
 			}
 		}
 		
 		if(keyboard.down){
 			if(orientation == 0){
-				y+=movementSpeed+2;
-			}else if(orientation == 1){
-				y+=movementSpeed;
-				x-=movementSpeed;
-			}else if(orientation == 2){
-				x-=movementSpeed+2;
-			}else if(orientation == 3){
-				y-=movementSpeed;
-				x-=movementSpeed;
-			}else if(orientation == 4){
 				y-=movementSpeed+2;
-			}else if(orientation == 5){
+			}else if(orientation == 1){
 				y-=movementSpeed;
 				x+=movementSpeed;
-			}else if(orientation == 6){
+			}else if(orientation == 2){
 				x+=movementSpeed+2;
-			}else if(orientation == 7){
-				x+=movementSpeed;
+			}else if(orientation == 3){
 				y+=movementSpeed;
+				x+=movementSpeed;
+			}else if(orientation == 4){
+				y+=movementSpeed+2;
+			}else if(orientation == 5){
+				y+=movementSpeed;
+				x-=movementSpeed;
+			}else if(orientation == 6){
+				x-=movementSpeed+2;
+			}else if(orientation == 7){
+				x-=movementSpeed;
+				y-=movementSpeed;
 			}
 		}
 		
@@ -242,19 +243,33 @@ public class RoundMode extends Mode{
 			try {
 					if (System.currentTimeMillis() > timeS) {
 						simpleEntities.add(
-								player.shoot(xOffset, yOffset, 6, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								player.shoot(xOffset, yOffset, 7, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 						timeF = System.currentTimeMillis() + shotDelayF;
+						timeD = System.currentTimeMillis() + shotDelayD;
 						timeS = System.currentTimeMillis() + shotDelayS;
 					}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (keyboard.d) {
+			try {
+				if (!player.isDead()) {
+					if (System.currentTimeMillis() > timeD) {
+						simpleEntities.add(player.shoot(xOffset, yOffset, 6, 5, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+						timeF = System.currentTimeMillis() + shotDelayD;
+						timeD = System.currentTimeMillis() + shotDelayD;
+						timeS = System.currentTimeMillis() + shotDelayD;
+					}
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else if (keyboard.f) {
 			try {
 					if (System.currentTimeMillis() > timeF) {
-						simpleEntities.add(
-								player.shoot(xOffset, yOffset, 7, 500, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+						simpleEntities.add(player.shoot(xOffset, yOffset, 8, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 						timeF = System.currentTimeMillis() + shotDelayF;
+						timeD = System.currentTimeMillis() + shotDelayD;
 						timeS = System.currentTimeMillis() + shotDelayS;
 					}
 			} catch (IOException e) {
@@ -280,6 +295,8 @@ public class RoundMode extends Mode{
 			int x = advancedEntities.get(e).getX();
 			int y = advancedEntities.get(e).getY();
 			int rotation = advancedEntities.get(e).getRotation();
+			
+			int bossFRate = 0;
 			
 			int id = e;
 			
@@ -513,26 +530,12 @@ public class RoundMode extends Mode{
 			
 			advancedEntities.get(e).rotate(dR);
 			
-			//TODO Rechts und unten vibriert
-//			if(advancedEntities.get(e).getX()+dX<=1 && advancedEntities.get(e).getY()+dY<=1){ // links oben
-//				advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), 1-advancedEntities.get(e).getY());
-//			} 
-//			else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1 && advancedEntities.get(e).getY()+dY<=1){ // rechts oben
-//				advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), 1-advancedEntities.get(e).getY());
-//			}
-//			else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1 && advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){ // rechts unten
-//				advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
-//			}
-//			else if(advancedEntities.get(e).getX()+dX<=1 && advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){ // links unten
-//				advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
-//			}
-			
 			if(advancedEntities.get(e).getX()+dX<=1){ // links
 				if(advancedEntities.get(e).getY()+dY<=1){
 					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), 1-advancedEntities.get(e).getY());
 				}
 				else if(advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){
-					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), 0);
 				}
 				else{
 					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), dY);
@@ -540,13 +543,13 @@ public class RoundMode extends Mode{
 			}
 			else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1){ // rechts
 				if(advancedEntities.get(e).getY()+dY<=1){
-					advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), 1-advancedEntities.get(e).getY());
+					advancedEntities.get(e).move(0, 1-advancedEntities.get(e).getY());
 				}
 				else if(advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){
-					advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+					advancedEntities.get(e).move(0, 0);
 				}
 				else{
-					advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), dY);
+					advancedEntities.get(e).move(0, dY);
 				}
 			}
 			else if(advancedEntities.get(e).getY()+dY<=1){ // oben
@@ -554,7 +557,7 @@ public class RoundMode extends Mode{
 					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), 1-advancedEntities.get(e).getY());
 				}
 				else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1){
-					advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), 1-advancedEntities.get(e).getY());
+					advancedEntities.get(e).move(0, 1-advancedEntities.get(e).getY());
 				}
 				else{
 					advancedEntities.get(e).move(dX, 1-advancedEntities.get(e).getY());
@@ -562,13 +565,13 @@ public class RoundMode extends Mode{
 			}
 			else if(advancedEntities.get(e).getY()+dY+ advancedEntities.get(e).getHeight()>=screenY-1){ // unten
 				if(advancedEntities.get(e).getX()+dX<=1){
-					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+					advancedEntities.get(e).move(1-advancedEntities.get(e).getX(),0);
 				}
 				else if(advancedEntities.get(e).getX()+dX+ advancedEntities.get(e).getWidth()>=screenX-1){
-					advancedEntities.get(e).move(advancedEntities.get(e).getX() + advancedEntities.get(e).getWidth() - (screenX-1), advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+					advancedEntities.get(e).move(0, 0);
 				}
 				else{
-					advancedEntities.get(e).move(dX, advancedEntities.get(e).getY() + advancedEntities.get(e).getHeight() - (screenY-1));
+					advancedEntities.get(e).move(dX, 0);
 				}
 			}
 			else {
@@ -580,13 +583,18 @@ public class RoundMode extends Mode{
 					try {
 						if(timers[e-1] + delay< System.currentTimeMillis() && (!(e == last) || advancedEntities.size()==2)){
 								if(advancedEntities.get(e).getType()==1){
-								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, 7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 							}else if(advancedEntities.get(e).getType()==2){
-								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/3, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/3, -advancedEntities.get(e).getHeight()/4, 7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
 							}else if(advancedEntities.get(e).getType()==3){
-								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/5, -advancedEntities.get(e).getHeight()/6, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/5+5, -advancedEntities.get(e).getHeight()+120, 7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 							}else{
-								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/5, -advancedEntities.get(e).getHeight()/5, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								if(advancedEntities.get(e).getHealth() <= 1000){
+									bossFRate = 20;
+								} else bossFRate = 16;
+								if(enemyInput.shoot[e-1] <= bossFRate){
+								simpleEntities.add(advancedEntities.get(e).shoot(0, 0, 7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								}
 							}
 							timers[e-1] = System.currentTimeMillis()-(new Random().nextInt(300)+100);
 							last = e;

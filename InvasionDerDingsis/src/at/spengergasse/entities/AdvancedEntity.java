@@ -120,54 +120,54 @@ public class AdvancedEntity extends Entity {
 		switch (rotation) {
 		case 0: {
 			x = this.x + width / 2;
-			y = this.y;
-			mY -= speed+2;
-			break;
-		}
-		case 1: {
-			x = this.x + width;
-			y = this.y;
-			mX += speed;
-			mY += -speed;
-			break;
-		}
-		case 2: {
-			x = this.x + width;
-			y = this.y + height / 2;
-			mX += speed+2;
-			break;
-		}
-		case 3: {
-			x = this.x + width;
-			y = this.y + height;
-			mX += speed;
-			mY += speed;
-			break;
-		}
-		case 4: {
-			x = this.x + width / 2;
 			y = this.y + height;
 			mY += speed+2;
 			break;
 		}
-		case 5: {
+		case 1: {
 			x = this.x;
 			y = this.y + height;
-			mX = -speed;
-			mY += speed;
+			mX -= speed;
+			mY -= -speed;
 			break;
 		}
-		case 6: {
+		case 2: {
 			x = this.x;
 			y = this.y + height / 2;
 			mX -= speed+2;
 			break;
 		}
-		case 7: {
+		case 3: {
 			x = this.x;
 			y = this.y;
-			mX += -speed;
-			mY += -speed;
+			mX -= speed;
+			mY -= speed;
+			break;
+		}
+		case 4: {
+			x = this.x + width / 2;
+			y = this.y;
+			mY -= speed+2;
+			break;
+		}
+		case 5: {
+			x = this.x + width;
+			y = this.y;
+			mX = speed;
+			mY -= speed;
+			break;
+		}
+		case 6: {
+			x = this.x + width;
+			y = this.y + height / 2;
+			mX += speed+2;
+			break;
+		}
+		case 7: {
+			x = this.x + width;
+			y = this.y + height;
+			mX -= -speed;
+			mY -= -speed;
 			break;
 		}
 		}

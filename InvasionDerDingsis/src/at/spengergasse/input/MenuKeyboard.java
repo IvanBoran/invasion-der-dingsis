@@ -5,14 +5,26 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+/**
+ * Handles the Input while the menu is running.
+ */
 public class MenuKeyboard implements EventHandler<KeyEvent> {
 
 	private Core core;
 
+	/**
+	 * Constructs a new MenuKeyboard.
+	 * @param core
+	 */
 	public MenuKeyboard(Core core) {
 		this.core = core;
 	}
 
+	/**
+	 * Handles the Input while the menu is running.
+	 * 
+	 * @param event the KeyEvent which was done
+	 */
 	@Override
 	public void handle(KeyEvent event) {
 		if (event.getEventType() == KeyEvent.KEY_PRESSED) {
@@ -25,8 +37,6 @@ public class MenuKeyboard implements EventHandler<KeyEvent> {
 			} else if (event.getCode() == KeyCode.ESCAPE) {
 				core.escape();
 			}
-		} else {
-			// release
 		}
 	}
 }

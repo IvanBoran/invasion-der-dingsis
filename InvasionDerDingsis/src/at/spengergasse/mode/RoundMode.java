@@ -9,11 +9,29 @@ import at.spengergasse.enemyInput.RoundInput;
 import at.spengergasse.entities.AdvancedEntity;
 import at.spengergasse.input.Keyboard;
 
+/**
+ * Handles the gamemode Round.
+ * Handles the Entity placement, Entity movement, shots.
+ */
 public class RoundMode extends Mode{
 	
 	private RoundInput enemyInput;
 	private long[] timers;
 
+	/**
+	 * Constructs a new RoundsMode.
+	 * Places all entities for the different levels.
+	 * 
+	 * @param screenX the width of the window
+	 * @param screenY the height of the window
+	 * @param data the Array, where the different Colors of the Pixels are saved
+	 * @param keyboard the keyboard class which is used
+	 * @param difficulty the level number
+	 * @param enemyInput the class for the Input
+	 * 
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 */
 	public RoundMode(int screenX, int screenY, int[] data, Keyboard keyboard, int difficulty,RoundInput enemyInput) throws NumberFormatException, IOException {
 		super(screenX, screenY, data, keyboard, difficulty);
 		
@@ -106,6 +124,9 @@ public class RoundMode extends Mode{
 		timers = new long[advancedEntities.size()-1];
 	}
 
+	/**
+	 * Handles what happens at a hit.
+	 */
 	@Override
 	protected void hit(int id1, int id2) {
 		final int COLLISION_DAMAGE = 50;
@@ -131,6 +152,11 @@ public class RoundMode extends Mode{
 		}
 	}
 
+	/**
+	 * Returns if the game is finished.
+	 * 
+	 * @return if the game is finished (1 = win; -1 = lose; 0 = unfinished)
+	 */
 	@Override
 	public int finished() {
 		if(player.isDead()){
@@ -154,6 +180,9 @@ public class RoundMode extends Mode{
 	long timerRotation;
 	int timerDelta=150;
 	
+	/**
+	 * Handles the Input for the Player.
+	 */
 	@Override
 	protected void handleInputs() {
 		int orientation = player.getRotation();
@@ -284,6 +313,10 @@ public class RoundMode extends Mode{
 	
 	int idOffset = 30;
 	
+	/**
+	 * Updates and handles the Enemies.
+	 * Movement & shots.
+	 */
 	@Override
 	protected void updateEnemies() {
 		int xP = player.getX();

@@ -11,11 +11,29 @@ import at.spengergasse.enemyInput.InvadersInput;
 import at.spengergasse.entities.AdvancedEntity;
 import at.spengergasse.input.Keyboard;
 
+/**
+ * Handles the gamemode Invaders.
+ * Handles the Entity placement, Entity movement, shots.
+ */
 public class InvadersMode extends Mode {
 	
 	private InvadersInput enemyInput;
 	private long[] timers;
 	
+	/**
+	 * Constructs a new InvadersMode.
+	 * Places all entities for the different levels.
+	 * 
+	 * @param screenX the width of the window
+	 * @param screenY the height of the window
+	 * @param data the Array, where the different Colors of the Pixels are saved
+	 * @param keyboard the keyboard class which is used
+	 * @param difficulty the level number
+	 * @param enemyInput the class for the Input
+	 * 
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 */
 	public InvadersMode(int screenX, int screenY, int[] data, Keyboard keyboard, int difficulty,InvadersInput enemyInput)
 			throws NumberFormatException, IOException {
 		super(screenX, screenY, data, keyboard, difficulty);
@@ -159,6 +177,10 @@ public class InvadersMode extends Mode {
 	int delay = 650;
 	int last = 0;
 	
+	/**
+	 * Updates and handles the Enemies.
+	 * Movement & shots.
+	 */
 	protected void updateEnemies(){
 		
 		Random r = new Random();
@@ -280,6 +302,9 @@ public class InvadersMode extends Mode {
 	int xOffset = -10;
 	int yOffset = -16;
 
+	/**
+	 * Handles the Input for the Player.
+	 */
 	@Override
 	protected void handleInputs() {
 		if(keyboard.esc){
@@ -352,6 +377,9 @@ public class InvadersMode extends Mode {
 		}
 	}
 
+	/**
+	 * Handles what happens at a hit.
+	 */
 	@Override
 	protected void hit(int id1, int id2) {
 		final int COLLISION_DAMAGE = 50;
@@ -375,6 +403,11 @@ public class InvadersMode extends Mode {
 			}
 	}
 	
+	/**
+	 * Returns if the game is finished.
+	 * 
+	 * @return if the game is finished (1 = win; -1 = lose; 0 = unfinished)
+	 */
 	@Override
 	public int finished() {
 		if(player.isDead()){

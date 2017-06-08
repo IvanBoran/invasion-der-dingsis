@@ -60,7 +60,7 @@ public class Keyboard implements EventHandler<KeyEvent> {
 	}
 	
 	/**
-	 * 
+	 * Cleans esc if you switch the Scene.
 	 */
 	public void clean(){
 		esc=false;

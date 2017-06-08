@@ -9,6 +9,10 @@ import at.spengergasse.entities.Entity;
 import at.spengergasse.entities.SimpleEntity;
 import at.spengergasse.input.Keyboard;
 
+/**
+ * Handles the different gamemodes.
+ * Handles the Entity placement, Entity movement, shots.
+ */
 public abstract class Mode {
 
 	protected AdvancedEntity player;
@@ -27,6 +31,15 @@ public abstract class Mode {
 
 	protected int updates;
 	
+	/**
+	 * Constructs a new Mode.
+	 * 
+	 * @param screenX the width of the window
+	 * @param screenY the height of the window
+	 * @param data the Array, where the different Colors of the Pixels are saved
+	 * @param keyboard the keyboard class which is used
+	 * @param difficulty the level number
+	 */
 	public Mode(int screenX, int screenY, int[] data, Keyboard keyboard, int difficulty) {
 		this.screenX = screenX;
 		this.screenY = screenY;
@@ -42,6 +55,12 @@ public abstract class Mode {
 		advancedEntities = new ArrayList<>();
 	}
 
+	/**
+	 * Loads the shape in the data Array.
+	 * Loads the id in the collisionMap.
+	 * 
+	 * @param entity the Entity which will be loaded
+	 */
 	private void load(Entity entity) {// Ruft alle Informationen vom jeweiligen
 										// Entity auf und lädt es so auf die
 										// richtige Position im data Array
@@ -70,6 +89,9 @@ public abstract class Mode {
 		}
 	}
 
+	/**
+	 * Looks for hits.
+	 */
 	private void check() {
 		for (int i = 0; i < collisionMap.length - 1-screenX; i++) {
 			if ((collisionMap[i] != 0 && collisionMap[i + 1] != 0) && collisionMap[i] != collisionMap[i + 1]) {
@@ -81,8 +103,17 @@ public abstract class Mode {
 		}
 	}
 
+	/**
+	 * Handles hits.
+	 * 
+	 * @param id1
+	 * @param id2
+	 */
 	abstract protected void hit(int id1, int id2);
 
+	/**
+	 * Removes the dead Entities from the Arrays.
+	 */
 	private void clean() {
 
 		while (true) {
@@ -102,6 +133,9 @@ public abstract class Mode {
 		}
 	}
 
+	/**
+	 * Updates the different Entities.
+	 */
 	public void update() {
 		updates++;
 		
@@ -126,13 +160,30 @@ public abstract class Mode {
 
 		check();
 	}
-
+	
+	/**
+	 * Returns if the game is finished.
+	 * 
+	 * @return if the game is finished (1 = win; -1 = lose; 0 = unfinished)
+	 */
 	abstract public int finished();
 	
+	/**
+	 * Updates the Enemies.
+	 */
 	abstract protected void updateEnemies();
 
+	/**
+	 * Handles the Inputs of the Player.
+	 */
 	abstract protected void handleInputs();
 
+	/**
+	 * Returns the index of the AdvancedEntity with this ID.
+	 * 
+	 * @param ID the ID of the AdvancedEntity
+	 * @return the index of the AdvancedEntity
+	 */
 	protected int getAdvancedEntity(int ID) {
 		for (int i = 0; i < advancedEntities.size(); i++) {
 			if (advancedEntities.get(i).getID() == ID) {
@@ -142,6 +193,12 @@ public abstract class Mode {
 		return -1;
 	}
 
+	/**
+	 * Returns the index of the SimpleEntity with this ID.
+	 * 
+	 * @param ID the ID of the SimpleEntity
+	 * @return the index of the SimpleEntity
+	 */
 	protected int getSimpleEntity(int ID) {
 		for (int i = 0; i < simpleEntities.size(); i++) {
 			if (simpleEntities.get(i).getID() == ID) {
@@ -151,10 +208,21 @@ public abstract class Mode {
 		return -1;
 	}
 	
+	/**
+	 * Returns the Player Object.
+	 * 
+	 * @return the Player Object
+	 */
 	public AdvancedEntity getPlayer() {
 		return player;
 	}
-
+	
+	/**
+	 * Returns the Boss Object.
+	 * If there is no boss = null.
+	 * 
+	 * @return the Boss Object; no boss = null
+	 */
 	public AdvancedEntity getBoss(){
 		if(advancedEntities.size() != 1 && advancedEntities.get(1).getType() == 4){
 			return advancedEntities.get(1);

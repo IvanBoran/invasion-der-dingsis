@@ -42,6 +42,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+/**
+ * Core brings all together.
+ * It managed the whole game and makes the Menu. 
+ */
 public class Core extends Application {
 
 	private Stage primaryStage;
@@ -94,6 +98,9 @@ public class Core extends Application {
 		
 	private Label finishScreen,finishScreen2,finishScreen3;
 
+	/**
+	 * Initiate the window, the menu, Healthbars, endscreens...
+	 */
 	public void init() {
 		screenX = 1440;
 		screenY = 810;
@@ -239,6 +246,11 @@ public class Core extends Application {
 		}
 	}
 
+	/**
+	 * Makes the Window with Icon, Title and set the Menu scene.
+	 * 
+	 * @param primaryStage the current PrimaryStage
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
@@ -257,6 +269,12 @@ public class Core extends Application {
 
 	}
 
+	/**
+	 * Handles the menu.
+	 * Makes the Border on the field which you currently have selected.
+	 * 
+	 * @param e the movement in the menu (1 = up; -1 = down)
+	 */
 	public void menu(int e) {
 		if (!menuStateL) {
 			menuState += e;
@@ -308,6 +326,11 @@ public class Core extends Application {
 		}
 	}
 	
+	/**
+	 * Stops the game loop and shows the finish screen if the fame is finished.
+	 * 
+	 * @param modeFinish 1 = win; -1 = lose
+	 */
 	private void finish(int modeFinish){
 		if(modeFinish==1){
 			loop.stop();
@@ -322,6 +345,9 @@ public class Core extends Application {
 		}
 	}
 
+	/**
+	 * Loads the next screen which you have selected in the menu.
+	 */
 	public void enter() {
 		bossBar.setOpacity(100);
 		if (primaryStage.getScene() == sceneM) {
@@ -377,6 +403,11 @@ public class Core extends Application {
 		menu(0);
 	}
 
+	/**
+	 * Loads images of all levels in the menu.
+	 * 
+	 * @param e the number of levels
+	 */
 	private void loadLevels(int e) {
 		for (int i = 0; i < levels[e].length; i++) {// TODO
 			HBox box = new HBox();
@@ -385,6 +416,9 @@ public class Core extends Application {
 		}
 	}
 
+	/**
+	 * Loads the previous screen in the menu if you press escape.
+	 */
 	public void escape() {
 		if (primaryStage.getScene() != sceneM) {
 			if (primaryStage.getScene() == sceneMs) {
@@ -400,6 +434,9 @@ public class Core extends Application {
 		}
 	}
 
+	/**
+	 * Draws the Entities.
+	 */
 	private void draw() {
 		pixelWriter.setPixels(0, 0, screenX, screenY, pixelFormat, data, 0, screenX);
 		graphicsContext.drawImage(image, 0, 0);

@@ -79,6 +79,7 @@ public class Core extends Application {
 	private int menuState;
 
 	private HBox hBoxStart;
+	
 	// private HBox hBoxOptions;
 	private HBox hBoxQuitGame;
 
@@ -370,7 +371,7 @@ public class Core extends Application {
 					} catch (NumberFormatException | IOException e) {
 						e.printStackTrace();
 					}
-					if(menuStateS +1 != 10 && menuState == 0){
+					if(menuStateS +1 != 10){
 						bossBar.setOpacity(0);
 					}
 					primaryStage.setScene(sceneG);
@@ -382,9 +383,7 @@ public class Core extends Application {
 					} catch (NumberFormatException | IOException e) {
 						e.printStackTrace();
 					}
-					if(menuStateS +1 != 10){
-						bossBar.setOpacity(0);
-					}
+					bossBar.setOpacity(0);
 					primaryStage.setScene(sceneG);
 					loop.start();
 				}

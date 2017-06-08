@@ -28,9 +28,9 @@ public class MenuKeyboard implements EventHandler<KeyEvent> {
 	@Override
 	public void handle(KeyEvent event) {
 		if (event.getEventType() == KeyEvent.KEY_PRESSED) {
-			if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.RIGHT)
+			if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.LEFT)
 				core.menu(-1);
-			else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT)
+			else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.RIGHT)
 				core.menu(1);
 			else if (event.getCode() == KeyCode.ENTER) {
 				core.enter();

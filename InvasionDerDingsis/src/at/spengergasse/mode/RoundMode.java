@@ -176,7 +176,7 @@ public class RoundMode extends Mode{
 	int shotDelayF = 150;
 
 	int xOffset = -10;
-	int yOffset = -16;
+	int yOffset = -14;
 	
 	long timerRotation;
 	int timerDelta=150;

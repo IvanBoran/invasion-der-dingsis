@@ -370,7 +370,7 @@ public class Core extends Application {
 					} catch (NumberFormatException | IOException e) {
 						e.printStackTrace();
 					}
-					if(menuStateS +1 != 10){
+					if(menuStateS +1 != 10 && menuState == 0){
 						bossBar.setOpacity(0);
 					}
 					primaryStage.setScene(sceneG);

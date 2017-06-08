@@ -116,63 +116,85 @@ public class AdvancedEntity extends Entity {
 			int modolX, int modolY, String pathShape) throws IOException {
 		int x = 0, y = 0;
 		int mX = momentumX, mY = momentumY;
+		int xO = xOffset, yO = yOffset;
+		int t = 0;
 
 		switch (rotation) {
-		case 0: {
-			x = this.x + width / 2;
-			y = this.y + height;
-			mY += speed+2;
-			break;
-		}
-		case 1: {
-			x = this.x;
-			y = this.y + height;
-			mX -= speed;
-			mY -= -speed;
-			break;
-		}
-		case 2: {
-			x = this.x;
-			y = this.y + height / 2;
-			mX -= speed+2;
-			break;
-		}
-		case 3: {
-			x = this.x;
-			y = this.y;
-			mX -= speed;
-			mY -= speed;
-			break;
-		}
-		case 4: {
-			x = this.x + width / 2;
-			y = this.y;
-			mY -= speed+2;
-			break;
-		}
-		case 5: {
-			x = this.x + width;
-			y = this.y;
-			mX = speed;
-			mY -= speed;
-			break;
-		}
-		case 6: {
-			x = this.x + width;
-			y = this.y + height / 2;
-			mX += speed+2;
-			break;
-		}
-		case 7: {
-			x = this.x + width;
-			y = this.y + height;
-			mX -= -speed;
-			mY -= -speed;
-			break;
-		}
+			case 0: {
+				x = this.x + width / 2;
+				y = this.y + height;
+				mY += speed+2;
+				break;
+			}
+			case 1: {
+				x = this.x;
+				y = this.y + height;
+				mX -= speed;
+				mY -= -speed;
+				t = xO;
+				xO = 0;
+				yO = -this.height/4;
+				break;
+				
+			}
+			case 2: {
+				x = this.x;
+				y = this.y + height / 2;
+				mX -= speed+2;
+				t = xO;
+				xO = yO + 10;
+				yO = t;
+				break;
+			}
+			case 3: {
+				x = this.x;
+				y = this.y;
+				mX -= speed;
+				mY -= speed;
+				t = xO;
+				xO = 0;
+				yO = 0;
+				break;
+			}
+			case 4: {
+				x = this.x + width / 2;
+				y = this.y;
+				mY -= speed+2;
+				yO += this.height/4;
+				break;
+			}
+			case 5: {
+				x = this.x + width;
+				y = this.y;
+				mX = speed;
+				mY -= speed;
+				t = xO;
+				xO = -this.width/4;
+				yO = 0;
+				break;
+			}
+			case 6: {
+				x = this.x + width;
+				y = this.y + height / 2;
+				mX += speed+2;
+				t = xO;
+				xO = yO;
+				yO = t;
+				break;
+			}
+			case 7: {
+				x = this.x + width;
+				y = this.y + height;
+				mX -= -speed;
+				mY -= -speed;
+				t = xO;
+				xO = -this.width/4;
+				yO = -this.height/4;
+				break;
+			}
 		}
 
-		return new SimpleEntity(x + xOffset, y + yOffset, pathShape, tileSize, mX, mY, modolX, modolY, damage, this.ID);
+		return new SimpleEntity(x + xO, y + yO, pathShape, tileSize, mX, mY, modolX, modolY, damage, this.ID);
 	}
 	
 	/**

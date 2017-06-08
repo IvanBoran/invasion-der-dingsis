@@ -19,7 +19,7 @@ public class RoundMode extends Mode{
 		
 		this.enemyInput=enemyInput;
 		
-		player = new AdvancedEntity(screenX / 2, screenY/2, "src/entities/shapePlayer", 4, 10000, 0);
+		player = new AdvancedEntity(screenX / 2, screenY/2, "src/entities/shapePlayer", 4, 100, 0);
 		advancedEntities.add(player);
 
 		switch (difficulty) {
@@ -145,11 +145,11 @@ public class RoundMode extends Mode{
 	int movementSpeed = 5;
 
 	int shotDelayS = 500;
-	int shotDelayD = 20;
+	int shotDelayD = 30;
 	int shotDelayF = 150;
 
-	int xOffset = -9;
-	int yOffset = -9;
+	int xOffset = -10;
+	int yOffset = -16;
 	
 	long timerRotation;
 	int timerDelta=150;
@@ -583,17 +583,17 @@ public class RoundMode extends Mode{
 					try {
 						if(timers[e-1] + delay< System.currentTimeMillis() && (!(e == last) || advancedEntities.size()==2)){
 								if(advancedEntities.get(e).getType()==1){
-								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, 7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-12, -40, 3, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 							}else if(advancedEntities.get(e).getType()==2){
-								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/3, -advancedEntities.get(e).getHeight()/4, 7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-10, -30, 3, 30, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
 							}else if(advancedEntities.get(e).getType()==3){
-								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/5+5, -advancedEntities.get(e).getHeight()+120, 7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-12, -40, 3, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 							}else{
 								if(advancedEntities.get(e).getHealth() <= 1000){
 									bossFRate = 20;
 								} else bossFRate = 16;
 								if(enemyInput.shoot[e-1] <= bossFRate){
-								simpleEntities.add(advancedEntities.get(e).shoot(0, 0, 7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-15, -70, 7, 50, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 								}
 							}
 							timers[e-1] = System.currentTimeMillis()-(new Random().nextInt(300)+100);

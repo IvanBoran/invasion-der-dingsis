@@ -163,10 +163,6 @@ public class InvadersMode extends Mode {
 		
 		Random r = new Random();
 		int t = 0;
-		int xOffset = 0;
-		int yOffset = 0;
-		int y = 0;
-		int modolX = 0;
 		int bossFRate = 0;
 		
 		if(!(advancedEntities.size()>1)){
@@ -210,11 +206,11 @@ public class InvadersMode extends Mode {
 				try {
 					if(timers[e-1] + delay< System.currentTimeMillis() && (!(e == last) || advancedEntities.get(e).getType() == 4)){
 							if(advancedEntities.get(e).getType()==1){
-							simpleEntities.add(advancedEntities.get(e).shoot(-12, advancedEntities.get(e).getHeight()-20, 4, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+							simpleEntities.add(advancedEntities.get(e).shoot(-12, -30, 4, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 						}else if(advancedEntities.get(e).getType()==2){
-							simpleEntities.add(advancedEntities.get(e).shoot(-13, advancedEntities.get(e).getHeight()-25, 5, 30, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+							simpleEntities.add(advancedEntities.get(e).shoot(-12, -30, 5, 30, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
 						}else if(advancedEntities.get(e).getType()==3){
-							simpleEntities.add(advancedEntities.get(e).shoot(-15, advancedEntities.get(e).getHeight()-20, 6, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+							simpleEntities.add(advancedEntities.get(e).shoot(-16, -30, 6, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 						}else{
 							if(advancedEntities.get(e).getHealth() <= 1000){
 								bossFRate = 12;
@@ -222,41 +218,41 @@ public class InvadersMode extends Mode {
 							if(enemyInput.shoot[e-1] <= bossFRate){
 								t = r.nextInt(4);
 								if(t == 0){
-									simpleEntities.add(advancedEntities.get(e).shoot(-30, advancedEntities.get(e).getHeight()-65, 9, 80, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-50,-80, 3, 80, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 								}else if(t == 1){
-									simpleEntities.add(advancedEntities.get(e).shoot(-120, advancedEntities.get(e).getHeight()-65, 5, 50, -6, 0, 2, 1, "src/entities/shots/shapeShoot2"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-90, advancedEntities.get(e).getHeight()-65, 5, 50, -4, 0, 2, 1, "src/entities/shots/shapeShoot2"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-60, advancedEntities.get(e).getHeight()-65, 5, 50, -2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-30, advancedEntities.get(e).getHeight()-65, 5, 50, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
-									simpleEntities.add(advancedEntities.get(e).shoot(0, advancedEntities.get(e).getHeight()-65, 5, 50, 2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+30, advancedEntities.get(e).getHeight()-65, 5, 50, 4, 0, 2, 1, "src/entities/shots/shapeShoot2"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+60, advancedEntities.get(e).getHeight()-65, 5, 50, 6, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-140, -80, 5, 50, -6, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-110, -80, 5, 50, -4, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-80, -80, 5, 50, -2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-50, -80, 5, 50, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-20, -80, 5, 50, 2, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+10, -80, 5, 50, 4, 0, 2, 1, "src/entities/shots/shapeShoot2"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+40, -80, 5, 50, 6, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 								} else if(t == 2){
-									simpleEntities.add(advancedEntities.get(e).shoot(-180, advancedEntities.get(e).getHeight()-125, 5, 40, -10, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-150, advancedEntities.get(e).getHeight()-105, 5, 40, -8, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-120, advancedEntities.get(e).getHeight()-85, 5, 40, -6, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-90, advancedEntities.get(e).getHeight()-65, 5, 40, -4, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-60, advancedEntities.get(e).getHeight()-65, 5, 40, -2, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-30, advancedEntities.get(e).getHeight()-65, 5, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(0, advancedEntities.get(e).getHeight()-65, 5, 40, 2, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+30, advancedEntities.get(e).getHeight()-65, 5, 40, 4, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+60, advancedEntities.get(e).getHeight()-85, 5, 40, 6, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+90, advancedEntities.get(e).getHeight()-105, 5, 40, 8, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+120, advancedEntities.get(e).getHeight()-125, 5, 40, 10, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-200, -140, 5, 40, -10, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-170, -120, 5, 40, -8, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-140, -100, 5, 40, -6, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-110, -80, 5, 40, -4, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-80, -80, 5, 40, -2, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-50, -80, 5, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-20, -80, 5, 40, 2, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+10, -80, 5, 40, 4, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+40, -100, 5, 40, 6, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+70, -120, 5, 40, 8, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+100, -140, 5, 40, 10, 0, 2, 1, "src/entities/shots/shapeShoot3"));
 								} else{
-									xOffset = -210;
-									yOffset = -145;
-									modolX = -6;
-									y = 25;
-									for(int i = 0; i < 11; i++){ 
-										if(i == 6){
-											y = -y;
-										}
-										xOffset += 35;
-										yOffset +=y;
-										modolX += 2;
-										simpleEntities.add(advancedEntities.get(e).shoot(xOffset, advancedEntities.get(e).getHeight()+yOffset, 5, 50, modolX, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									}
+									simpleEntities.add(advancedEntities.get(e).shoot(-230, -200, 5, 50, -12, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-200, -180, 5, 50, -10, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-170, -160, 5, 50, -8, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-140, -140, 5, 50, -6, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-110, -120, 5, 50, -4, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-80, -100, 5, 50, -2, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-50, -80, 5, 50, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-20, -100, 5, 50, 2, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+10, -120, 5, 50, 4, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+40, -140, 5, 50, 6, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+70, -160, 5, 50, 8, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+100, -180, 5, 50, 10, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+130, -200, 5, 50, 12, 0, 2, 1, "src/entities/shots/shapeShoot1"));
 								}
 							}
 						}
@@ -281,8 +277,8 @@ public class InvadersMode extends Mode {
 	int shotDelayD = 800;
 	int shotDelayF = 250;
 
-	int xOffset = -14;
-	int yOffset = 0;
+	int xOffset = -10;
+	int yOffset = -16;
 
 	@Override
 	protected void handleInputs() {

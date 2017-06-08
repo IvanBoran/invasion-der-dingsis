@@ -4,10 +4,18 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+/**
+ * Handles the Input while the game is running.
+ */
 public class Keyboard implements EventHandler<KeyEvent> {
 
 	public boolean up, down, left, right, space, s, d, f,esc;
 
+	/**
+	 * Handles the Input while the game is running.
+	 * 
+	 * @param event the KeyEvent which was done
+	 */
 	@Override
 	public void handle(KeyEvent event) {
 		if (event.getEventType() == KeyEvent.KEY_PRESSED) {
@@ -51,6 +59,9 @@ public class Keyboard implements EventHandler<KeyEvent> {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	public void clean(){
 		esc=false;
 	}

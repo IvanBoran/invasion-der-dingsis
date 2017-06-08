@@ -25,8 +25,8 @@ public class SimpleEntity extends Entity {
 	/**
 	 * Constructs a new SimpleEntity.
 	 * 
-	 * @param x the X Coordinate (coordinate origin is the uppon left corner)
-	 * @param y  the Y Coordinate (coordinate origin is the uppon left corner)
+	 * @param x the X Coordinate (coordinate origin is the upon left corner)
+	 * @param y  the Y Coordinate (coordinate origin is the upon left corner)
 	 * @param shapePath the Path where the Shape is
 	 * @param tilesize how big one Pixel is
 	 * @param momentumX the momentum on the x axis 

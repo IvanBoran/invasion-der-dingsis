@@ -149,7 +149,7 @@ public class InvadersMode extends Mode {
 			break;
 			
 		case 10:
-			advancedEntities.add(new AdvancedEntity(screenX /2 - 10*17, 1, "src/entities/shapeEnemy4", 17, 2000, 4));
+			advancedEntities.add(new AdvancedEntity(screenX /2 - 10*17, 1, "src/entities/shapeEnemy4", 13, 2000, 4));
 		}
 		
 		timers = new long[advancedEntities.size()-1];
@@ -204,7 +204,7 @@ public class InvadersMode extends Mode {
 		for(int e = 1;e<advancedEntities.size();e++){
 			if(enemyInput.shoot[e-1]==1){
 				try {
-					if(timers[e-1] + delay< System.currentTimeMillis() && (!(e == last) || advancedEntities.get(e).getType() == 4)){
+					if(timers[e-1] + delay< System.currentTimeMillis() && (!(e == last) || advancedEntities.size()==2)){
 							if(advancedEntities.get(e).getType()==1){
 							simpleEntities.add(advancedEntities.get(e).shoot(-12, -30, 4, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 						}else if(advancedEntities.get(e).getType()==2){
@@ -218,7 +218,7 @@ public class InvadersMode extends Mode {
 							if(enemyInput.shoot[e-1] <= bossFRate){
 								t = r.nextInt(4);
 								if(t == 0){
-									simpleEntities.add(advancedEntities.get(e).shoot(-50,-80, 3, 80, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-50,-80, 8, 80, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 								}else if(t == 1){
 									simpleEntities.add(advancedEntities.get(e).shoot(-140, -80, 5, 50, -6, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 									simpleEntities.add(advancedEntities.get(e).shoot(-110, -80, 5, 50, -4, 0, 2, 1, "src/entities/shots/shapeShoot2"));
@@ -228,31 +228,31 @@ public class InvadersMode extends Mode {
 									simpleEntities.add(advancedEntities.get(e).shoot(+10, -80, 5, 50, 4, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 									simpleEntities.add(advancedEntities.get(e).shoot(+40, -80, 5, 50, 6, 0, 2, 1, "src/entities/shots/shapeShoot2"));
 								} else if(t == 2){
-									simpleEntities.add(advancedEntities.get(e).shoot(-200, -140, 5, 40, -10, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-170, -120, 5, 40, -8, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-140, -100, 5, 40, -6, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-110, -80, 5, 40, -4, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-80, -80, 5, 40, -2, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-50, -80, 5, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-20, -80, 5, 40, 2, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+10, -80, 5, 40, 4, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+40, -100, 5, 40, 6, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+70, -120, 5, 40, 8, 0, 2, 1, "src/entities/shots/shapeShoot3"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+100, -140, 5, 40, 10, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-200, -140, 4, 40, -10, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-170, -120, 4, 40, -8, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-140, -100, 4, 40, -6, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-110, -80, 4, 40, -4, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-80, -80, 4, 40, -2, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-50, -80, 4, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-20, -80, 4, 40, 2, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+10, -80, 4, 40, 4, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+40, -100, 4, 40, 6, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+70, -120, 4, 40, 8, 0, 2, 1, "src/entities/shots/shapeShoot3"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+100, -140, 4, 40, 10, 0, 2, 1, "src/entities/shots/shapeShoot3"));
 								} else{
-									simpleEntities.add(advancedEntities.get(e).shoot(-230, -200, 5, 50, -12, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-200, -180, 5, 50, -10, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-170, -160, 5, 50, -8, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-140, -140, 5, 50, -6, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-110, -120, 5, 50, -4, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-80, -100, 5, 50, -2, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-50, -80, 5, 50, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(-20, -100, 5, 50, 2, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+10, -120, 5, 50, 4, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+40, -140, 5, 50, 6, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+70, -160, 5, 50, 8, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+100, -180, 5, 50, 10, 0, 2, 1, "src/entities/shots/shapeShoot1"));
-									simpleEntities.add(advancedEntities.get(e).shoot(+130, -200, 5, 50, 12, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-230, -200, 4, 50, -12, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-200, -180, 4, 50, -10, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-170, -160, 4, 50, -8, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-140, -140, 4, 50, -6, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-110, -120, 4, 50, -4, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-80, -100, 4, 50, -2, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-50, -80, 4, 50, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(-20, -100, 4, 50, 2, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+10, -120, 4, 50, 4, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+40, -140, 4, 50, 6, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+70, -160, 4, 50, 8, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+100, -180, 4, 50, 10, 0, 2, 1, "src/entities/shots/shapeShoot1"));
+									simpleEntities.add(advancedEntities.get(e).shoot(+130, -200, 4, 50, 12, 0, 2, 1, "src/entities/shots/shapeShoot1"));
 								}
 							}
 						}

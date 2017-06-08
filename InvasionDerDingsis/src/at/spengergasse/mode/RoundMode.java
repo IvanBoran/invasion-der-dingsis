@@ -243,7 +243,7 @@ public class RoundMode extends Mode{
 			try {
 					if (System.currentTimeMillis() > timeS) {
 						simpleEntities.add(
-								player.shoot(xOffset, yOffset, 7, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								player.shoot(xOffset, yOffset, 8, 40, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 						timeF = System.currentTimeMillis() + shotDelayF;
 						timeD = System.currentTimeMillis() + shotDelayD;
 						timeS = System.currentTimeMillis() + shotDelayS;
@@ -255,7 +255,7 @@ public class RoundMode extends Mode{
 			try {
 				if (!player.isDead()) {
 					if (System.currentTimeMillis() > timeD) {
-						simpleEntities.add(player.shoot(xOffset, yOffset, 6, 5, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+						simpleEntities.add(player.shoot(xOffset, yOffset, 7, 5, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
 						timeF = System.currentTimeMillis() + shotDelayD;
 						timeD = System.currentTimeMillis() + shotDelayD;
 						timeS = System.currentTimeMillis() + shotDelayD;
@@ -267,7 +267,7 @@ public class RoundMode extends Mode{
 		} else if (keyboard.f) {
 			try {
 					if (System.currentTimeMillis() > timeF) {
-						simpleEntities.add(player.shoot(xOffset, yOffset, 8, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+						simpleEntities.add(player.shoot(xOffset, yOffset, 9, 20, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 						timeF = System.currentTimeMillis() + shotDelayF;
 						timeD = System.currentTimeMillis() + shotDelayD;
 						timeS = System.currentTimeMillis() + shotDelayS;

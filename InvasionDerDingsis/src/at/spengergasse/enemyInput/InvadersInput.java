@@ -2,6 +2,11 @@ package at.spengergasse.enemyInput;
 
 import java.util.Random;
 
+/**
+ * InvadersInput makes the "Inputs" for the AI in the gamemode "Invaders".
+ * It generates random moving and random shooting.
+ * The InvadersInput class is a subclass of EnemyInput.
+ */
 public class InvadersInput extends EnemyInput{
 
 	public boolean left,right;
@@ -10,6 +15,11 @@ public class InvadersInput extends EnemyInput{
 	private int counter;
 	private int z=1;
 	
+	/**
+	 * Makes random moving and shooting for the AI in the gamemode "Invaders".
+	 * 
+	 * @param enemies the number of Enemies
+	 */
 	@Override
 	public void update(int enemies) {
 		left=false;

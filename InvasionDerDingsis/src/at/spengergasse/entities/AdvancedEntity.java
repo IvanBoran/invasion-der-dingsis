@@ -28,8 +28,8 @@ public class AdvancedEntity extends Entity {
 	/**
 	 * Constructs a new AdvancedEntity.
 	 * 
-	 * @param x the X Coordinate (coordinate origin is the uppon left corner)
-	 * @param y the Y Coordinate (coordinate origin is the uppon left corner)
+	 * @param x the X Coordinate (coordinate origin is the upon left corner)
+	 * @param y the Y Coordinate (coordinate origin is the upon left corner)
 	 * @param shapePath the Path where the Shape is
 	 * @param tilesize how big one Pixel is
 	 * @param health the hit points (HP)

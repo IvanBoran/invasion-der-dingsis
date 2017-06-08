@@ -19,8 +19,8 @@ public abstract class Entity {
 	 * Constructs a new Entity.
 	 * 
 	 * @param sim determines whether it is a SimpleEntity (-1) or a AdvancedEntity (1)
-	 * @param x  the X Coordinate (coordinate origin is the uppon left corner)
-	 * @param y the Y Coordinate (coordinate origin is the uppon left corner)
+	 * @param x  the X Coordinate (coordinate origin is the upon left corner)
+	 * @param y the Y Coordinate (coordinate origin is the upon left corner)
 	 */
 	public Entity(int sim, int x, int y) {
 		this.ID = countId++ * sim;

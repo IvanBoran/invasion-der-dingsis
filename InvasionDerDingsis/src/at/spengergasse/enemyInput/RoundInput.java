@@ -2,6 +2,11 @@ package at.spengergasse.enemyInput;
 
 import java.util.Random;
 
+/**
+ * RoundInput makes the "Inputs" for the AI in the gamemode "round".
+ * It generates random moving and random shooting.
+ * The RoundInput class is a subclass of EnemyInput.
+ */
 public class RoundInput extends EnemyInput{
 
 	public int[] shoot=new int[100];
@@ -9,6 +14,11 @@ public class RoundInput extends EnemyInput{
 	private int counter;
 	private int z=1;
 	
+	/**
+	 * Makes random moving and shooting for the AI in the gamemode "round".
+	 * 
+	 * @param enemies the number of Enemies
+	 */
 	@Override
 	public void update(int enemies) {
 		

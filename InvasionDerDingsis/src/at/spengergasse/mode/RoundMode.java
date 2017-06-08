@@ -117,7 +117,8 @@ public class RoundMode extends Mode{
 			break;
 			
 		case 10:
-			advancedEntities.add(new AdvancedEntity(200, 100,"src/entities/shapeEnemy4", 6, 2000, 4));
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy3", 4, 1000, 3));
+			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy3", 4, 1000, 3));
 			break;
 		}
 		
@@ -265,7 +266,7 @@ public class RoundMode extends Mode{
 		}else if(player.getY() + y <= 0){
 			y= -player.getY()+1;
 		}
-		
+
 		player.move(x, y);
 
 		if (keyboard.s) {

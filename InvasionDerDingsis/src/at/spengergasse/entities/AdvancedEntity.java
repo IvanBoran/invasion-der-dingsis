@@ -7,6 +7,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * AdvancedEntities are every Player and Enemies.
+ * The AdvancedEntity class is a subclass of Entity.
+ */
 public class AdvancedEntity extends Entity {
 
 	private final int type;
@@ -21,6 +25,16 @@ public class AdvancedEntity extends Entity {
 	
 	private boolean hit;
 
+	/**
+	 * Constructs a new AdvancedEntity.
+	 * 
+	 * @param x the X Coordinate (coordinate origin is the uppon left corner)
+	 * @param y the Y Coordinate (coordinate origin is the uppon left corner)
+	 * @param shapePath the Path where the Shape is
+	 * @param tilesize how big one Pixel is
+	 * @param health the hit points (HP)
+	 * @param type the Type (0 = Player; 1 = Enemy lvl.1; 2 = Enemy lvl.2; 3 = Enemy lvl.3; 4 = Boss)
+	 */
 	public AdvancedEntity(int x, int y, String shapePath, int tileSize, int health, int type)
 			throws NumberFormatException, IOException {
 		super(1, x, y);
@@ -84,6 +98,20 @@ public class AdvancedEntity extends Entity {
 		}
 	}
 
+	/**
+	 * Makes a new SimpleEntity and shoots.
+	 * 
+	 * 
+	 * @param xOffset how far the shot spawns on the x axis from the coordinate origin of the AdvancedEntity
+	 * @param yOffset how far the shot spawns on the y axis from the coordinate origin of the AdvancedEntity
+	 * @param speed how fast it travels
+	 * @param damage the damage
+	 * @param momentumX the momentum on the x axis 
+	 * @param momentumY the momentum on the Y axis 
+	 * @param modolX veer on the x axis 
+	 * @param modolY veer on the y axis 
+	 * @param shapePath the Path where the Shape is
+	 */
 	public SimpleEntity shoot(int xOffset, int yOffset, int speed, int damage, int momentumX, int momentumY,
 			int modolX, int modolY, String pathShape) throws IOException {
 		int x = 0, y = 0;
@@ -146,12 +174,23 @@ public class AdvancedEntity extends Entity {
 
 		return new SimpleEntity(x + xOffset, y + yOffset, pathShape, tileSize, mX, mY, modolX, modolY, damage, this.ID);
 	}
-
+	
+	/**
+	 * Moves the AdvancedEntity.
+	 * 
+	 * @param x how far it travels on the x axis
+	 * @param y how far it travels on the y axis
+	 */
 	public void move(int x, int y) {
 		this.x += x;
 		this.y += y;
 	}
 
+	/**
+	 * Hits the AdvancedEntity with this damage.
+	 * 
+	 * @param damage how much damage 
+	 */
 	public void hit(int damage) {
 		hit=true;
 		health -= damage;
@@ -160,14 +199,29 @@ public class AdvancedEntity extends Entity {
 		}
 	}
 	
+	/**
+	 * returns true if the Entity is hit; false if the Entity is not hit.
+	 * 
+	 * @return true if the Entity is hit; false if the Entity is not hit
+	 */
 	public boolean getHit(){
 		return hit;
 	}
 	
+	/**
+	 * set hit.
+	 * 
+	 * @param hit is it hit or not
+	 */
 	public void setHit(boolean hit){
 		this.hit=hit;
 	}
 
+	/**
+	 * Rotates the AdvancedEntity by this direction .
+	 * 
+	 * @param direction the direction in which the AdvancedEntity rotate (>0 = right; <0 = left)
+	 */
 	public void rotate(int direction) {// 0 - 7
 		rotation += direction;
 		if (rotation == -1)
@@ -176,19 +230,39 @@ public class AdvancedEntity extends Entity {
 			rotation = 0;
 	}
 
+	/**
+	 * returns the Shape.
+	 * 
+	 * @return the shape
+	 */
 	@Override
 	public int[] getShape() {
 		return SHAPE[rotation];
 	}
 
+	/**
+	 * returns the type (0 = Player; 1 = Enemy lvl.1; 2 = Enemy lvl.2; 3 = Enemy lvl.3; 4 = Boss).
+	 * 
+	 * @return type 
+	 */
 	public int getType() {
 		return type;
 	}
 
+	/**
+	 * returns the health.
+	 * 
+	 * @return the health
+	 */
 	public double getHealth() {
 		return health;
 	}
 	
+	/**
+	 * return rotation (0 = up; 1 = right up; 2 = right; 3 = right down; 4 = down; 5 = left down; 6 = left; 7 = left up).
+	 * 
+	 * @return rotation
+	 */
 	public int getRotation(){
 		return rotation;
 	}

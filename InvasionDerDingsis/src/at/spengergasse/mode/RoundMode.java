@@ -19,7 +19,7 @@ public class RoundMode extends Mode{
 		
 		this.enemyInput=enemyInput;
 		
-		player = new AdvancedEntity(screenX / 2, screenY - 100, "src/entities/shapePlayer", 4, 100, 0);
+		player = new AdvancedEntity(screenX / 2, screenY/2, "src/entities/shapePlayer", 4, 100, 0);
 		advancedEntities.add(player);
 
 		switch (difficulty) {
@@ -31,39 +31,75 @@ public class RoundMode extends Mode{
 			break;
 
 		case 2:
-			
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(100, screenY-100, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(screenX-100, screenY-100, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(screenX/2, 100, "src/entities/shapeEnemy1", 4, 100, 1));
+			advancedEntities.add(new AdvancedEntity(screenX/2, screenY-100, "src/entities/shapeEnemy1", 4, 100, 1));advancedEntities.get(advancedEntities.size()-1).rotate(4);
 			break;
 
 		case 3:
-			
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy2", 4, 200, 2));//klasse 2
+			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy2", 4, 200, 2));
+			advancedEntities.add(new AdvancedEntity(100, screenY-100, "src/entities/shapeEnemy2", 4, 200, 2));
+			advancedEntities.add(new AdvancedEntity(screenX-100, screenY-100, "src/entities/shapeEnemy2", 4, 200, 2));
 			break;
 
 		case 4:
-			
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy2", 4, 200, 2));
+			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy2", 4, 200, 2));
+			advancedEntities.add(new AdvancedEntity(100, screenY-100, "src/entities/shapeEnemy2", 4, 200, 2));
+			advancedEntities.add(new AdvancedEntity(screenX-100, screenY-100, "src/entities/shapeEnemy2", 4, 200, 2));
+			advancedEntities.add(new AdvancedEntity(screenX/2, 100, "src/entities/shapeEnemy2", 4, 200, 2));
+			advancedEntities.add(new AdvancedEntity(screenX/2, screenY-100, "src/entities/shapeEnemy2", 4, 200, 2));advancedEntities.get(advancedEntities.size()-1).rotate(4);
 			break;
 
 		case 5:
-			
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy2", 4, 200, 2));//klasse 2 und 3 
+			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(100, screenY-100, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(screenX-100, screenY-100, "src/entities/shapeEnemy2", 4, 200, 2));
 			break;
 			
 		case 6:
-			
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy2", 4, 200, 2));
+			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy2", 4, 200, 2));
+			advancedEntities.add(new AdvancedEntity(100, screenY-100, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(screenX-100, screenY-100, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(screenX/2, 100, "src/entities/shapeEnemy2", 4, 200, 2));
+			advancedEntities.add(new AdvancedEntity(screenX/2, screenY-100, "src/entities/shapeEnemy2", 4, 200, 2));advancedEntities.get(advancedEntities.size()-1).rotate(4);
 			break;
 			
 		case 7:
-			
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy3", 4, 300, 3));//klasse 3 
+			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(100, screenY-100, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(screenX-100, screenY-100, "src/entities/shapeEnemy3", 4, 300, 3));
 			break;
 			
 		case 8:
-			
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy3", 3, 300, 3));
+			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(100, screenY-200, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(screenX-100, screenY-200, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(screenX/2, 100, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(screenX/2, screenY-200, "src/entities/shapeEnemy3", 4, 300, 3));advancedEntities.get(advancedEntities.size()-1).rotate(4);
 			break;
 			
 		case 9:
-			
+			advancedEntities.add(new AdvancedEntity(100, 100, "src/entities/shapeEnemy3", 4, 300, 3));//klasse 3 
+			advancedEntities.add(new AdvancedEntity(screenX - 100, 100, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(100, screenY-200, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(screenX-100, screenY-200, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(100+100, 100, "src/entities/shapeEnemy3", 4, 300,3));//klasse 3 
+			advancedEntities.add(new AdvancedEntity(screenX - 100-100, 100, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(100+100, screenY-200, "src/entities/shapeEnemy3", 4, 300, 3));
+			advancedEntities.add(new AdvancedEntity(screenX-100-100, screenY-200, "src/entities/shapeEnemy3", 4, 300, 3));
 			break;
 			
 		case 10:
-			
+			advancedEntities.add(new AdvancedEntity(200, 100,"src/entities/shapeEnemy4", 5, 1000, 4));
 			break;
 		}
 		
@@ -546,17 +582,16 @@ public class RoundMode extends Mode{
 								if(advancedEntities.get(e).getType()==1){
 								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 							}else if(advancedEntities.get(e).getType()==2){
-								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/3, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot2"));
 							}else if(advancedEntities.get(e).getType()==3){
-								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/5, -advancedEntities.get(e).getHeight()/6, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot3"));
 							}else{
-								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/4, -advancedEntities.get(e).getHeight()/4, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
+								simpleEntities.add(advancedEntities.get(e).shoot(-advancedEntities.get(e).getWidth()/5, -advancedEntities.get(e).getHeight()/5, -7, 10, 0, 0, 1, 1, "src/entities/shots/shapeShoot1"));
 							}
 							timers[e-1] = System.currentTimeMillis()-(new Random().nextInt(300)+100);
 							last = e;
 						}
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
